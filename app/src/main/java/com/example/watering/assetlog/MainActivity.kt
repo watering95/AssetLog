@@ -7,23 +7,39 @@ import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    val fragmentManager = supportFragmentManager
+    var transaction = fragmentManager.beginTransaction()
+    val fragmentHome = FragmentHome()
+    val fragmentBook = FragmentBook()
+    val fragmentAccounts = FragmentAccounts()
+    val fragmentManagement = FragmentManagement()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        transaction = fragmentManager.beginTransaction()
+
         when (item.itemId) {
             R.id.navigation_home -> {
-
+                transaction.replace(R.id.main_fragment, fragmentHome)
+                transaction.addToBackStack(null)
+                transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_book -> {
-
+                transaction.replace(R.id.main_fragment, fragmentBook)
+                transaction.addToBackStack(null)
+                transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_accounts -> {
-
+                transaction.replace(R.id.main_fragment, fragmentAccounts)
+                transaction.addToBackStack(null)
+                transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_management -> {
-
+                transaction.replace(R.id.main_fragment, fragmentManagement)
+                transaction.addToBackStack(null)
+                transaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -36,6 +52,8 @@ class MainActivity : AppCompatActivity() {
         val toolBar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolBar)
         supportActionBar?.title = ""
+
+        transaction.add(R.id.main_fragment, fragmentHome).commit()
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
