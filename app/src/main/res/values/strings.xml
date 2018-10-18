@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AssetLog</string>
+    <string name="app_name">나의 자산</string>
     <string name="title_home">Home</string>
     <string name="title_book">가계부</string>
     <string name="title_accounts">계좌</string>
