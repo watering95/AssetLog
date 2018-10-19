@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProviders
 import com.example.watering.assetlog.fragments.FragmentAccounts
 import com.example.watering.assetlog.fragments.FragmentBook
 import com.example.watering.assetlog.fragments.FragmentHome
@@ -53,6 +54,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val model = ViewModelProviders.of(this).get(AppViewModel::class.java)
         val toolBar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolBar)
         supportActionBar?.title = getString(R.string.app_name)
