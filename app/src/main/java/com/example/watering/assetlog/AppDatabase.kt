@@ -7,10 +7,9 @@ import androidx.room.RoomDatabase
 import com.example.watering.assetlog.daos.*
 import com.example.watering.assetlog.entities.*
 
-@Database(entities = arrayOf(Account::class, Card::class, CategoryMain::class, CategorySub::class,
-    DairyForeign::class, DairyKRW::class, DairyTotal::class, Group::class, Income::class,
-    IOForeign::class, IOKRW::class, Spend::class, SpendCard::class, SpendCash::class), version = 7)
+@Database(entities = [Account::class, Card::class, CategoryMain::class, CategorySub::class, DairyForeign::class, DairyKRW::class, DairyTotal::class, Group::class, Income::class, IOForeign::class, IOKRW::class, Spend::class, SpendCard::class, SpendCash::class], version = 7)
 abstract class AppDatabase: RoomDatabase() {
+
     abstract fun daoAccount(): DaoAccount
     abstract fun daoCard(): DaoCard
     abstract fun daoCategoryMain(): DaoCategoryMain
@@ -27,7 +26,7 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun daoSpendCash(): DaoSpendCash
 
     companion object {
-        lateinit var INSTANCE: AppDatabase
+        private lateinit var INSTANCE: AppDatabase
 
         fun getDatabase(context: Context): AppDatabase {
             if(INSTANCE == null) {

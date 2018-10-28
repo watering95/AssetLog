@@ -5,19 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.watering.assetlog.R
 
 class FragmentManagement : Fragment() {
-    lateinit var mView: View
+    private lateinit var mView: View
+    lateinit var mChildFragmentManager: FragmentManager
+    private lateinit var mTransaction: FragmentTransaction
+    val mFragmentManagementMain = FragmentManagementMain()
+    val mFragmentManagementDB = FragmentManagementDB()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_management, container, false)
+        mChildFragmentManager = childFragmentManager
         initLayout()
         return mView
     }
-    fun initLayout() {
-        val viewPager = mView.findViewById(R.id.viewpager_fragment_management) as ViewPager
-        viewPager.adapter = PagerAdapterManagement(childFragmentManager)
+    private fun initLayout() {
+        mTransaction = mChildFragmentManager.beginTransaction()
+        mTransaction.replace(R.id.frame_management, mFragmentManagementMain).commit()
     }
 }

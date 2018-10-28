@@ -3,10 +3,7 @@ package com.example.watering.assetlog
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 
-class AppViewModel: AndroidViewModel {
-    lateinit var repository: AppRepository
+class AppViewModel(application: Application) : AndroidViewModel(application) {
+    var mRepository: AppRepository = AppRepository(application)
 
-    constructor(application: Application) : super(application) {
-        repository = AppRepository(application)
-    }
 }

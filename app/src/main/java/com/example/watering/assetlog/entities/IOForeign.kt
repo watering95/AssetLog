@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "tbl_Info_IO_Foreign")
 class IOForeign {
     @PrimaryKey
     var id = -1

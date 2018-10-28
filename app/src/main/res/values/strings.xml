@@ -4,4 +4,12 @@
     <string name="title_book">가계부</string>
     <string name="title_accounts">계좌</string>
     <string name="title_management">관리</string>
+    <string name="toast_db_del_ok">DB File을 삭제하였습니다.</string>
+    <string name="toast_db_del_error">DB File을 삭제하지 못했습니다.</string>
+    <string name="toast_db_open_error">DB File을 열지 못했습니다.</string>
+    <string name="toast_db_restore_ok">DB File을 복구했습니다.</string>
+    <string name="toast_db_restore_error">DB File을 복구하지 못했습니다.</string>
+    <string name="toast_db_no_exist_error">DB File이 없습니다.</string>
+    <string name="toast_db_backup_ok">DB File이 Backup 되었습니다.</string>
+    <string name="toast_db_backup_error">DB File이 Backup 되지 았않습니다.</string>
 </resources>

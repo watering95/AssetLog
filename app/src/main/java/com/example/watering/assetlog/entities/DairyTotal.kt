@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "tbl_Info_Dairy_Total")
 class DairyTotal {
     @PrimaryKey
     var id = -1

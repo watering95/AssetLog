@@ -4,20 +4,12 @@
         android:id="@+id/fragment_management"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <TextView
-            android:text="Management"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewpager_fragment_management"
+    <FrameLayout
+            android:id="@+id/frame_management"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <androidx.viewpager.widget.PagerTabStrip
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-        </androidx.viewpager.widget.PagerTabStrip>
+    </FrameLayout>
 
-    </androidx.viewpager.widget.ViewPager>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,50 +1,55 @@
 package com.example.watering.assetlog
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProviders
 import com.example.watering.assetlog.fragments.FragmentAccounts
 import com.example.watering.assetlog.fragments.FragmentBook
 import com.example.watering.assetlog.fragments.FragmentHome
 import com.example.watering.assetlog.fragments.FragmentManagement
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.drive.*
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
-    val fragmentManager = supportFragmentManager
-    var transaction = fragmentManager.beginTransaction()
-    val fragmentHome = FragmentHome()
-    val fragmentBook = FragmentBook()
-    val fragmentAccounts = FragmentAccounts()
-    val fragmentManagement = FragmentManagement()
+    private val mFragmentManager = this.supportFragmentManager!!
+    private var mTransaction = mFragmentManager.beginTransaction()
+    private val mFragmentHome = FragmentHome()
+    private val mFragmentBook = FragmentBook()
+    private val mFragmentAccounts = FragmentAccounts()
+    private val mFragmentManagement = FragmentManagement()
+    val mGoogleDrive = GoogleDrive(this)
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        transaction = fragmentManager.beginTransaction()
+        mTransaction = mFragmentManager.beginTransaction()
 
         when (item.itemId) {
             R.id.navigation_home -> {
-                transaction.replace(R.id.main_fragment, fragmentHome)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                mTransaction.replace(R.id.frame_main, mFragmentHome)
+                mTransaction.addToBackStack(null)
+                mTransaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_book -> {
-                transaction.replace(R.id.main_fragment, fragmentBook)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                mTransaction.replace(R.id.frame_main, mFragmentBook)
+                mTransaction.addToBackStack(null)
+                mTransaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_accounts -> {
-                transaction.replace(R.id.main_fragment, fragmentAccounts)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                mTransaction.replace(R.id.frame_main, mFragmentAccounts)
+                mTransaction.addToBackStack(null)
+                mTransaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_management -> {
-                transaction.replace(R.id.main_fragment, fragmentManagement)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                mTransaction.replace(R.id.frame_main, mFragmentManagement)
+                mTransaction.addToBackStack(null)
+                mTransaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -55,13 +60,41 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val model = ViewModelProviders.of(this).get(AppViewModel::class.java)
+//        val model = ViewModelProviders.of(this).get(AppViewModel::class.java)
         val toolBar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolBar)
         supportActionBar?.title = getString(R.string.app_name)
 
-        transaction.add(R.id.main_fragment, fragmentHome).commit()
+        mTransaction.add(R.id.frame_main, mFragmentHome).commit()
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            GoogleDrive.REQUEST_CODE_SIGN_IN_UP, GoogleDrive.REQUEST_CODE_SIGN_IN_DOWN -> {
+                when (resultCode) {
+                    RESULT_OK -> {
+                        mGoogleDrive.driveClient = Drive.getDriveClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
+                        mGoogleDrive.driveResourceClient = Drive.getDriveResourceClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
+                        when (requestCode) {
+                            GoogleDrive.REQUEST_CODE_SIGN_IN_UP -> mGoogleDrive.saveFileToDrive()
+                            else -> mGoogleDrive.downloadFileFromDrive()
+                        }
+                    }
+                }
+            }
+            GoogleDrive.REQUEST_CODE_CREATOR -> when (resultCode) {
+                RESULT_OK -> Toast.makeText(this,R.string.toast_db_backup_ok,Toast.LENGTH_SHORT).show()
+                else -> Toast.makeText(this,R.string.toast_db_backup_error,Toast.LENGTH_SHORT).show()
+            }
+            GoogleDrive.REQUEST_CODE_OPENER -> when (resultCode) {
+                RESULT_OK -> {
+                    mGoogleDrive.currentDriveId = data?.getParcelableExtra(OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID)!!
+                    mGoogleDrive.loadCurrentFile()
+                }
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 }
