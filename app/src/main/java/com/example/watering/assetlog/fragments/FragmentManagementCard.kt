@@ -11,7 +11,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FragmentManagementCard : Fragment() {
     private lateinit var mView: View
-    lateinit var gestureDetector: GestureDetector
+    private lateinit var gestureDetector: GestureDetector
     lateinit var lists: List<Card>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -24,29 +24,12 @@ class FragmentManagementCard : Fragment() {
     private fun initLayout() {
         val viewManager = LinearLayoutManager(mView.context)
         val viewAdapter = RecyclerViewAdapterManagementCard(lists)
-        val recyclerView = mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_card).apply {
+        mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_card).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
         }
-        recyclerView.addOnItemTouchListener(object: RecyclerView.OnItemTouchListener {
-            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
 
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                rv.findChildViewUnder(e.x, e.y)?.let {
-                    if(gestureDetector.onTouchEvent(e)) {
-
-                    }
-                }
-                return true
-            }
-
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-        })
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_card)
         floating.setOnClickListener {  }
     }

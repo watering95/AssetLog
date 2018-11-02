@@ -15,7 +15,7 @@ class FragmentManagementMain : Fragment() {
     private lateinit var mFragmentManager: FragmentManager
     private lateinit var mTransaction: FragmentTransaction
 
-    val lists = arrayListOf("group","account","category","card","DB")
+    val lists = arrayListOf("group","account","categoryMain","categorySub","card","DB")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_management_main, container, false)
@@ -36,11 +36,12 @@ class FragmentManagementMain : Fragment() {
     private fun itemClicked(position: Int) {
         mTransaction = mFragmentManager.beginTransaction()
         when(position) {
-            0 -> { mTransaction.replace(R.id.frame_management, mFragmentManagement.mFragmentManagementMain).commit() }
-            1 -> {}
-            2 -> {}
-            3 -> {}
-            4 -> { mTransaction.replace(R.id.frame_management, mFragmentManagement.mFragmentManagementDB).commit() }
+            0 -> { mTransaction.replace(R.id.frame_management, mFragmentManagement.mFragmentManagementGroup).commit() }
+            1 -> { mTransaction.replace(R.id.frame_management, mFragmentManagement.mFragmentManagementAccount).commit() }
+            2 -> { mTransaction.replace(R.id.frame_management, mFragmentManagement.mFragmentManagementCategoryMain).commit() }
+            3 -> { mTransaction.replace(R.id.frame_management, mFragmentManagement.mFragmentManagementCategorySub).commit() }
+            4 -> {}
+            5 -> { mTransaction.replace(R.id.frame_management, mFragmentManagement.mFragmentManagementDB).commit() }
         }
     }
 }

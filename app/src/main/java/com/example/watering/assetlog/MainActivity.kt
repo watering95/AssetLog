@@ -1,11 +1,13 @@
 package com.example.watering.assetlog
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProviders
 import com.example.watering.assetlog.fragments.FragmentAccounts
 import com.example.watering.assetlog.fragments.FragmentBook
 import com.example.watering.assetlog.fragments.FragmentHome
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val mFragmentAccounts = FragmentAccounts()
     private val mFragmentManagement = FragmentManagement()
     val mGoogleDrive = GoogleDrive(this)
+    lateinit var mViewModel: AppViewModel
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         mTransaction = mFragmentManager.beginTransaction()
@@ -60,12 +63,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        val model = ViewModelProviders.of(this).get(AppViewModel::class.java)
         val toolBar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolBar)
         supportActionBar?.title = getString(R.string.app_name)
 
         mTransaction.add(R.id.frame_main, mFragmentHome).commit()
+
+        mViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }

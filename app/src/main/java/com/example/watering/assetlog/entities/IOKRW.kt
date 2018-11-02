@@ -6,22 +6,23 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tbl_Info_IO")
 class IOKRW {
-    @PrimaryKey
-    var id = -1
+    @ColumnInfo(name = "_id")
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = -1
     @ColumnInfo(name = "date")
     var date: String? = null
     @ColumnInfo(name = "id_account")
-    var account = -1
+    var account: Int? = -1
     @ColumnInfo(name = "input")
-    var input = 0
+    var input: Int? = 0
     @ColumnInfo(name = "output")
-    var output = 0
+    var output: Int? = 0
     @ColumnInfo(name = "income")
-    var income = 0
+    var income: Int? = 0
     @ColumnInfo(name = "spend_cash")
-    var spend_cash = 0
+    var spend_cash: Int? = 0
     @ColumnInfo(name = "spend_card")
-    var spend_card = 0
+    var spend_card: Int? = 0
     @ColumnInfo(name = "evaluation")
-    var evaluation_krw = 0
+    var evaluation_krw: Int? = 0
 }

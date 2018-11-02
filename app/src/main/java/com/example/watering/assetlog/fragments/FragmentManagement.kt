@@ -13,7 +13,11 @@ class FragmentManagement : Fragment() {
     private lateinit var mView: View
     lateinit var mChildFragmentManager: FragmentManager
     private lateinit var mTransaction: FragmentTransaction
-    val mFragmentManagementMain = FragmentManagementMain()
+    private val mFragmentManagementMain = FragmentManagementMain()
+    val mFragmentManagementGroup = FragmentManagementGroup()
+    val mFragmentManagementAccount = FragmentManagementAccount()
+    val mFragmentManagementCategoryMain = FragmentManagementCategoryMain()
+    val mFragmentManagementCategorySub = FragmentManagementCategorySub()
     val mFragmentManagementDB = FragmentManagementDB()
 
 

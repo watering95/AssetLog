@@ -7,11 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.Category
+import com.example.watering.assetlog.entities.CategorySub
 
-class RecyclerViewAdapterManagementCategory(val lists:List<Category>): RecyclerView.Adapter<RecyclerViewAdapterManagementCategory.ViewHolder>() {
+class RecyclerViewAdapterManagementCategorySub(val lists:List<CategorySub>): RecyclerView.Adapter<RecyclerViewAdapterManagementCategorySub.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val cardView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.card_management_category, parent, false)
+            .inflate(R.layout.card_management_category_sub, parent, false)
 
         return ViewHolder(cardView)
 
@@ -26,6 +27,6 @@ class RecyclerViewAdapterManagementCategory(val lists:List<Category>): RecyclerV
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var name: TextView = view.findViewById(R.id.text_name_card_management_category)
+        var name: TextView = view.findViewById(R.id.text_name_card_management_category_sub)
     }
 }

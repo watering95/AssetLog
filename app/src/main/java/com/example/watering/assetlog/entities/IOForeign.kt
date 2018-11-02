@@ -6,22 +6,23 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tbl_Info_IO_Foreign")
 class IOForeign {
-    @PrimaryKey
-    var id = -1
+    @ColumnInfo(name = "_id")
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = -1
     @ColumnInfo(name = "date")
     var date: String? = null
     @ColumnInfo(name = "id_account")
-    var account = -1
+    var account: Int? = -1
     @ColumnInfo(name = "input")
-    var input = 0.0
+    var input: Double? = 0.0
     @ColumnInfo(name = "output")
-    var output = 0.0
+    var output: Double? = 0.0
     @ColumnInfo(name = "input_krw")
-    var input_krw = 0
+    var input_krw: Int? = 0
     @ColumnInfo(name = "output_krw")
-    var output_krw = 0
+    var output_krw: Int? = 0
     @ColumnInfo(name = "id_currency")
-    var currency = 0
+    var currency: Int? = 0
     @ColumnInfo(name = "evaluation")
-    var evaluation_krw = 0
+    var evaluation_krw: Double? = 0.0
 }

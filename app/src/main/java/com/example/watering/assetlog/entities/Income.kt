@@ -6,16 +6,17 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tbl_income")
 class Income {
-    @PrimaryKey
-    var id = -1
+    @ColumnInfo(name = "_id")
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = -1
     @ColumnInfo(name = "date")
     var date: String? = null
     @ColumnInfo(name = "id_sub")
-    var category = -1
+    var category: Int? = -1
     @ColumnInfo(name = "amount")
-    var amount = 0
+    var amount: Int? = 0
     @ColumnInfo(name = "details")
     var details: String? = null
     @ColumnInfo(name = "id_account")
-    var account = -1
+    var account: Int? = -1
 }

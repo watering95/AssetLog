@@ -12,7 +12,7 @@ import com.example.watering.assetlog.R
 class FragmentManagementDB : Fragment() {
     private lateinit var mView: View
     private lateinit var mMainActivity: MainActivity
-    val lists = arrayListOf("파일백업","파일복원")
+    val lists = arrayListOf("파일백업","파일복원", "파일삭제")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_management_db, container, false)
@@ -33,6 +33,7 @@ class FragmentManagementDB : Fragment() {
         when(position) {
             0 -> { mMainActivity.mGoogleDrive.signIn(GoogleDrive.REQUEST_CODE_SIGN_IN_UP) }
             1 -> { mMainActivity.mGoogleDrive.signIn(GoogleDrive.REQUEST_CODE_SIGN_IN_DOWN) }
+            2 -> { mMainActivity.mGoogleDrive.deleteDBFile() }
         }
     }
 }

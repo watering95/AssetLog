@@ -18,7 +18,7 @@ import java.io.IOException
 import java.util.*
 
 class GoogleDrive(val context: Context) {
-    private val dbFileName = "AssetLog"
+    private val dbFileName = "AssetLog.db"
     private val TAG = "AssetLog"
     lateinit var driveResourceClient: DriveResourceClient
     lateinit var driveClient: DriveClient
@@ -31,19 +31,16 @@ class GoogleDrive(val context: Context) {
         const val REQUEST_CODE_OPENER = 3
     }
 
-    fun deleteDBFile(context: Context) {
-        try {
-            context.getDatabasePath(dbFileName).delete()
-            Toast.makeText(context, R.string.toast_db_del_ok, Toast.LENGTH_SHORT).show()
-        } catch (e: FileNotFoundException) {
-            Toast.makeText(context, R.string.toast_db_del_error, Toast.LENGTH_SHORT).show()
-        }
+    fun deleteDBFile() = try {
+        context.getDatabasePath(dbFileName).delete()
+        Toast.makeText(context, R.string.toast_db_del_ok, Toast.LENGTH_SHORT).show()
+    } catch (e: FileNotFoundException) {
+        Toast.makeText(context, R.string.toast_db_del_error, Toast.LENGTH_SHORT).show()
     }
     fun saveFileToDrive() {
         val context = this.context as AppCompatActivity
         val fileInputStream: FileInputStream
-        val directory = context.filesDir.toString()
-        val fileName = directory.substring(0,directory.length-5) + dbFileName + ".db"
+        val fileName = context.getDatabasePath(dbFileName)
 
         try {
             fileInputStream = FileInputStream(fileName)
@@ -69,7 +66,7 @@ class GoogleDrive(val context: Context) {
             Log.w(TAG, "Unable to write file contents.", e)
         }
 
-        val filename = "InvestRecord_" + getToday() + ".db"
+        val filename = "AssetLog_" + getToday() + ".db"
         val metadataChangeSet = MetadataChangeSet.Builder().setMimeType("application/x-sqlite3")
             .setTitle(filename).build()
         val createFileActivityOptions = CreateFileActivityOptions.Builder()
@@ -89,7 +86,7 @@ class GoogleDrive(val context: Context) {
         val openFileActivityOptions = OpenFileActivityOptions.Builder().setMimeType(mimeList).build()
         driveClient.newOpenFileActivityIntentSender(openFileActivityOptions).addOnSuccessListener {
             try {
-                context.startIntentSenderForResult(it, REQUEST_CODE_CREATOR,null,0,0,0)
+                context.startIntentSenderForResult(it, REQUEST_CODE_OPENER,null,0,0,0)
             } catch(e: IntentSender.SendIntentException) {
                 Log.w(TAG, "Unable to send intent", e)
             }
@@ -104,15 +101,18 @@ class GoogleDrive(val context: Context) {
         }.addOnSuccessListener {
             driveContents = it
             refreshDBFromCurrentFile()
-        }.addOnFailureListener { Log.e(TAG, "Unable to retrieve file metadata and contennts", it) }
+        }.addOnFailureListener { Log.e(TAG, "Unable to retrieve file metadata and contents", it) }
     }
     private fun refreshDBFromCurrentFile() {
         currentDriveId.let {
             try {
                 val context = this.context as AppCompatActivity
-                val directory = context.filesDir.toString()
-                val fileName = directory.substring(0, directory.length - 5) + dbFileName + ".db"
-                val dbFileOutputStream = FileOutputStream(fileName)
+                val file = context.getDatabasePath(dbFileName)
+                if(!file.exists()) {
+                    file.parentFile.mkdir()
+                    file.createNewFile()
+                }
+                val dbFileOutputStream = FileOutputStream(file)
                 val inputStream = driveContents.inputStream
                 val writeBuffer = ByteArray(1024)
 
@@ -122,9 +122,11 @@ class GoogleDrive(val context: Context) {
                     }
                 } catch (e_io: IOException) {
                     Toast.makeText(context, R.string.toast_db_restore_error, Toast.LENGTH_SHORT).show()
+                    return
                 }
             } catch (e: FileNotFoundException) {
                 Toast.makeText(context, R.string.toast_db_no_exist_error, Toast.LENGTH_SHORT).show()
+                return
             }
             Toast.makeText(context, R.string.toast_db_restore_ok, Toast.LENGTH_SHORT).show()
         }
