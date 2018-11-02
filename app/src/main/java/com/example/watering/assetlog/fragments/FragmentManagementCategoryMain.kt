@@ -6,11 +6,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.watering.assetlog.AppViewModel
+import com.example.watering.assetlog.viewmodel.AppViewModel
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
-import com.example.watering.assetlog.entities.Category
-import com.example.watering.assetlog.entities.CategoryMain
+import com.example.watering.assetlog.view.RecyclerViewAdapterManagementCategoryMain
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FragmentManagementCategoryMain : Fragment() {

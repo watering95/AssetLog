@@ -18,8 +18,8 @@ class FragmentManagement : Fragment() {
     val mFragmentManagementAccount = FragmentManagementAccount()
     val mFragmentManagementCategoryMain = FragmentManagementCategoryMain()
     val mFragmentManagementCategorySub = FragmentManagementCategorySub()
+    val mFragmentManagementCard = FragmentManagementCard()
     val mFragmentManagementDB = FragmentManagementDB()
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_management, container, false)
@@ -29,6 +29,6 @@ class FragmentManagement : Fragment() {
     }
     private fun initLayout() {
         mTransaction = mChildFragmentManager.beginTransaction()
-        mTransaction.replace(R.id.frame_management, mFragmentManagementMain).commit()
+        mTransaction.replace(R.id.frame_management, mFragmentManagementMain).addToBackStack(null).commit()
     }
 }

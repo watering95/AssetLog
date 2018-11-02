@@ -1,10 +1,10 @@
-package com.example.watering.assetlog.fragments
+package com.example.watering.assetlog.view
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
-class PagerAdapterBook(fm: FragmentManager): FragmentPagerAdapter(fm) {
+class PagerAdapterAccounts(fm: FragmentManager): FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

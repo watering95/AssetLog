@@ -2,10 +2,9 @@ package com.example.watering.assetlog.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "tbl_spend", indices = [] )
+@Entity(tableName = "tbl_spend")
 class Spend {
     @ColumnInfo(name = "_id")
     @PrimaryKey(autoGenerate = true)

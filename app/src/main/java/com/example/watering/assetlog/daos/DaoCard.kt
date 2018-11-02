@@ -2,6 +2,7 @@ package com.example.watering.assetlog.daos
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import com.example.watering.assetlog.entities.Card
 
@@ -9,4 +10,7 @@ import com.example.watering.assetlog.entities.Card
 interface DaoCard {
     @Query("SELECT * from tbl_card")
     fun getAll(): LiveData<List<Card>>
+
+    @Insert
+    fun insert(card: Card)
 }

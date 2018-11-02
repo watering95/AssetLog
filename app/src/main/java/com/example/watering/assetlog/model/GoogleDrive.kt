@@ -1,10 +1,11 @@
-package com.example.watering.assetlog
+package com.example.watering.assetlog.model
 
 import android.content.Context
 import android.content.IntentSender
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.watering.assetlog.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -73,7 +74,8 @@ class GoogleDrive(val context: Context) {
             .setInitialMetadata(metadataChangeSet).setInitialDriveContents(driveContents).build()
         return driveClient.newCreateFileActivityIntentSender(createFileActivityOptions)
             .continueWith {
-                context.startIntentSenderForResult(it.result, REQUEST_CODE_CREATOR, null, 0,0,0)
+                context.startIntentSenderForResult(it.result,
+                    REQUEST_CODE_CREATOR, null, 0,0,0)
                 null
             }
     }
@@ -86,7 +88,8 @@ class GoogleDrive(val context: Context) {
         val openFileActivityOptions = OpenFileActivityOptions.Builder().setMimeType(mimeList).build()
         driveClient.newOpenFileActivityIntentSender(openFileActivityOptions).addOnSuccessListener {
             try {
-                context.startIntentSenderForResult(it, REQUEST_CODE_OPENER,null,0,0,0)
+                context.startIntentSenderForResult(it,
+                    REQUEST_CODE_OPENER,null,0,0,0)
             } catch(e: IntentSender.SendIntentException) {
                 Log.w(TAG, "Unable to send intent", e)
             }

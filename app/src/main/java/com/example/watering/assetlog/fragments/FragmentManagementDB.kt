@@ -5,9 +5,10 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.watering.assetlog.GoogleDrive
+import com.example.watering.assetlog.model.GoogleDrive
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
+import com.example.watering.assetlog.view.RecyclerViewAdapterManagementDB
 
 class FragmentManagementDB : Fragment() {
     private lateinit var mView: View
@@ -22,7 +23,9 @@ class FragmentManagementDB : Fragment() {
     }
     private fun initLayout() {
         val viewManager = LinearLayoutManager(mView.context)
-        val viewAdapter = RecyclerViewAdapterManagementDB(lists) { position: Int -> itemClicked(position) }
+        val viewAdapter = RecyclerViewAdapterManagementDB(lists) { position: Int ->
+            itemClicked(position)
+        }
         mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_db).apply {
             setHasFixedSize(true)
             layoutManager = viewManager

@@ -1,4 +1,4 @@
-package com.example.watering.assetlog.fragments
+package com.example.watering.assetlog.view
 
 import android.view.LayoutInflater
 import android.view.View

@@ -1,12 +1,8 @@
-package com.example.watering.assetlog
+package com.example.watering.assetlog.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import com.example.watering.assetlog.entities.Account
-import com.example.watering.assetlog.entities.CategoryMain
-import com.example.watering.assetlog.entities.CategorySub
-import com.example.watering.assetlog.entities.Group
+import com.example.watering.assetlog.model.AppRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,10 +15,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = AppRepository(application, scope)
 
-    val allGroups: LiveData<List<Group>> = repository.allGroups
-    val allAccounts: LiveData<List<Account>> = repository.allAccounts
-    val allCategoryMains: LiveData<List<CategoryMain>> = repository.allCategoryMains
-    val allCategorySubs: LiveData<List<CategorySub>> = repository.allCategorySubs
+    val allGroups = repository.allGroups
+    val allAccounts = repository.allAccounts
+    val allCategoryMains = repository.allCategoryMains
+    val allCategorySubs = repository.allCategorySubs
+    val allCards = repository.allCards
 
     fun <T> insert(t: T) = scope.launch(Dispatchers.IO) {
         repository.insert(t)

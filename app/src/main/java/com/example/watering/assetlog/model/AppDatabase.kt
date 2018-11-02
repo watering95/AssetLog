@@ -1,4 +1,4 @@
-package com.example.watering.assetlog
+package com.example.watering.assetlog.model
 
 import android.content.Context
 import androidx.room.Database
@@ -9,8 +9,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.watering.assetlog.daos.*
 import com.example.watering.assetlog.entities.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Database(entities = [Account::class, Card::class, CategoryMain::class, CategorySub::class, DairyForeign::class, DairyKRW::class, DairyTotal::class, Group::class, Income::class, IOForeign::class, IOKRW::class, Spend::class, SpendCard::class, SpendCash::class], version = 8)
 abstract class AppDatabase: RoomDatabase() {
@@ -43,7 +41,7 @@ abstract class AppDatabase: RoomDatabase() {
             }
         }
 
-        val MIGRATION_7_8 = object: Migration(7,8) {
+        private val MIGRATION_7_8 = object: Migration(7,8) {
             override fun migrate(database: SupportSQLiteDatabase) {
 
             }

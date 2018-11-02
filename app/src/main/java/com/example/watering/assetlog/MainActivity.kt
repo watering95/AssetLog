@@ -1,6 +1,5 @@
 package com.example.watering.assetlog
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -12,6 +11,8 @@ import com.example.watering.assetlog.fragments.FragmentAccounts
 import com.example.watering.assetlog.fragments.FragmentBook
 import com.example.watering.assetlog.fragments.FragmentHome
 import com.example.watering.assetlog.fragments.FragmentManagement
+import com.example.watering.assetlog.model.GoogleDrive
+import com.example.watering.assetlog.viewmodel.AppViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.drive.*
 import kotlinx.android.synthetic.main.activity_main.*

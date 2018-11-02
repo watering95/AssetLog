@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.example.watering.assetlog.R
+import com.example.watering.assetlog.view.PagerAdapterAccounts
 
 class FragmentAccounts : Fragment() {
     private lateinit var mView: View
