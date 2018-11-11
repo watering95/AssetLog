@@ -45,17 +45,16 @@ class FragmentManagementAccount : Fragment() {
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_account)
         floating.setOnClickListener {
-            mFragmentManager?.let { fragmentManager ->
-                mTransaction = fragmentManager.beginTransaction()
-                mTransaction.replace(R.id.frame_main, FragmentEditAccount().initInstance(Account())).commit()
-            }
-
+            replaceFragement(FragmentEditAccount().initInstance(Account()))
         }
     }
     private fun itemClicked(item: Account) {
+        replaceFragement(FragmentEditAccount().initInstance(item))
+    }
+    private fun replaceFragement(fragment:Fragment) {
         mFragmentManager?.let {
             mTransaction = it.beginTransaction()
-            mTransaction.replace(R.id.frame_main, FragmentEditAccount().initInstance(item)).addToBackStack(null).commit()
+            mTransaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
         }
     }
 }

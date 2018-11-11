@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_group_fragment_edit_account"
                 android:adapter="@{adapter}"
-                android:selectedItemPosition="@={ viewmodel.selectedGroup }"
+                android:selectedItemPosition="@={ viewmodel.selected }"
                 app:layout_constraintStart_toEndOf="@+id/text_group_fragment_edit_account"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_description_fragment_edit_account"

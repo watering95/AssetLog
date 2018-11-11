@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_home -> {
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentHome)
+                    addToBackStack(null)
                     commit()
                 }
                 return@OnNavigationItemSelectedListener true
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_book -> {
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentBook)
+                    addToBackStack(null)
                     commit()
                 }
                 return@OnNavigationItemSelectedListener true
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_accounts -> {
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentAccounts)
+                    addToBackStack(null)
                     commit()
                 }
                 return@OnNavigationItemSelectedListener true
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_management -> {
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentManagement)
+                    addToBackStack(null)
                     commit()
                 }
                 return@OnNavigationItemSelectedListener true

@@ -15,5 +15,8 @@
     <string name="toast_db_no_exist_error">DB File이 없습니다.</string>
     <string name="toast_db_backup_ok">DB File이 Backup 되었습니다.</string>
     <string name="toast_db_backup_error">DB File이 Backup 되지 았않습니다.</string>
-    <string name="toast_save_ok">저장되었습니다.</string>
+    <array name="category">
+        <item name="spend">spend</item>
+        <item name="income">income</item>
+    </array>
 </resources>

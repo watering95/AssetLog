@@ -40,17 +40,20 @@ class FragmentManagement : Fragment() {
         }
     }
     private fun itemClicked(position: Int) {
+        when (position) {
+            0 -> replaceFragement(mFragmentManagementGroup)
+            1 -> replaceFragement(mFragmentManagementAccount)
+            2 -> replaceFragement(mFragmentManagementCategoryMain)
+            3 -> replaceFragement(mFragmentManagementCategorySub)
+            4 -> replaceFragement(mFragmentManagementCard)
+            5 -> replaceFragement(mFragmentManagementDB)
+            else -> {  }
+        }
+    }
+    private fun replaceFragement(fragment:Fragment) {
         mFragmentManager?.let {
             mTransaction = it.beginTransaction()
-            when (position) {
-                0 -> mTransaction.replace(R.id.frame_main, mFragmentManagementGroup).addToBackStack(null).commit()
-                1 -> mTransaction.replace(R.id.frame_main, mFragmentManagementAccount).addToBackStack(null).commit()
-                2 -> mTransaction.replace(R.id.frame_main, mFragmentManagementCategoryMain).addToBackStack(null).commit()
-                3 -> mTransaction.replace(R.id.frame_main, mFragmentManagementCategorySub).addToBackStack(null).commit()
-                4 -> mTransaction.replace(R.id.frame_main, mFragmentManagementCard).addToBackStack(null).commit()
-                5 -> mTransaction.replace(R.id.frame_main, mFragmentManagementDB).addToBackStack(null).commit()
-                else -> {  }
-            }
+            mTransaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
         }
     }
 }

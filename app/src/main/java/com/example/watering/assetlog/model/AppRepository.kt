@@ -21,6 +21,8 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     var allCards: LiveData<List<Card>> = daoCard.getAll()
 
     fun getGroup(id:Int?): LiveData<Group> = daoGroup.get(id)
+    fun getAccount(id:Int?): LiveData<Account> = daoAccount.get(id)
+    fun getCategoryMain(id:Int?): LiveData<CategoryMain> = daoCategoryMain.get(id)
 
     @WorkerThread
     fun <T> insert(t: T) {

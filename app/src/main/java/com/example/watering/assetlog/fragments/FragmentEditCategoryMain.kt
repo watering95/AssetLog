@@ -7,32 +7,38 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
-import com.example.watering.assetlog.databinding.FragmentEditGroupBinding
-import com.example.watering.assetlog.entities.Group
+import com.example.watering.assetlog.databinding.FragmentEditCategorymainBinding
+import com.example.watering.assetlog.entities.CategoryMain
 import com.example.watering.assetlog.viewmodel.AppViewModel
+import com.example.watering.assetlog.viewmodel.EditCategoryMainViewModel
 
-class FragmentEditGroup : Fragment() {
-    private lateinit var item: Group
+class FragmentEditCategoryMain : Fragment() {
+    private lateinit var item: CategoryMain
     private lateinit var mViewModel: AppViewModel
-    private lateinit var binding:FragmentEditGroupBinding
+    private lateinit var binding:FragmentEditCategorymainBinding
     private var mFragmentManager: FragmentManager? = null
+    private lateinit var mList:List<String>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = inflate(inflater, R.layout.fragment_edit_group, container, false)
+        binding = inflate(inflater, R.layout.fragment_edit_categorymain, container, false)
         initLayout()
         return binding.root
     }
-    fun initInstance(item: Group):FragmentEditGroup {
+    fun initInstance(item: CategoryMain):FragmentEditCategoryMain {
         this.item = item
         return this
     }
     private fun initLayout() {
-        val activity = activity as MainActivity
-        mViewModel = activity.mViewModel
         mFragmentManager = fragmentManager
 
+        val activity = activity as MainActivity
+        mViewModel = activity.mViewModel
+
+        mList = resources.getStringArray(R.array.category).toList()
+
+        binding.viewmodel = EditCategoryMainViewModel(this.item, mList.indexOf(this.item.kind))
+
         setHasOptionsMenu(true)
-        binding.group = this.item
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -44,12 +50,18 @@ class FragmentEditGroup : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
-                if(this.item.id == null) mViewModel.insert(binding.group)
-                else mViewModel.update(binding.group)
+                binding.viewmodel?.let { viewModel ->
+                    viewModel.categoryMain?.let {
+                        viewModel.selected?.let { selected -> it.kind = mList[selected] }
+                        when {
+                            this.item.id == null -> mViewModel.insert(it)
+                            else -> mViewModel.update(it)
+                        }
+                    }
+                }
             }
             R.id.menu_edit_delete -> { mViewModel.delete(this.item) }
         }
-
         mFragmentManager?.popBackStack()
 
         return super.onOptionsItemSelected(item)

@@ -9,23 +9,23 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
-import com.example.watering.assetlog.databinding.FragmentEditAccountBinding
-import com.example.watering.assetlog.entities.Account
+import com.example.watering.assetlog.databinding.FragmentEditCategorysubBinding
+import com.example.watering.assetlog.entities.CategorySub
 import com.example.watering.assetlog.viewmodel.AppViewModel
-import com.example.watering.assetlog.viewmodel.EditAccountViewModel
+import com.example.watering.assetlog.viewmodel.EditCategorySubViewModel
 
-class FragmentEditAccount : Fragment() {
-    private lateinit var item: Account
+class FragmentEditCategorySub : Fragment() {
+    private lateinit var item: CategorySub
     private lateinit var mViewModel: AppViewModel
-    private lateinit var binding:FragmentEditAccountBinding
+    private lateinit var binding:FragmentEditCategorysubBinding
     private var mFragmentManager: FragmentManager? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = inflate(inflater, R.layout.fragment_edit_account, container, false)
+        binding = inflate(inflater, R.layout.fragment_edit_categorysub, container, false)
         initLayout()
         return binding.root
     }
-    fun initInstance(item: Account):FragmentEditAccount {
+    fun initInstance(item: CategorySub):FragmentEditCategorySub {
         this.item = item
         return this
     }
@@ -35,17 +35,19 @@ class FragmentEditAccount : Fragment() {
         val activity = activity as MainActivity
         mViewModel = activity.mViewModel
 
+        mViewModel = activity.mViewModel
+
         setHasOptionsMenu(true)
 
-        mViewModel.allGroups.observe(this, Observer { groups -> groups?.let {listGroup ->
-            val listName = listGroup.map { it.name }
+        mViewModel.allCategoryMains.observe(this, Observer { listCategoryMains -> listCategoryMains?.let {listCategoryMain ->
+            val listName = listCategoryMain.map { it.name }
             when {
-                this.item.id != null -> mViewModel.getGroup(this.item.group).observe(this, Observer { selectedGroup -> selectedGroup?.let {
-                    binding.viewmodel = EditAccountViewModel(this.item, listName.indexOf(it.name))
+                this.item.id != null -> mViewModel.getCategoryMain(this.item.categoryMain).observe(this, Observer { selected -> selected?.let {
+                    binding.viewmodel = EditCategorySubViewModel(this.item, listName.indexOf(it.name))
                     binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
                 } })
                 else -> {
-                    binding.viewmodel = EditAccountViewModel(this.item, 0)
+                    binding.viewmodel = EditCategorySubViewModel(this.item, 0)
                     binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
                 }
             }
@@ -62,10 +64,10 @@ class FragmentEditAccount : Fragment() {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
                 binding.viewmodel?.let { viewModel ->
-                    mViewModel.allGroups.observe(this, Observer { groups -> groups?.let { listGroup ->
+                    mViewModel.allCategoryMains.observe(this, Observer { categoryMains -> categoryMains?.let { list ->
                         viewModel.selected?.let { id ->
-                            viewModel.account?.let {
-                                it.group = listGroup[id].id
+                            viewModel.categorySub?.let {
+                                it.categoryMain = list[id].id
                                 when {
                                     this.item.id == null -> mViewModel.insert(it)
                                     else -> mViewModel.update(it)

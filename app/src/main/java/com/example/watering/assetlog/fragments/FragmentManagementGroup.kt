@@ -45,16 +45,16 @@ class FragmentManagementGroup : Fragment() {
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_group)
         floating.setOnClickListener {
-            mFragmentManager?.let { fragmentManager ->
-                mTransaction = fragmentManager.beginTransaction()
-                mTransaction.replace(R.id.frame_main, FragmentEditGroup().initInstance(Group())).commit()
-            }
+            replaceFragement(FragmentEditGroup().initInstance(Group()))
         }
     }
     private fun itemClicked(item: Group) {
+        replaceFragement(FragmentEditGroup().initInstance(item))
+    }
+    private fun replaceFragement(fragment:Fragment) {
         mFragmentManager?.let {
             mTransaction = it.beginTransaction()
-            mTransaction.replace(R.id.frame_main, FragmentEditGroup().initInstance(item)).commit()
+            mTransaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
         }
     }
 }

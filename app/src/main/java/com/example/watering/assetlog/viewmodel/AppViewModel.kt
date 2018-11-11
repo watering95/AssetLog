@@ -19,6 +19,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val allCards = repository.allCards
 
     fun getGroup(id: Int?) = repository.getGroup(id)
+    fun getAccount(id: Int?) = repository.getAccount(id)
+    fun getCategoryMain(id: Int?) = repository.getCategoryMain(id)
 
     fun <T> insert(t: T) = scope.launch(Dispatchers.IO) { repository.insert(t) }
 

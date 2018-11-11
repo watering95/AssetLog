@@ -9,23 +9,23 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
-import com.example.watering.assetlog.databinding.FragmentEditAccountBinding
-import com.example.watering.assetlog.entities.Account
+import com.example.watering.assetlog.databinding.FragmentEditCardBinding
+import com.example.watering.assetlog.entities.Card
 import com.example.watering.assetlog.viewmodel.AppViewModel
-import com.example.watering.assetlog.viewmodel.EditAccountViewModel
+import com.example.watering.assetlog.viewmodel.EditCardViewModel
 
-class FragmentEditAccount : Fragment() {
-    private lateinit var item: Account
+class FragmentEditCard : Fragment() {
+    private lateinit var item: Card
     private lateinit var mViewModel: AppViewModel
-    private lateinit var binding:FragmentEditAccountBinding
+    private lateinit var binding: FragmentEditCardBinding
     private var mFragmentManager: FragmentManager? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = inflate(inflater, R.layout.fragment_edit_account, container, false)
+        binding = inflate(inflater, R.layout.fragment_edit_card, container, false)
         initLayout()
         return binding.root
     }
-    fun initInstance(item: Account):FragmentEditAccount {
+    fun initInstance(item: Card):FragmentEditCard {
         this.item = item
         return this
     }
@@ -37,16 +37,16 @@ class FragmentEditAccount : Fragment() {
 
         setHasOptionsMenu(true)
 
-        mViewModel.allGroups.observe(this, Observer { groups -> groups?.let {listGroup ->
-            val listName = listGroup.map { it.name }
+        mViewModel.allAccounts.observe(this, Observer { accounts -> accounts?.let {listAccount ->
+            val listName = listAccount.map { it.number }
             when {
-                this.item.id != null -> mViewModel.getGroup(this.item.group).observe(this, Observer { selectedGroup -> selectedGroup?.let {
-                    binding.viewmodel = EditAccountViewModel(this.item, listName.indexOf(it.name))
-                    binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
+                this.item.id != null -> mViewModel.getAccount(this.item.account).observe(this, Observer { selectedAccount -> selectedAccount?.let {
+                    binding.viewmodel = EditCardViewModel(this.item, listName.indexOf(it.number))
+                    binding.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item,listName)
                 } })
                 else -> {
-                    binding.viewmodel = EditAccountViewModel(this.item, 0)
-                    binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
+                    binding.viewmodel = EditCardViewModel(this.item, 0)
+                    binding.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item,listName)
                 }
             }
         } })
@@ -61,18 +61,16 @@ class FragmentEditAccount : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
-                binding.viewmodel?.let { viewModel ->
-                    mViewModel.allGroups.observe(this, Observer { groups -> groups?.let { listGroup ->
+                binding.viewmodel?.let {viewModel ->
+                    mViewModel.allAccounts.observe(this, Observer { accounts -> accounts?.let { listAccount ->
                         viewModel.selected?.let { id ->
-                            viewModel.account?.let {
-                                it.group = listGroup[id].id
-                                when {
-                                    this.item.id == null -> mViewModel.insert(it)
-                                    else -> mViewModel.update(it)
-                                }
-                            }
+                            viewModel.card?.let { it.account = listAccount[id].id }
                         }
                     } })
+                    when {
+                        this.item.id == null -> mViewModel.insert(viewModel.card)
+                        else -> mViewModel.update(viewModel.card)
+                    }
                 }
             }
             R.id.menu_edit_delete -> { mViewModel.delete(this.item) }
