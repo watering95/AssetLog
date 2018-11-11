@@ -18,7 +18,8 @@ class FragmentAccounts : Fragment() {
     }
     private fun initLayout() {
         setHasOptionsMenu(false)
-        val viewPager = mView.findViewById(R.id.viewpager_fragment_accounts) as ViewPager
+
+        val viewPager = mView.findViewById<ViewPager>(R.id.viewpager_fragment_accounts)
         viewPager.adapter = PagerAdapterAccounts(childFragmentManager)
     }
 }

@@ -8,7 +8,15 @@ import androidx.fragment.app.Fragment
 import com.example.watering.assetlog.R
 
 class FragmentHome : Fragment() {
+    private lateinit var mView: View
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        mView = inflater.inflate(R.layout.fragment_home, container, false)
+        initLayout()
+        return mView
+    }
+    private fun initLayout() {
+        setHasOptionsMenu(false)
+
     }
 }
