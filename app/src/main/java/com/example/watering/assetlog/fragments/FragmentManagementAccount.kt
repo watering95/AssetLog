@@ -29,6 +29,7 @@ class FragmentManagementAccount : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
+        activity.supportActionBar?.setTitle(R.string.title_management_account)
         mFragmentManager = fragmentManager
 
         mViewModel = activity.mViewModel

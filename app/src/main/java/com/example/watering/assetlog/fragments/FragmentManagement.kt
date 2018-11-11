@@ -21,7 +21,7 @@ class FragmentManagement : Fragment() {
     private val mFragmentManagementCard = FragmentManagementCard()
     private val mFragmentManagementDB = FragmentManagementDB()
 
-    val lists = arrayListOf("group","account","categoryMain","categorySub","card","DB")
+    val lists = arrayListOf("Group","Account","CategoryMain","CategorySub","Card","DB")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_management, container, false)

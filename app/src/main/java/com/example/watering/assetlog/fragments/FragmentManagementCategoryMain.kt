@@ -28,6 +28,7 @@ class FragmentManagementCategoryMain : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
+        activity.supportActionBar?.setTitle(R.string.title_management_categorymain)
         mFragmentManager = fragmentManager
 
         setHasOptionsMenu(false)

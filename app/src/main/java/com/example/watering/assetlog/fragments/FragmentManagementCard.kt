@@ -28,6 +28,7 @@ class FragmentManagementCard : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
+        activity.supportActionBar?.setTitle(R.string.title_management_card)
         mFragmentManager = fragmentManager
 
         mViewModel = activity.mViewModel

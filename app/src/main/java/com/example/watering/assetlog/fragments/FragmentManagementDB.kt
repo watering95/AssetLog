@@ -17,11 +17,13 @@ class FragmentManagementDB : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_management_db, container, false)
-        mMainActivity = activity as MainActivity
         initLayout()
         return mView
     }
     private fun initLayout() {
+        mMainActivity = activity as MainActivity
+        mMainActivity.supportActionBar?.setTitle(R.string.title_management_db)
+
         setHasOptionsMenu(false)
 
         mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_db).apply {

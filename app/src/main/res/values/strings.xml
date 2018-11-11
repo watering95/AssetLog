@@ -7,6 +7,12 @@
     <string name="title_book">가계부</string>
     <string name="title_accounts">계좌</string>
     <string name="title_management">관리</string>
+    <string name="title_management_group">그룹 관리</string>
+    <string name="title_management_account">계좌 관리</string>
+    <string name="title_management_card">카드 관리</string>
+    <string name="title_management_categorymain">주카테고리 관리</string>
+    <string name="title_management_categorysub">부카테고리 관리</string>
+    <string name="title_management_db">데이터베이스 관리</string>
     <string name="toast_db_del_ok">DB File을 삭제하였습니다.</string>
     <string name="toast_db_del_error">DB File을 삭제하지 못했습니다.</string>
     <string name="toast_db_open_error">DB File을 열지 못했습니다.</string>

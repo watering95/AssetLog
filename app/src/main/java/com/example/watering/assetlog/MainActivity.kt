@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.navigation_home -> {
+                supportActionBar?.title = getString(R.string.app_name)
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentHome)
                     addToBackStack(null)
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_book -> {
+                supportActionBar?.title = getString(R.string.title_book)
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentBook)
                     addToBackStack(null)
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_accounts -> {
+                supportActionBar?.title = getString(R.string.title_accounts)
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentAccounts)
                     addToBackStack(null)
@@ -54,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_management -> {
+                supportActionBar?.title = getString(R.string.title_management)
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentManagement)
                     addToBackStack(null)
@@ -71,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         val toolBar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolBar)
-        supportActionBar?.title = getString(R.string.app_name)
+
 
         mTransaction.add(R.id.frame_main, mFragmentHome).addToBackStack(null).commit()
 

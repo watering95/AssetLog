@@ -28,6 +28,7 @@ class FragmentManagementGroup : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
+        activity.supportActionBar?.setTitle(R.string.title_management_group)
 
         mFragmentManager = fragmentManager
 
