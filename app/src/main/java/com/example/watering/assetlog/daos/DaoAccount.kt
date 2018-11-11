@@ -1,9 +1,7 @@
 package com.example.watering.assetlog.daos
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.watering.assetlog.entities.Account
 
 @Dao
@@ -13,4 +11,10 @@ interface DaoAccount {
 
     @Insert
     fun insert(account: Account)
+
+    @Update
+    fun update(account: Account)
+
+    @Delete
+    fun delete(account: Account)
 }

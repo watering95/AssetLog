@@ -8,15 +8,15 @@ import androidx.room.PrimaryKey
 class Income {
     @ColumnInfo(name = "_id")
     @PrimaryKey(autoGenerate = true)
-    var id: Int? = -1
+    var id: Int? = null
     @ColumnInfo(name = "date")
     var date: String? = null
     @ColumnInfo(name = "id_sub")
-    var category: Int? = -1
+    var category: Int? = null
     @ColumnInfo(name = "amount")
     var amount: Int? = 0
     @ColumnInfo(name = "details")
     var details: String? = null
     @ColumnInfo(name = "id_account")
-    var account: Int? = -1
+    var account: Int? = null
 }

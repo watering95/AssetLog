@@ -7,10 +7,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
-import com.example.watering.assetlog.fragments.FragmentAccounts
-import com.example.watering.assetlog.fragments.FragmentBook
-import com.example.watering.assetlog.fragments.FragmentHome
-import com.example.watering.assetlog.fragments.FragmentManagement
+import com.example.watering.assetlog.fragments.*
 import com.example.watering.assetlog.model.GoogleDrive
 import com.example.watering.assetlog.viewmodel.AppViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -33,27 +30,31 @@ class MainActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.navigation_home -> {
-                mTransaction.replace(R.id.frame_main, mFragmentHome)
-                mTransaction.addToBackStack(null)
-                mTransaction.commit()
+                with(mTransaction) {
+                    replace(R.id.frame_main, mFragmentHome)
+                    commit()
+                }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_book -> {
-                mTransaction.replace(R.id.frame_main, mFragmentBook)
-                mTransaction.addToBackStack(null)
-                mTransaction.commit()
+                with(mTransaction) {
+                    replace(R.id.frame_main, mFragmentBook)
+                    commit()
+                }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_accounts -> {
-                mTransaction.replace(R.id.frame_main, mFragmentAccounts)
-                mTransaction.addToBackStack(null)
-                mTransaction.commit()
+                with(mTransaction) {
+                    replace(R.id.frame_main, mFragmentAccounts)
+                    commit()
+                }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_management -> {
-                mTransaction.replace(R.id.frame_main, mFragmentManagement)
-                mTransaction.addToBackStack(null)
-                mTransaction.commit()
+                with(mTransaction) {
+                    replace(R.id.frame_main, mFragmentManagement)
+                    commit()
+                }
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -68,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolBar)
         supportActionBar?.title = getString(R.string.app_name)
 
-        mTransaction.add(R.id.frame_main, mFragmentHome).commit()
+        mTransaction.add(R.id.frame_main, mFragmentHome).addToBackStack(null).commit()
 
         mViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
 

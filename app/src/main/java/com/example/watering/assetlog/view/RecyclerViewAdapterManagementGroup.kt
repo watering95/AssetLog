@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.Group
 
-class RecyclerViewAdapterManagementGroup(val lists:List<Group>): RecyclerView.Adapter<RecyclerViewAdapterManagementGroup.ViewHolder>() {
+class RecyclerViewAdapterManagementGroup(val lists:List<Group>, private val clickListener: (Int) -> Unit): RecyclerView.Adapter<RecyclerViewAdapterManagementGroup.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val cardView = LayoutInflater.from(parent.context)
             .inflate(R.layout.card_management_group, parent, false)
@@ -22,10 +22,15 @@ class RecyclerViewAdapterManagementGroup(val lists:List<Group>): RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.name.text = lists[position].name
+        holder.bind(lists[position], position, clickListener)
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         var name: TextView = view.findViewById(R.id.text_name_card_management_group)
+
+        fun bind(group: Group, position: Int, clickListener: (Int) -> Unit) {
+            name.text = group.name
+            view.setOnClickListener { clickListener(position) }
+        }
     }
 }

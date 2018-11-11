@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey
 class SpendCard {
     @ColumnInfo(name = "_id")
     @PrimaryKey(autoGenerate = true)
-    var id: Int? = -1
+    var id: Int? = null
     @ColumnInfo(name = "spend_code")
     var code: String? = null
     @ColumnInfo(name = "id_card")
-    var card: Int? = -1
+    var card: Int? = null
 }

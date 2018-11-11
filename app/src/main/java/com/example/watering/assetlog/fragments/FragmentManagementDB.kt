@@ -22,14 +22,12 @@ class FragmentManagementDB : Fragment() {
         return mView
     }
     private fun initLayout() {
-        val viewManager = LinearLayoutManager(mView.context)
-        val viewAdapter = RecyclerViewAdapterManagementDB(lists) { position: Int ->
-            itemClicked(position)
-        }
+        setHasOptionsMenu(false)
+
         mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_db).apply {
             setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = viewAdapter
+            layoutManager = LinearLayoutManager(mView.context)
+            adapter = RecyclerViewAdapterManagementDB(lists) { position -> itemClicked(position) }
         }
     }
     private fun itemClicked(position: Int) {

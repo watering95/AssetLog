@@ -3,10 +3,7 @@ package com.example.watering.assetlog.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.example.watering.assetlog.model.AppRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
     private var parentJob = Job()
@@ -21,9 +18,13 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val allCategorySubs = repository.allCategorySubs
     val allCards = repository.allCards
 
-    fun <T> insert(t: T) = scope.launch(Dispatchers.IO) {
-        repository.insert(t)
-    }
+    fun getGroup(id: Int?) = repository.getGroup(id)
+
+    fun <T> insert(t: T) = scope.launch(Dispatchers.IO) { repository.insert(t) }
+
+    fun <T> update(t: T) = scope.launch(Dispatchers.IO) { repository.update(t) }
+
+    fun <T> delete(t: T) = scope.launch(Dispatchers.IO) { repository.delete(t) }
 
     override fun onCleared() {
         super.onCleared()

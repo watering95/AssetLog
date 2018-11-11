@@ -8,13 +8,13 @@ import androidx.room.PrimaryKey
 class Spend {
     @ColumnInfo(name = "_id")
     @PrimaryKey(autoGenerate = true)
-    var id: Int? = -1
+    var id: Int? = null
     @ColumnInfo(name = "spend_code")
     var code: String? = null
     @ColumnInfo(name = "details")
     var details: String? = null
     @ColumnInfo(name = "id_sub")
-    var category: Int? = -1
+    var category: Int? = null
     @ColumnInfo(name = "date_use")
     var date: String? = null
     @ColumnInfo(name = "amount")

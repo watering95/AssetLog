@@ -18,6 +18,7 @@ class FragmentBook : Fragment() {
         return mView
     }
     private fun initLayout() {
+        setHasOptionsMenu(false)
         val viewPager = mView.findViewById(R.id.viewpager_fragment_book) as ViewPager
         viewPager.adapter = PagerAdapterBook(childFragmentManager)
     }

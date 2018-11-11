@@ -14,6 +14,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_fragment_management_category_main"
+            android:src="@drawable/baseline_add_black_18dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"/>

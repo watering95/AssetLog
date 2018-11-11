@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 abstract class Category {
     @ColumnInfo(name = "_id")
     @PrimaryKey(autoGenerate = true)
-    var id: Int? = -1
+    var id: Int? = null
     @ColumnInfo(name = "name")
     var name: String? = null
 }

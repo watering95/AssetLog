@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 class Card {
     @ColumnInfo(name = "_id")
     @PrimaryKey(autoGenerate = true)
-    var id:Int? = -1
+    var id:Int? = null
     @ColumnInfo(name = "number")
     var number: String? = null
     @ColumnInfo(name = "company")
@@ -18,5 +18,5 @@ class Card {
     @ColumnInfo(name = "date_draw")
     var drawDate: String? = null
     @ColumnInfo(name = "id_account")
-    var account: Int? = -1
+    var account: Int? = null
 }

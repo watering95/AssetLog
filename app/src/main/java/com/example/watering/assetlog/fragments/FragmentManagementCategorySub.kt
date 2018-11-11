@@ -24,19 +24,22 @@ class FragmentManagementCategorySub : Fragment() {
     private fun initLayout() {
         val activity = activity as MainActivity
 
+        setHasOptionsMenu(false)
+
         mViewModel = activity.mViewModel
 
         mViewModel.allCategorySubs.observe(this, Observer { categorySubs -> categorySubs?.let {
-            val viewManager = LinearLayoutManager(mView.context)
-            val viewAdapter = RecyclerViewAdapterManagementCategorySub(it)
             mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_category_sub).run {
                 setHasFixedSize(true)
-                layoutManager = viewManager
-                adapter = viewAdapter
+                layoutManager = LinearLayoutManager(mView.context)
+                adapter = RecyclerViewAdapterManagementCategorySub(it) { position -> itemClicked(position) }
             }
         } })
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_category_sub)
         floating.setOnClickListener {  }
+    }
+    private fun itemClicked(position: Int) {
+
     }
 }

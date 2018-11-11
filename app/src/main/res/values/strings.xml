@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">나의 자산</string>
+    <string name="group">그룹</string>
+    <string name="save">저장</string>
+    <string name="delete">삭제</string>
     <string name="title_home">Home</string>
     <string name="title_book">가계부</string>
     <string name="title_accounts">계좌</string>
@@ -12,4 +15,5 @@
     <string name="toast_db_no_exist_error">DB File이 없습니다.</string>
     <string name="toast_db_backup_ok">DB File이 Backup 되었습니다.</string>
     <string name="toast_db_backup_error">DB File이 Backup 되지 았않습니다.</string>
+    <string name="toast_save_ok">저장되었습니다.</string>
 </resources>

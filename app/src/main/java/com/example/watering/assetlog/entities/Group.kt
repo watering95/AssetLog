@@ -5,8 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "tbl_Group")
-data class Group (@ColumnInfo(name = "name") var name: String?){
+class Group {
     @ColumnInfo(name = "_id")
     @PrimaryKey(autoGenerate = true)
-    var id:Int? = -1
+    var id:Int? = null
+    @ColumnInfo(name = "name")
+    var name: String? = null
 }

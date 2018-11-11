@@ -20,6 +20,8 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     var allCategorySubs: LiveData<List<CategorySub>> = daoCategorySub.getAll()
     var allCards: LiveData<List<Card>> = daoCard.getAll()
 
+    fun getGroup(id:Int?): LiveData<Group> = daoGroup.get(id)
+
     @WorkerThread
     fun <T> insert(t: T) {
         if(t is Group) daoGroup.insert(t)
@@ -27,5 +29,23 @@ class AppRepository(application: Application, scope:CoroutineScope) {
         if(t is CategoryMain) daoCategoryMain.insert(t)
         if(t is CategorySub) daoCategorySub.insert(t)
         if(t is Card) daoCard.insert(t)
+    }
+
+    @WorkerThread
+    fun <T> update(t: T) {
+        if(t is Group) daoGroup.update(t)
+        if(t is Account) daoAccount.update(t)
+        if(t is CategoryMain) daoCategoryMain.update(t)
+        if(t is CategorySub) daoCategorySub.update(t)
+        if(t is Card) daoCard.update(t)
+    }
+
+    @WorkerThread
+    fun <T> delete(t: T) {
+        if(t is Group) daoGroup.delete(t)
+        if(t is Account) daoAccount.delete(t)
+        if(t is CategoryMain) daoCategoryMain.delete(t)
+        if(t is CategorySub) daoCategorySub.delete(t)
+        if(t is Card) daoCard.delete(t)
     }
 }

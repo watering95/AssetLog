@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey
 class Account {
     @ColumnInfo(name = "_id")
     @PrimaryKey(autoGenerate = true)
-    var id:Int? = -1
+    var id:Int? = null
     @ColumnInfo(name = "id_group")
-    var group:Int? = -1
+    var group:Int? = null
     @ColumnInfo(name = "institute")
     var institute: String? = null
     @ColumnInfo(name = "number")
