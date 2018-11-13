@@ -15,7 +15,7 @@ class FragmentEditGroup : Fragment() {
     private lateinit var item: Group
     private lateinit var mViewModel: AppViewModel
     private lateinit var binding:FragmentEditGroupBinding
-    private var mFragmentManager: FragmentManager? = null
+    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_group, container, false)
@@ -29,7 +29,6 @@ class FragmentEditGroup : Fragment() {
     private fun initLayout() {
         val activity = activity as MainActivity
         mViewModel = activity.mViewModel
-        mFragmentManager = fragmentManager
 
         setHasOptionsMenu(true)
         binding.group = this.item
@@ -50,7 +49,7 @@ class FragmentEditGroup : Fragment() {
             R.id.menu_edit_delete -> { mViewModel.delete(this.item) }
         }
 
-        mFragmentManager?.popBackStack()
+        mFragmentManager.popBackStack()
 
         return super.onOptionsItemSelected(item)
     }

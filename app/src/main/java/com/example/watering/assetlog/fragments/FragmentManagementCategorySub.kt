@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.watering.assetlog.viewmodel.AppViewModel
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.CategorySub
@@ -17,9 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FragmentManagementCategorySub : Fragment() {
     private lateinit var mView: View
-    private lateinit var mViewModel: AppViewModel
-    private var mFragmentManager: FragmentManager? = null
-    private lateinit var mTransaction: FragmentTransaction
+    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_management_category_sub, container, false)
@@ -28,14 +24,13 @@ class FragmentManagementCategorySub : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
+        val viewModel = activity.mViewModel
+
         activity.supportActionBar?.setTitle(R.string.title_management_categorysub)
-        mFragmentManager = fragmentManager
 
         setHasOptionsMenu(false)
 
-        mViewModel = activity.mViewModel
-
-        mViewModel.allCategorySubs.observe(this, Observer { categorySubs -> categorySubs?.let {
+        viewModel.allCategorySubs.observe(this, Observer { categorySubs -> categorySubs?.let {
             mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_category_sub).run {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mView.context)
@@ -44,15 +39,15 @@ class FragmentManagementCategorySub : Fragment() {
         } })
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_category_sub)
-        floating.setOnClickListener { replaceFragement(FragmentEditCategorySub().initInstance(CategorySub())) }
+        floating.setOnClickListener { replaceFragment(FragmentEditCategorySub().initInstance(CategorySub())) }
     }
     private fun itemClicked(item: CategorySub) {
-        replaceFragement(FragmentEditCategorySub().initInstance(item))
+        replaceFragment(FragmentEditCategorySub().initInstance(item))
     }
-    private fun replaceFragement(fragment:Fragment) {
-        mFragmentManager?.let {
-            mTransaction = it.beginTransaction()
-            mTransaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
+    private fun replaceFragment(fragment:Fragment) {
+        mFragmentManager.run {
+            val transaction = beginTransaction()
+            transaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
         }
     }
 }

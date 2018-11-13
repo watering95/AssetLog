@@ -16,7 +16,7 @@ class FragmentEditCategoryMain : Fragment() {
     private lateinit var item: CategoryMain
     private lateinit var mViewModel: AppViewModel
     private lateinit var binding:FragmentEditCategorymainBinding
-    private var mFragmentManager: FragmentManager? = null
+    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
     private lateinit var mList:List<String>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,8 +29,6 @@ class FragmentEditCategoryMain : Fragment() {
         return this
     }
     private fun initLayout() {
-        mFragmentManager = fragmentManager
-
         val activity = activity as MainActivity
         mViewModel = activity.mViewModel
 
@@ -51,8 +49,7 @@ class FragmentEditCategoryMain : Fragment() {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
                 binding.viewmodel?.let { viewModel ->
-                    viewModel.categoryMain?.let {
-                        viewModel.selected?.let { selected -> it.kind = mList[selected] }
+                    viewModel.categoryMain?.apply { viewModel.selected?.let { kind = mList[it] } }.let {
                         when {
                             this.item.id == null -> mViewModel.insert(it)
                             else -> mViewModel.update(it)
@@ -62,7 +59,7 @@ class FragmentEditCategoryMain : Fragment() {
             }
             R.id.menu_edit_delete -> { mViewModel.delete(this.item) }
         }
-        mFragmentManager?.popBackStack()
+        mFragmentManager.popBackStack()
 
         return super.onOptionsItemSelected(item)
     }

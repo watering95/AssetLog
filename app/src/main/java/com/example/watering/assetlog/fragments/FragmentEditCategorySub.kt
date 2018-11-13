@@ -18,7 +18,7 @@ class FragmentEditCategorySub : Fragment() {
     private lateinit var item: CategorySub
     private lateinit var mViewModel: AppViewModel
     private lateinit var binding:FragmentEditCategorysubBinding
-    private var mFragmentManager: FragmentManager? = null
+    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_categorysub, container, false)
@@ -30,11 +30,7 @@ class FragmentEditCategorySub : Fragment() {
         return this
     }
     private fun initLayout() {
-        mFragmentManager = fragmentManager
-
         val activity = activity as MainActivity
-        mViewModel = activity.mViewModel
-
         mViewModel = activity.mViewModel
 
         setHasOptionsMenu(true)
@@ -65,13 +61,10 @@ class FragmentEditCategorySub : Fragment() {
             R.id.menu_edit_save -> {
                 binding.viewmodel?.let { viewModel ->
                     mViewModel.allCategoryMains.observe(this, Observer { categoryMains -> categoryMains?.let { list ->
-                        viewModel.selected?.let { id ->
-                            viewModel.categorySub?.let {
-                                it.categoryMain = list[id].id
-                                when {
-                                    this.item.id == null -> mViewModel.insert(it)
-                                    else -> mViewModel.update(it)
-                                }
+                        viewModel.categorySub?.apply { viewModel.selected?.let { categoryMain = list[it].id } }.let {
+                            when {
+                                this.item.id == null -> mViewModel.insert(it)
+                                else -> mViewModel.update(it)
                             }
                         }
                     } })
@@ -79,7 +72,7 @@ class FragmentEditCategorySub : Fragment() {
             }
             R.id.menu_edit_delete -> { mViewModel.delete(this.item) }
         }
-        mFragmentManager?.popBackStack()
+        mFragmentManager.popBackStack()
 
         return super.onOptionsItemSelected(item)
     }

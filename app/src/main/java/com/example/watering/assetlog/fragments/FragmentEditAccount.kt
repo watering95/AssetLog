@@ -18,7 +18,7 @@ class FragmentEditAccount : Fragment() {
     private lateinit var item: Account
     private lateinit var mViewModel: AppViewModel
     private lateinit var binding:FragmentEditAccountBinding
-    private var mFragmentManager: FragmentManager? = null
+    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_account, container, false)
@@ -30,15 +30,13 @@ class FragmentEditAccount : Fragment() {
         return this
     }
     private fun initLayout() {
-        mFragmentManager = fragmentManager
-
         val activity = activity as MainActivity
         mViewModel = activity.mViewModel
 
         setHasOptionsMenu(true)
 
-        mViewModel.allGroups.observe(this, Observer { groups -> groups?.let {listGroup ->
-            val listName = listGroup.map { it.name }
+        mViewModel.allGroups.observe(this, Observer { groups -> groups?.let {list ->
+            val listName = list.map { it.name }
             when {
                 this.item.id != null -> mViewModel.getGroup(this.item.group).observe(this, Observer { selectedGroup -> selectedGroup?.let {
                     binding.viewmodel = EditAccountViewModel(this.item, listName.indexOf(it.name))
@@ -61,23 +59,20 @@ class FragmentEditAccount : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
-                binding.viewmodel?.let { viewModel ->
-                    mViewModel.allGroups.observe(this, Observer { groups -> groups?.let { listGroup ->
-                        viewModel.selected?.let { id ->
-                            viewModel.account?.let {
-                                it.group = listGroup[id].id
-                                when {
-                                    this.item.id == null -> mViewModel.insert(it)
-                                    else -> mViewModel.update(it)
-                                }
+                mViewModel.allGroups.observe(this, Observer { groups -> groups?.let { list ->
+                    binding.viewmodel?.let { viewModel ->
+                        viewModel.account?.apply { viewModel.selected?.let { group = list[it].id } }.let {
+                            when {
+                                this.item.id == null -> mViewModel.insert(it)
+                                else -> mViewModel.update(it)
                             }
                         }
-                    } })
-                }
+                    }}
+                })
             }
             R.id.menu_edit_delete -> { mViewModel.delete(this.item) }
         }
-        mFragmentManager?.popBackStack()
+        mFragmentManager.popBackStack()
 
         return super.onOptionsItemSelected(item)
     }

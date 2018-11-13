@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.watering.assetlog.R
@@ -12,8 +11,8 @@ import com.example.watering.assetlog.view.RecyclerViewAdapterManagementMain
 
 class FragmentManagement : Fragment() {
     private lateinit var mView: View
-    private var mFragmentManager: FragmentManager? = null
-    private lateinit var mTransaction: FragmentTransaction
+    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
+
     private val mFragmentManagementGroup = FragmentManagementGroup()
     private val mFragmentManagementAccount = FragmentManagementAccount()
     private val mFragmentManagementCategoryMain = FragmentManagementCategoryMain()
@@ -29,11 +28,9 @@ class FragmentManagement : Fragment() {
         return mView
     }
     private fun initLayout() {
-        mFragmentManager = fragmentManager
-
         setHasOptionsMenu(false)
 
-        mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_main).apply {
+        mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_main).run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(mView.context)
             adapter = RecyclerViewAdapterManagementMain(lists) { position -> itemClicked(position) }
@@ -51,9 +48,9 @@ class FragmentManagement : Fragment() {
         }
     }
     private fun replaceFragement(fragment:Fragment) {
-        mFragmentManager?.let {
-            mTransaction = it.beginTransaction()
-            mTransaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
+        mFragmentManager.run {
+            val transaction = beginTransaction()
+            transaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
         }
     }
 }
