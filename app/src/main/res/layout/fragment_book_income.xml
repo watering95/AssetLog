@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fragment_book_spend"
+        android:id="@+id/fragment_book_income"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floating_fragment_book_spend"
+            android:id="@+id/floating_fragment_book_income"
             android:src="@drawable/baseline_add_black_18dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

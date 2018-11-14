@@ -7,34 +7,28 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
-import com.example.watering.assetlog.databinding.FragmentEditCategorymainBinding
-import com.example.watering.assetlog.entities.CategoryMain
+import com.example.watering.assetlog.databinding.FragmentEditSpendBinding
+import com.example.watering.assetlog.entities.Spend
 import com.example.watering.assetlog.viewmodel.ViewModelApp
-import com.example.watering.assetlog.viewmodel.ViewModelEditCategoryMain
 
-class FragmentEditCategoryMain : Fragment() {
-    private lateinit var item: CategoryMain
+class FragmentEditSpend : Fragment() {
+    private lateinit var item: Spend
     private lateinit var mViewModel: ViewModelApp
-    private lateinit var binding:FragmentEditCategorymainBinding
+    private lateinit var binding: FragmentEditSpendBinding
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
-    private lateinit var mList:List<String>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = inflate(inflater, R.layout.fragment_edit_categorymain, container, false)
+        binding = inflate(inflater, R.layout.fragment_edit_spend, container, false)
         initLayout()
         return binding.root
     }
-    fun initInstance(item: CategoryMain):FragmentEditCategoryMain {
+    fun initInstance(item: Spend):FragmentEditSpend {
         this.item = item
         return this
     }
     private fun initLayout() {
         val activity = activity as MainActivity
         mViewModel = activity.mViewModel
-
-        mList = resources.getStringArray(R.array.category).toList()
-
-        binding.viewmodel = ViewModelEditCategoryMain(this.item, mList.indexOf(this.item.kind))
 
         setHasOptionsMenu(true)
     }
@@ -48,14 +42,7 @@ class FragmentEditCategoryMain : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
-                binding.viewmodel?.let { viewModel ->
-                    viewModel.categoryMain?.apply { viewModel.selected?.let { kind = mList[it] } }.let {
-                        when {
-                            this.item.id == null -> mViewModel.insert(it)
-                            else -> mViewModel.update(it)
-                        }
-                    }
-                }
+
             }
             R.id.menu_edit_delete -> { mViewModel.delete(this.item) }
         }

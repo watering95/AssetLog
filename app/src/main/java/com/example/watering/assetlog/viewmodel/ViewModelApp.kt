@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.example.watering.assetlog.model.AppRepository
 import kotlinx.coroutines.*
 
-class AppViewModel(application: Application) : AndroidViewModel(application) {
+class ViewModelApp(application: Application) : AndroidViewModel(application) {
     private var parentJob = Job()
     private val coroutineContext = parentJob + Dispatchers.Main
     private val scope = CoroutineScope(coroutineContext)

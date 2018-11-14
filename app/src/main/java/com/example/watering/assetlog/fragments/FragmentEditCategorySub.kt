@@ -11,12 +11,12 @@ import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditCategorysubBinding
 import com.example.watering.assetlog.entities.CategorySub
-import com.example.watering.assetlog.viewmodel.AppViewModel
-import com.example.watering.assetlog.viewmodel.EditCategorySubViewModel
+import com.example.watering.assetlog.viewmodel.ViewModelApp
+import com.example.watering.assetlog.viewmodel.ViewModelEditCategorySub
 
 class FragmentEditCategorySub : Fragment() {
     private lateinit var item: CategorySub
-    private lateinit var mViewModel: AppViewModel
+    private lateinit var mViewModel: ViewModelApp
     private lateinit var binding:FragmentEditCategorysubBinding
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
@@ -39,11 +39,11 @@ class FragmentEditCategorySub : Fragment() {
             val listName = listCategoryMain.map { it.name }
             when {
                 this.item.id != null -> mViewModel.getCategoryMain(this.item.categoryMain).observe(this, Observer { selected -> selected?.let {
-                    binding.viewmodel = EditCategorySubViewModel(this.item, listName.indexOf(it.name))
+                    binding.viewmodel = ViewModelEditCategorySub(this.item, listName.indexOf(it.name))
                     binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
                 } })
                 else -> {
-                    binding.viewmodel = EditCategorySubViewModel(this.item, 0)
+                    binding.viewmodel = ViewModelEditCategorySub(this.item, 0)
                     binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
                 }
             }

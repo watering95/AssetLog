@@ -4,4 +4,4 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.example.watering.assetlog.entities.CategoryMain
 
-class EditCategoryMainViewModel(@Bindable var categoryMain: CategoryMain?, @Bindable var selected:Int?) : BaseObservable()
+class ViewModelEditCategoryMain(@Bindable var categoryMain: CategoryMain?, @Bindable var selected:Int?) : BaseObservable()

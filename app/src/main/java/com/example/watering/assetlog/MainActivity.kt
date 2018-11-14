@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import com.example.watering.assetlog.fragments.*
 import com.example.watering.assetlog.model.GoogleDrive
-import com.example.watering.assetlog.viewmodel.AppViewModel
+import com.example.watering.assetlog.viewmodel.ViewModelApp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.drive.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val mFragmentAccounts = FragmentAccounts()
     private val mFragmentManagement = FragmentManagement()
     val mGoogleDrive = GoogleDrive(this)
-    lateinit var mViewModel: AppViewModel
+    lateinit var mViewModel: ViewModelApp
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         mTransaction = mFragmentManager.beginTransaction()
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         mTransaction.add(R.id.frame_main, mFragmentHome).addToBackStack(null).commit()
 
-        mViewModel = ViewModelProviders.of(this).get(AppViewModel::class.java)
+        mViewModel = ViewModelProviders.of(this).get(ViewModelApp::class.java)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }

@@ -11,12 +11,12 @@ import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditCardBinding
 import com.example.watering.assetlog.entities.Card
-import com.example.watering.assetlog.viewmodel.AppViewModel
-import com.example.watering.assetlog.viewmodel.EditCardViewModel
+import com.example.watering.assetlog.viewmodel.ViewModelApp
+import com.example.watering.assetlog.viewmodel.ViewModelEditCard
 
 class FragmentEditCard : Fragment() {
     private lateinit var item: Card
-    private lateinit var mViewModel: AppViewModel
+    private lateinit var mViewModel: ViewModelApp
     private lateinit var binding: FragmentEditCardBinding
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
@@ -39,11 +39,11 @@ class FragmentEditCard : Fragment() {
             val listName = listAccount.map { it.number }
             when {
                 this.item.id != null -> mViewModel.getAccount(this.item.account).observe(this, Observer { selectedAccount -> selectedAccount?.let {
-                    binding.viewmodel = EditCardViewModel(this.item, listName.indexOf(it.number))
+                    binding.viewmodel = ViewModelEditCard(this.item, listName.indexOf(it.number))
                     binding.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item,listName)
                 } })
                 else -> {
-                    binding.viewmodel = EditCardViewModel(this.item, 0)
+                    binding.viewmodel = ViewModelEditCard(this.item, 0)
                     binding.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item,listName)
                 }
             }

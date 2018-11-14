@@ -9,11 +9,11 @@ import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditGroupBinding
 import com.example.watering.assetlog.entities.Group
-import com.example.watering.assetlog.viewmodel.AppViewModel
+import com.example.watering.assetlog.viewmodel.ViewModelApp
 
 class FragmentEditGroup : Fragment() {
     private lateinit var item: Group
-    private lateinit var mViewModel: AppViewModel
+    private lateinit var mViewModel: ViewModelApp
     private lateinit var binding:FragmentEditGroupBinding
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 

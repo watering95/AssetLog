@@ -4,4 +4,4 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.example.watering.assetlog.entities.Account
 
-class EditAccountViewModel(@Bindable var account:Account?, @Bindable var selected:Int?) : BaseObservable()
+class ViewModelEditAccount(@Bindable var account:Account?, @Bindable var selected:Int?) : BaseObservable()
