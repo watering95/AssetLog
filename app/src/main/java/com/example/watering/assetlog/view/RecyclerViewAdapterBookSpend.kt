@@ -3,6 +3,7 @@ package com.example.watering.assetlog.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.Spend
@@ -25,8 +26,12 @@ class RecyclerViewAdapterBookSpend(val lists:List<Spend>, private val clickListe
     }
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        private var detail: TextView = view.findViewById(R.id.text_detail_card_book_spend)
+        var amount: TextView = view.findViewById(R.id.text_amount_card_book_spend)
 
         fun bind(spend: Spend, position: Int, clickListener: (Int) -> Unit) {
+            detail.text = spend.details
+            amount.text = String.format("%d",spend.amount)
             view.setOnClickListener { clickListener(position) }
         }
     }

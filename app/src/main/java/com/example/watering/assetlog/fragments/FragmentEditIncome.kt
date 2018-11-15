@@ -8,9 +8,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditIncomeBinding
-import com.example.watering.assetlog.databinding.FragmentEditSpendBinding
 import com.example.watering.assetlog.entities.Income
-import com.example.watering.assetlog.entities.Spend
 import com.example.watering.assetlog.viewmodel.ViewModelApp
 
 class FragmentEditIncome : Fragment() {

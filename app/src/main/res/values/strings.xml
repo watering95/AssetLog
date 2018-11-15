@@ -3,6 +3,8 @@
     <string name="group">그룹</string>
     <string name="save">저장</string>
     <string name="delete">삭제</string>
+    <string name="spend">가계부 : 지출</string>
+    <string name="income">가계부 : 수입</string>
     <string name="title_home">Home</string>
     <string name="title_book">가계부</string>
     <string name="title_accounts">계좌</string>

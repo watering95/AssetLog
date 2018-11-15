@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.view.RecyclerViewAdapterManagementMain
+import com.example.watering.assetlog.viewmodel.ViewModelApp
 
 class FragmentManagement : Fragment() {
     private lateinit var mView: View
+    private lateinit var mViewModel: ViewModelApp
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     private val mFragmentManagementGroup = FragmentManagementGroup()
@@ -30,6 +33,8 @@ class FragmentManagement : Fragment() {
     private fun initLayout() {
         setHasOptionsMenu(false)
 
+        mViewModel = (activity as MainActivity).mViewModel
+
         mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_main).run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(mView.context)
@@ -37,20 +42,16 @@ class FragmentManagement : Fragment() {
         }
     }
     private fun itemClicked(position: Int) {
-        when (position) {
-            0 -> replaceFragement(mFragmentManagementGroup)
-            1 -> replaceFragement(mFragmentManagementAccount)
-            2 -> replaceFragement(mFragmentManagementCategoryMain)
-            3 -> replaceFragement(mFragmentManagementCategorySub)
-            4 -> replaceFragement(mFragmentManagementCard)
-            5 -> replaceFragement(mFragmentManagementDB)
-            else -> {  }
-        }
-    }
-    private fun replaceFragement(fragment:Fragment) {
-        mFragmentManager.run {
-            val transaction = beginTransaction()
-            transaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
+        mViewModel.run {
+            when (position) {
+                0 -> replaceFragement(mFragmentManager, mFragmentManagementGroup)
+                1 -> replaceFragement(mFragmentManager, mFragmentManagementAccount)
+                2 -> replaceFragement(mFragmentManager, mFragmentManagementCategoryMain)
+                3 -> replaceFragement(mFragmentManager, mFragmentManagementCategorySub)
+                4 -> replaceFragement(mFragmentManager, mFragmentManagementCard)
+                5 -> replaceFragement(mFragmentManager, mFragmentManagementDB)
+                else -> {  }
+            }
         }
     }
 }

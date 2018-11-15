@@ -11,10 +11,12 @@ import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.Card
 import com.example.watering.assetlog.view.RecyclerViewAdapterManagementCard
+import com.example.watering.assetlog.viewmodel.ViewModelApp
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FragmentManagementCard : Fragment() {
     private lateinit var mView: View
+    private lateinit var mViewModel: ViewModelApp
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -24,13 +26,13 @@ class FragmentManagementCard : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
-        val viewModel = activity.mViewModel
+        mViewModel = activity.mViewModel
 
         activity.supportActionBar?.setTitle(R.string.title_management_card)
 
         setHasOptionsMenu(false)
 
-        viewModel.allCards.observe(this, Observer { cards -> cards?.let {
+        mViewModel.allCards.observe(this, Observer { cards -> cards?.let {
             mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_card).apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mView.context)
@@ -39,15 +41,9 @@ class FragmentManagementCard : Fragment() {
         } })
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_card)
-        floating.setOnClickListener { replaceFragement(FragmentEditCard().initInstance(Card())) }
+        floating.setOnClickListener { mViewModel.replaceFragement(mFragmentManager, FragmentEditCard().initInstance(Card())) }
     }
     private fun itemClicked(item: Card) {
-        replaceFragement(FragmentEditCard().initInstance(item))
-    }
-    private fun replaceFragement(fragment:Fragment) {
-        mFragmentManager.run {
-            val transaction = beginTransaction()
-            transaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
-        }
+        mViewModel.replaceFragement(mFragmentManager, FragmentEditCard().initInstance(item))
     }
 }

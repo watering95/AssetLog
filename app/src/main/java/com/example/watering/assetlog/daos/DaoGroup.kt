@@ -9,8 +9,8 @@ interface DaoGroup {
     @Query("SELECT * FROM tbl_Group")
     fun getAll(): LiveData<List<Group>>
 
-    @Query("SELECT * FROM tbl_Group WHERE _id = :groupId LIMIT 1")
-    fun get(groupId: Int?): LiveData<Group>
+    @Query("SELECT * FROM tbl_Group WHERE _id = :id LIMIT 1")
+    fun get(id: Int?): LiveData<Group>
 
     @Insert
     fun insert(group: Group)

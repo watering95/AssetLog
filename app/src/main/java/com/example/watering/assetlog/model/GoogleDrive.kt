@@ -38,7 +38,7 @@ class GoogleDrive(val context: Context) {
     } catch (e: FileNotFoundException) {
         Toast.makeText(context, R.string.toast_db_del_error, Toast.LENGTH_SHORT).show()
     }
-    fun saveFileToDrive() {
+    fun saveFileToDrive(date:String) {
         val context = this.context as AppCompatActivity
         val fileInputStream: FileInputStream
         val fileName = context.getDatabasePath(dbFileName)
@@ -50,10 +50,10 @@ class GoogleDrive(val context: Context) {
             return
         }
 
-        driveResourceClient.createContents().continueWithTask { createFileIntentSender(it.result, fileInputStream) }
+        driveResourceClient.createContents().continueWithTask { createFileIntentSender(it.result, fileInputStream, date) }
             .addOnFailureListener { Log.w(TAG,"Failed to create new contents.", it) }
     }
-    private fun createFileIntentSender(driveContents: DriveContents?, file: FileInputStream): Task<Void> {
+    private fun createFileIntentSender(driveContents: DriveContents?, file: FileInputStream, date: String): Task<Void> {
         val context = this.context as AppCompatActivity
         val outputStream = driveContents?.outputStream
 
@@ -67,7 +67,7 @@ class GoogleDrive(val context: Context) {
             Log.w(TAG, "Unable to write file contents.", e)
         }
 
-        val filename = "AssetLog_" + getToday() + ".db"
+        val filename = "AssetLog_$date.db"
         val metadataChangeSet = MetadataChangeSet.Builder().setMimeType("application/x-sqlite3")
             .setTitle(filename).build()
         val createFileActivityOptions = CreateFileActivityOptions.Builder()
@@ -133,13 +133,6 @@ class GoogleDrive(val context: Context) {
             }
             Toast.makeText(context, R.string.toast_db_restore_ok, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun getToday(): String {
-        val today = Calendar.getInstance()
-        return String.format(
-            Locale.getDefault(), "%04d-%02d-%02d", today.get(Calendar.YEAR),today.get(Calendar.MONTH)+1,today.get(
-                Calendar.DATE))
     }
 
     fun signIn(code:Int) {

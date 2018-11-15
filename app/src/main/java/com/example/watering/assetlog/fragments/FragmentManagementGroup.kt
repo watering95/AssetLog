@@ -11,10 +11,12 @@ import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.Group
 import com.example.watering.assetlog.view.RecyclerViewAdapterManagementGroup
+import com.example.watering.assetlog.viewmodel.ViewModelApp
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FragmentManagementGroup : Fragment() {
     private lateinit var mView: View
+    private lateinit var mViewModel: ViewModelApp
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -24,13 +26,13 @@ class FragmentManagementGroup : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
-        val viewModel = activity.mViewModel
+        mViewModel = activity.mViewModel
 
         activity.supportActionBar?.setTitle(R.string.title_management_group)
 
         setHasOptionsMenu(false)
 
-        viewModel.allGroups.observe(this, Observer { groups -> groups?.let {
+        mViewModel.allGroups.observe(this, Observer { groups -> groups?.let {
             mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_group).run {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mView.context)
@@ -40,16 +42,10 @@ class FragmentManagementGroup : Fragment() {
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_group)
         floating.setOnClickListener {
-            replaceFragement(FragmentEditGroup().initInstance(Group()))
+            mViewModel.replaceFragement(mFragmentManager, FragmentEditGroup().initInstance(Group()))
         }
     }
     private fun itemClicked(item: Group) {
-        replaceFragement(FragmentEditGroup().initInstance(item))
-    }
-    private fun replaceFragement(fragment:Fragment) {
-        mFragmentManager.run {
-            val transaction = beginTransaction()
-            transaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
-        }
+        mViewModel.replaceFragement(mFragmentManager, FragmentEditGroup().initInstance(item))
     }
 }

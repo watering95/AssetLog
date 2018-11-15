@@ -9,8 +9,8 @@ interface DaoCategoryMain {
     @Query("SELECT * from tbl_category_main")
     fun getAll(): LiveData<List<CategoryMain>>
 
-    @Query("SELECT * FROM tbl_category_main WHERE _id = :categoryMainId LIMIT 1")
-    fun get(categoryMainId: Int?): LiveData<CategoryMain>
+    @Query("SELECT * FROM tbl_category_main WHERE _id = :id LIMIT 1")
+    fun get(id: Int?): LiveData<CategoryMain>
 
     @Insert
     fun insert(categoryMain: CategoryMain)

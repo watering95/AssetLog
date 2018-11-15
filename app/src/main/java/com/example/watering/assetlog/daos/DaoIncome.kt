@@ -9,4 +9,7 @@ import com.example.watering.assetlog.entities.Income
 interface DaoIncome {
     @Query("SELECT * from tbl_income")
     fun getAll(): LiveData<List<Income>>
+
+    @Query("SELECT * from tbl_income WHERE date = :date")
+    fun get(date:String?): LiveData<List<Income>>
 }

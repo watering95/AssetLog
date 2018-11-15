@@ -11,10 +11,12 @@ import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.Account
 import com.example.watering.assetlog.view.RecyclerViewAdapterManagementAccount
+import com.example.watering.assetlog.viewmodel.ViewModelApp
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FragmentManagementAccount : Fragment() {
     private lateinit var mView: View
+    private lateinit var mViewModel: ViewModelApp
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -26,11 +28,11 @@ class FragmentManagementAccount : Fragment() {
         val activity = activity as MainActivity
         activity.supportActionBar?.setTitle(R.string.title_management_account)
 
-        val viewModel = activity.mViewModel
+        mViewModel = activity.mViewModel
 
         setHasOptionsMenu(false)
 
-        viewModel.allAccounts.observe(this, Observer { accounts -> accounts?.let {
+        mViewModel.allAccounts.observe(this, Observer { accounts -> accounts?.let {
             mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_account).apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mView.context)
@@ -39,15 +41,9 @@ class FragmentManagementAccount : Fragment() {
         } })
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_account)
-        floating.setOnClickListener { replaceFragement(FragmentEditAccount().initInstance(Account())) }
+        floating.setOnClickListener { mViewModel.replaceFragement(mFragmentManager, FragmentEditAccount().initInstance(Account())) }
     }
     private fun itemClicked(item: Account) {
-        replaceFragement(FragmentEditAccount().initInstance(item))
-    }
-    private fun replaceFragement(fragment:Fragment) {
-        mFragmentManager.run {
-            val transaction = beginTransaction()
-            transaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
-        }
+        mViewModel.replaceFragement(mFragmentManager, FragmentEditAccount().initInstance(item))
     }
 }

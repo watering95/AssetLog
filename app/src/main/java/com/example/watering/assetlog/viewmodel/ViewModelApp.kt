@@ -1,7 +1,10 @@
 package com.example.watering.assetlog.viewmodel
 
 import android.app.Application
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.AndroidViewModel
+import com.example.watering.assetlog.R
 import com.example.watering.assetlog.model.AppRepository
 import kotlinx.coroutines.*
 
@@ -21,6 +24,8 @@ class ViewModelApp(application: Application) : AndroidViewModel(application) {
     fun getGroup(id: Int?) = repository.getGroup(id)
     fun getAccount(id: Int?) = repository.getAccount(id)
     fun getCategoryMain(id: Int?) = repository.getCategoryMain(id)
+    fun getSpends(date: String?) = repository.getSpends(date)
+    fun getIncomes(date: String?) = repository.getIncomes(date)
 
     fun <T> insert(t: T) = scope.launch(Dispatchers.IO) { repository.insert(t) }
 
@@ -31,5 +36,12 @@ class ViewModelApp(application: Application) : AndroidViewModel(application) {
     override fun onCleared() {
         super.onCleared()
         parentJob.cancel()
+    }
+
+    fun replaceFragement(fragmentManager: FragmentManager, fragment: Fragment) {
+        fragmentManager.run {
+            val transaction = beginTransaction()
+            transaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
+        }
     }
 }

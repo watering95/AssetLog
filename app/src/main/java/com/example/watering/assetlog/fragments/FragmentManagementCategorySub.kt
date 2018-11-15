@@ -11,10 +11,12 @@ import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.CategorySub
 import com.example.watering.assetlog.view.RecyclerViewAdapterManagementCategorySub
+import com.example.watering.assetlog.viewmodel.ViewModelApp
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FragmentManagementCategorySub : Fragment() {
     private lateinit var mView: View
+    private lateinit var mViewModel: ViewModelApp
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -24,13 +26,13 @@ class FragmentManagementCategorySub : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
-        val viewModel = activity.mViewModel
+        mViewModel = activity.mViewModel
 
         activity.supportActionBar?.setTitle(R.string.title_management_categorysub)
 
         setHasOptionsMenu(false)
 
-        viewModel.allCategorySubs.observe(this, Observer { categorySubs -> categorySubs?.let {
+        mViewModel.allCategorySubs.observe(this, Observer { categorySubs -> categorySubs?.let {
             mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_category_sub).run {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mView.context)
@@ -39,15 +41,9 @@ class FragmentManagementCategorySub : Fragment() {
         } })
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_category_sub)
-        floating.setOnClickListener { replaceFragment(FragmentEditCategorySub().initInstance(CategorySub())) }
+        floating.setOnClickListener { mViewModel.replaceFragement(mFragmentManager, FragmentEditCategorySub().initInstance(CategorySub())) }
     }
     private fun itemClicked(item: CategorySub) {
-        replaceFragment(FragmentEditCategorySub().initInstance(item))
-    }
-    private fun replaceFragment(fragment:Fragment) {
-        mFragmentManager.run {
-            val transaction = beginTransaction()
-            transaction.replace(R.id.frame_main, fragment).addToBackStack(null).commit()
-        }
+        mViewModel.replaceFragement(mFragmentManager, FragmentEditCategorySub().initInstance(item))
     }
 }

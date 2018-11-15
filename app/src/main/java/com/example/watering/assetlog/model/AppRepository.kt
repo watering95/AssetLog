@@ -13,6 +13,8 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     private val daoCategoryMain = db.daoCategoryMain()
     private val daoCategorySub = db.daoCategorySub()
     private val daoCard = db.daoCard()
+    private val daoSpend = db.daoSpend()
+    private val daoIncome = db.daoIncome()
 
     var allGroups: LiveData<List<Group>> = daoGroup.getAll()
     var allAccounts: LiveData<List<Account>> = daoAccount.getAll()
@@ -23,6 +25,8 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     fun getGroup(id:Int?): LiveData<Group> = daoGroup.get(id)
     fun getAccount(id:Int?): LiveData<Account> = daoAccount.get(id)
     fun getCategoryMain(id:Int?): LiveData<CategoryMain> = daoCategoryMain.get(id)
+    fun getSpends(date:String?): LiveData<List<Spend>> = daoSpend.get(date)
+    fun getIncomes(date:String?): LiveData<List<Income>> = daoIncome.get(date)
 
     @WorkerThread
     fun <T> insert(t: T) {

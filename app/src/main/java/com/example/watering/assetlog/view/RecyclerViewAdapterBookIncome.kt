@@ -3,10 +3,10 @@ package com.example.watering.assetlog.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.Income
-import com.example.watering.assetlog.entities.Spend
 
 class RecyclerViewAdapterBookIncome(val lists:List<Income>, private val clickListener: (Int) -> Unit): RecyclerView.Adapter<RecyclerViewAdapterBookIncome.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,8 +26,12 @@ class RecyclerViewAdapterBookIncome(val lists:List<Income>, private val clickLis
     }
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        private var detail: TextView = view.findViewById(R.id.text_detail_card_book_income)
+        var amount: TextView = view.findViewById(R.id.text_amount_card_book_income)
 
         fun bind(income: Income, position: Int, clickListener: (Int) -> Unit) {
+            detail.text = income.details
+            amount.text = String.format("%d",income.amount)
             view.setOnClickListener { clickListener(position) }
         }
     }
