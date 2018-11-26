@@ -32,7 +32,7 @@ class FragmentManagementCategorySub : Fragment() {
 
         setHasOptionsMenu(false)
 
-        mViewModel.allCategorySubs.observe(this, Observer { categorySubs -> categorySubs?.let {
+        mViewModel.allCatSubs.observe(this, Observer { categorySubs -> categorySubs?.let {
             mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_category_sub).run {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mView.context)

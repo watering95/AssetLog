@@ -1,48 +1,86 @@
 package com.example.watering.assetlog.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
+import com.example.watering.assetlog.databinding.FragmentBookSpendBinding
 import com.example.watering.assetlog.entities.Spend
+import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.view.RecyclerViewAdapterBookSpend
 import com.example.watering.assetlog.viewmodel.ViewModelApp
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.*
 
 class FragmentBookSpend : Fragment() {
-    private lateinit var mView: View
     private lateinit var mViewModel: ViewModelApp
-    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
+    private lateinit var binding: FragmentBookSpendBinding
+    private val mFragmentManager by lazy { (activity as MainActivity).supportFragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mView = inflater.inflate(R.layout.fragment_book_spend, container, false)
+        binding = inflate(inflater, R.layout.fragment_book_spend, container, false)
         initLayout()
-        return mView
+        return binding.root
     }
     private fun initLayout() {
         val activity = activity as MainActivity
-        activity.supportActionBar?.setTitle(R.string.spend)
+        activity.supportActionBar?.setTitle(R.string.title_spend)
 
         mViewModel = activity.mViewModel
-        val mModel = activity.mModel
+        binding.date = ModelCalendar.getToday()
 
         setHasOptionsMenu(false)
 
-        mViewModel.getSpends(mModel.getToday()).observe(this, Observer { spends -> spends?.let {
-            mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_book_spend).apply {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(mView.context)
-                adapter = RecyclerViewAdapterBookSpend(it) { position -> itemClicked(it[position]) }
+        binding.buttonCalendarFragmentBookSpend.setOnClickListener {
+            val dialog = DialogDate().newInstance(binding.date, object:DialogDate.Complete {
+                override fun onComplete(date: String?) {
+                    val select = ModelCalendar.strToCalendar(date)
+                    when {
+                        Calendar.getInstance().before(select) -> Toast.makeText(activity, R.string.toast_date_error, Toast.LENGTH_SHORT).show()
+                        else -> binding.date = ModelCalendar.calendarToStr(select)
+                    }
+                }
+            })
+            dialog.show(fragmentManager, "dialog")
+        }
+        binding.buttonBackwardFragmentBookSpend.setOnClickListener {
+            val date = ModelCalendar.changeDate(binding.date.toString(), -1)
+            binding.date = ModelCalendar.calendarToStr(date)
+        }
+        binding.buttonForwordFragmentBookSpend.setOnClickListener {
+            val date = ModelCalendar.changeDate(binding.date.toString(), 1)
+            when {
+                Calendar.getInstance().before(date) -> Toast.makeText(activity, R.string.toast_date_error, Toast.LENGTH_SHORT).show()
+                else -> binding.date = ModelCalendar.calendarToStr(date)
             }
-        } })
+        }
 
-        val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_book_spend)
-        floating.setOnClickListener { mViewModel.replaceFragement(mFragmentManager, FragmentEditSpend().initInstance(Spend())) }
+        binding.textDateFragmentBookSpend.addTextChangedListener(object: TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                mViewModel.getSpends(binding.date).observe(this@FragmentBookSpend, Observer { spends -> spends?.let {
+                    binding.recyclerviewFragmentBookSpend.apply {
+                        setHasFixedSize(true)
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = RecyclerViewAdapterBookSpend(it) { position -> itemClicked(it[position]) }
+                    }
+                } })
+            }
+        })
+
+        binding.floatingFragmentBookSpend.setOnClickListener { mViewModel.replaceFragement(mFragmentManager, FragmentEditSpend().initInstance(Spend())) }
     }
     private fun itemClicked(item: Spend) {
         mViewModel.replaceFragement(mFragmentManager, FragmentEditSpend().initInstance(item))

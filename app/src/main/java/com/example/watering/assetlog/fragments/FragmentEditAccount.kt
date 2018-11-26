@@ -40,13 +40,10 @@ class FragmentEditAccount : Fragment() {
             when {
                 this.item.id != null -> mViewModel.getGroup(this.item.group).observe(this, Observer { selectedGroup -> selectedGroup?.let {
                     binding.viewmodel = ViewModelEditAccount(this.item, listName.indexOf(it.name))
-                    binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
                 } })
-                else -> {
-                    binding.viewmodel = ViewModelEditAccount(this.item, 0)
-                    binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
-                }
+                else -> binding.viewmodel = ViewModelEditAccount(this.item, 0)
             }
+            binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
         } })
     }
 

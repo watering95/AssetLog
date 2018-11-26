@@ -9,6 +9,7 @@ import com.example.watering.assetlog.fragments.FragmentBookSpend
 class PagerAdapterBook(fm: FragmentManager): FragmentPagerAdapter(fm) {
     private val fragmentBookSpend = FragmentBookSpend()
     private val fragmentBookIncome = FragmentBookIncome()
+    private val titles = arrayOf("지출", "수입")
 
     override fun getItem(position: Int): Fragment {
         return when(position) {
@@ -20,5 +21,9 @@ class PagerAdapterBook(fm: FragmentManager): FragmentPagerAdapter(fm) {
 
     override fun getCount(): Int {
         return 2
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return titles[position]
     }
 }

@@ -26,13 +26,13 @@ class FragmentManagementCategoryMain : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
-        val mViewModel = activity.mViewModel
+        mViewModel = activity.mViewModel
 
         activity.supportActionBar?.setTitle(R.string.title_management_categorymain)
 
         setHasOptionsMenu(false)
 
-        mViewModel.allCategoryMains.observe(this, Observer { categoryMains -> categoryMains?.let {
+        mViewModel.allCatMains.observe(this, Observer { categoryMains -> categoryMains?.let {
             mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_management_category_main).run {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mView.context)

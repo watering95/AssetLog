@@ -12,6 +12,9 @@ interface DaoAccount {
     @Query("SELECT * FROM tbl_Account WHERE _id = :id LIMIT 1")
     fun get(id: Int?): LiveData<Account>
 
+    @Query("SELECT * FROM tbl_Account WHERE id_group = :id")
+    fun getByGroup(id: Int?): LiveData<List<Account>>
+
     @Insert
     fun insert(account: Account)
 

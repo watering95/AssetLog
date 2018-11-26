@@ -10,6 +10,6 @@ interface DaoSpend {
     @Query("SELECT * from tbl_spend")
     fun getAll(): LiveData<List<Spend>>
 
-    @Query("SELECT * from tbl_spend WHERE date_use = :dateUse")
-    fun get(dateUse:String?): LiveData<List<Spend>>
+    @Query("SELECT * from tbl_spend WHERE date_use = :date")
+    fun get(date: String?): LiveData<List<Spend>>
 }

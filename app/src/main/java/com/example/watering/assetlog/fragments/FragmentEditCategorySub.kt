@@ -35,18 +35,15 @@ class FragmentEditCategorySub : Fragment() {
 
         setHasOptionsMenu(true)
 
-        mViewModel.allCategoryMains.observe(this, Observer { listCategoryMains -> listCategoryMains?.let {listCategoryMain ->
+        mViewModel.allCatMains.observe(this, Observer { listCategoryMains -> listCategoryMains?.let { listCategoryMain ->
             val listName = listCategoryMain.map { it.name }
             when {
-                this.item.id != null -> mViewModel.getCategoryMain(this.item.categoryMain).observe(this, Observer { selected -> selected?.let {
+                this.item.id != null -> mViewModel.getCatMain(this.item.categoryMain).observe(this, Observer { selected -> selected?.let {
                     binding.viewmodel = ViewModelEditCategorySub(this.item, listName.indexOf(it.name))
-                    binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
                 } })
-                else -> {
-                    binding.viewmodel = ViewModelEditCategorySub(this.item, 0)
-                    binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
-                }
+                else -> binding.viewmodel = ViewModelEditCategorySub(this.item, 0)
             }
+            binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
         } })
     }
 
@@ -60,7 +57,7 @@ class FragmentEditCategorySub : Fragment() {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
                 binding.viewmodel?.let { viewModel ->
-                    mViewModel.allCategoryMains.observe(this, Observer { categoryMains -> categoryMains?.let { list ->
+                    mViewModel.allCatMains.observe(this, Observer { categoryMains -> categoryMains?.let { list ->
                         viewModel.categorySub?.apply { viewModel.selected?.let { categoryMain = list[it].id } }.let {
                             when {
                                 this.item.id == null -> mViewModel.insert(it)

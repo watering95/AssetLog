@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import com.example.watering.assetlog.fragments.*
-import com.example.watering.assetlog.model.AppModel
+import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.model.GoogleDrive
 import com.example.watering.assetlog.viewmodel.ViewModelApp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     private val mFragmentManagement = FragmentManagement()
     val mGoogleDrive = GoogleDrive(this)
     lateinit var mViewModel: ViewModelApp
-    lateinit var mModel: AppModel
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         mTransaction = mFragmentManager.beginTransaction()
@@ -78,8 +77,6 @@ class MainActivity : AppCompatActivity() {
         val toolBar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolBar)
 
-        mModel = AppModel()
-
         mTransaction.add(R.id.frame_main, mFragmentHome).addToBackStack(null).commit()
 
         mViewModel = ViewModelProviders.of(this).get(ViewModelApp::class.java)
@@ -95,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                         mGoogleDrive.driveClient = Drive.getDriveClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
                         mGoogleDrive.driveResourceClient = Drive.getDriveResourceClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
                         when (requestCode) {
-                            GoogleDrive.REQUEST_CODE_SIGN_IN_UP -> mGoogleDrive.saveFileToDrive(mModel.getToday())
+                            GoogleDrive.REQUEST_CODE_SIGN_IN_UP -> mGoogleDrive.saveFileToDrive(ModelCalendar.getToday())
                             else -> mGoogleDrive.downloadFileFromDrive()
                         }
                     }

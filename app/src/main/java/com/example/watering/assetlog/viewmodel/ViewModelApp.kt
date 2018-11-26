@@ -17,15 +17,22 @@ class ViewModelApp(application: Application) : AndroidViewModel(application) {
 
     val allGroups = repository.allGroups
     val allAccounts = repository.allAccounts
-    val allCategoryMains = repository.allCategoryMains
-    val allCategorySubs = repository.allCategorySubs
+    val allCatMains = repository.allCatMains
+    val allCatSubs = repository.allCatSubs
     val allCards = repository.allCards
 
     fun getGroup(id: Int?) = repository.getGroup(id)
     fun getAccount(id: Int?) = repository.getAccount(id)
-    fun getCategoryMain(id: Int?) = repository.getCategoryMain(id)
+    fun getAccountByGroup(id_group: Int?) = repository.getAccountByGroup(id_group)
+    fun getCatMain(id: Int?) = repository.getCatMain(id)
+    fun getCatMainsByKind(kind: String?) = repository.getCatMainByKind(kind)
+    fun getCatSub(id: Int?) = repository.getCatSub(id)
+    fun getCatSubsByMain(id_main: Int?) = repository.getCatSubsByMain(id_main)
     fun getSpends(date: String?) = repository.getSpends(date)
+    fun getSpendCashByCode(code: String?) = repository.getSpendCash(code)
+    fun getSpendCardByCode(code: String?) = repository.getSpendCard(code)
     fun getIncomes(date: String?) = repository.getIncomes(date)
+    fun getCard(id: Int?) = repository.getCard(id)
 
     fun <T> insert(t: T) = scope.launch(Dispatchers.IO) { repository.insert(t) }
 

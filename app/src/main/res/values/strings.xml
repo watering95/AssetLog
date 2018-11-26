@@ -3,8 +3,10 @@
     <string name="group">그룹</string>
     <string name="save">저장</string>
     <string name="delete">삭제</string>
-    <string name="spend">가계부 : 지출</string>
-    <string name="income">가계부 : 수입</string>
+    <string name="select">선택</string>
+    <string name="cancel">취소</string>
+    <string name="title_spend">가계부 : 지출</string>
+    <string name="title_income">가계부 : 수입</string>
     <string name="title_home">Home</string>
     <string name="title_book">가계부</string>
     <string name="title_accounts">계좌</string>
@@ -15,6 +17,7 @@
     <string name="title_management_categorymain">주카테고리 관리</string>
     <string name="title_management_categorysub">부카테고리 관리</string>
     <string name="title_management_db">데이터베이스 관리</string>
+    <string name="title_select_date">날짜 선택</string>
     <string name="toast_db_del_ok">DB File을 삭제하였습니다.</string>
     <string name="toast_db_del_error">DB File을 삭제하지 못했습니다.</string>
     <string name="toast_db_open_error">DB File을 열지 못했습니다.</string>
@@ -23,8 +26,13 @@
     <string name="toast_db_no_exist_error">DB File이 없습니다.</string>
     <string name="toast_db_backup_ok">DB File이 Backup 되었습니다.</string>
     <string name="toast_db_backup_error">DB File이 Backup 되지 았않습니다.</string>
+    <string name="toast_date_error">오늘 이전 날짜로 선택해 주세요.</string>
     <array name="category">
         <item name="spend">spend</item>
         <item name="income">income</item>
+    </array>
+    <array name="type">
+        <item name="cash">cash</item>
+        <item name="card">card</item>
     </array>
 </resources>

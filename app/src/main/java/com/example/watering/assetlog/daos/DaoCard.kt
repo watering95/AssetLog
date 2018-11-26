@@ -9,6 +9,9 @@ interface DaoCard {
     @Query("SELECT * from tbl_card")
     fun getAll(): LiveData<List<Card>>
 
+    @Query("SELECT * FROM tbl_card WHERE _id = :id LIMIT 1")
+    fun get(id: Int?): LiveData<Card>
+
     @Insert
     fun insert(card: Card)
 

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.Income
+import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.view.RecyclerViewAdapterBookIncome
 import com.example.watering.assetlog.viewmodel.ViewModelApp
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,7 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class FragmentBookIncome : Fragment() {
     private lateinit var mView: View
     private lateinit var mViewModel: ViewModelApp
-    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
+    private val mFragmentManager by lazy { (activity as MainActivity).supportFragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_book_income, container, false)
@@ -26,14 +27,13 @@ class FragmentBookIncome : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
-        activity.supportActionBar?.setTitle(R.string.income)
+        activity.supportActionBar?.setTitle(R.string.title_income)
 
         mViewModel = activity.mViewModel
-        val mModel = activity.mModel
 
         setHasOptionsMenu(false)
 
-        mViewModel.getIncomes(mModel.getToday()).observe(this, Observer { incomes -> incomes?.let {
+        mViewModel.getIncomes(ModelCalendar.getToday()).observe(this, Observer { incomes -> incomes?.let {
             mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_book_income).apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mView.context)
