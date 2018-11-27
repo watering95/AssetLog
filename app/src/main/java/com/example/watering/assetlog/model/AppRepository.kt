@@ -14,8 +14,6 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     private val daoCatSub = db.daoCategorySub()
     private val daoCard = db.daoCard()
     private val daoSpend = db.daoSpend()
-    private val daoSpendCard = db.daoSpendCard()
-    private val daoSpendCash = db.daoSpendCash()
     private val daoIncome = db.daoIncome()
 
     var allGroups: LiveData<List<Group>> = daoGroup.getAll()
@@ -26,17 +24,14 @@ class AppRepository(application: Application, scope:CoroutineScope) {
 
     fun getGroup(id: Int?): LiveData<Group> = daoGroup.get(id)
     fun getAccount(id: Int?): LiveData<Account> = daoAccount.get(id)
-    fun getAccountByGroup(id_group: Int?): LiveData<List<Account>> = daoAccount.getByGroup(id_group)
+    fun getAccountByCode(code: String?): LiveData<Account> = daoAccount.getByCode(code)
     fun getCatMain(id: Int?): LiveData<CategoryMain> = daoCatMain.get(id)
     fun getCatMainByKind(kind: String?): LiveData<List<CategoryMain>> = daoCatMain.getByKind(kind)
-    fun getCatMainByName(name: String?): LiveData<CategoryMain> = daoCatMain.getByName(name)
-    fun getCard(id: Int?): LiveData<Card> = daoCard.get(id)
+    fun getCardByCode(code: String?): LiveData<Card> = daoCard.getByCode(code)
     fun getIncomes(date: String?): LiveData<List<Income>> = daoIncome.get(date)
     fun getCatSub(id: Int?): LiveData<CategorySub> = daoCatSub.get(id)
     fun getCatSubsByMain(id_main: Int?): LiveData<List<CategorySub>> = daoCatSub.getByMain(id_main)
     fun getSpends(date: String?): LiveData<List<Spend>> = daoSpend.get(date)
-    fun getSpendCard(code: String?): LiveData<SpendCard> = daoSpendCard.get(code)
-    fun getSpendCash(code: String?): LiveData<SpendCash> = daoSpendCash.get(code)
 
     @WorkerThread
     fun <T> insert(t: T) {

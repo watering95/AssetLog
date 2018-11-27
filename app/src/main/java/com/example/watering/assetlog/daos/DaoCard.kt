@@ -12,6 +12,9 @@ interface DaoCard {
     @Query("SELECT * FROM tbl_card WHERE _id = :id LIMIT 1")
     fun get(id: Int?): LiveData<Card>
 
+    @Query("SELECT * FROM tbl_card INNER JOIN tbl_spend_card on tbl_spend_card.id_card = tbl_card._id WHERE tbl_spend_card.spend_code = :code LIMIT 1")
+    fun getByCode(code: String?): LiveData<Card>
+
     @Insert
     fun insert(card: Card)
 

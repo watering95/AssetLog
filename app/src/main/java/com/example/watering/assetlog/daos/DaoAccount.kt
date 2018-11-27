@@ -15,6 +15,9 @@ interface DaoAccount {
     @Query("SELECT * FROM tbl_Account WHERE id_group = :id")
     fun getByGroup(id: Int?): LiveData<List<Account>>
 
+    @Query("SELECT * FROM tbl_Account INNER JOIN tbl_spend_cash on tbl_spend_cash.id_account = tbl_Account._id WHERE tbl_spend_cash.spend_code = :code LIMIT 1")
+    fun getByCode(code: String?): LiveData<Account>
+
     @Insert
     fun insert(account: Account)
 

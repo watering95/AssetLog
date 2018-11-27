@@ -70,11 +70,11 @@ class FragmentBookSpend : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                mViewModel.getSpends(binding.date).observe(this@FragmentBookSpend, Observer { spends -> spends?.let {
-                    binding.recyclerviewFragmentBookSpend.apply {
+                mViewModel.getSpends(binding.date).observe(this@FragmentBookSpend, Observer { list -> list?.let {
+                    binding.recyclerviewFragmentBookSpend.run {
                         setHasFixedSize(true)
                         layoutManager = LinearLayoutManager(context)
-                        adapter = RecyclerViewAdapterBookSpend(it) { position -> itemClicked(it[position]) }
+                        adapter = RecyclerViewAdapterBookSpend(list) { position -> itemClicked(list[position]) }
                     }
                 } })
             }

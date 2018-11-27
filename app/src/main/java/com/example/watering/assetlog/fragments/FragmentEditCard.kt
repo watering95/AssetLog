@@ -35,16 +35,17 @@ class FragmentEditCard : Fragment() {
 
         setHasOptionsMenu(true)
 
-        mViewModel.allAccounts.observe(this, Observer { accounts -> accounts?.let {listAccount ->
-            val listName = listAccount.map { it.number }
-            when {
-                this.item.id != null -> mViewModel.getAccount(this.item.account).observe(this, Observer { selectedAccount -> selectedAccount?.let {
-                    binding.viewmodel = ViewModelEditCard(this.item, listName.indexOf(it.number))
-                    binding.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item,listName)
-                } })
-                else -> {
-                    binding.viewmodel = ViewModelEditCard(this.item, 0)
-                    binding.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item,listName)
+        mViewModel.allAccounts.observe(this, Observer { list -> list?.let {
+            list.map { it.number }.let { list ->
+                when {
+                    this.item.id != null -> mViewModel.getAccount(this.item.account).observe(this, Observer { account -> account?.let {
+                        binding.viewmodel = ViewModelEditCard(this.item, list.indexOf(account.number))
+                        binding.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item,list)
+                    } })
+                    else -> {
+                        binding.viewmodel = ViewModelEditCard(this.item, 0)
+                        binding.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item,list)
+                    }
                 }
             }
         } })
@@ -59,12 +60,12 @@ class FragmentEditCard : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
-                mViewModel.allAccounts.observe(this, Observer { accounts -> accounts?.let { list ->
-                    binding.viewmodel?.let { viewModel ->
-                        viewModel.card?.apply { viewModel.selected?.let { account = list[it].id } }.let {
+                mViewModel.allAccounts.observe(this, Observer { list -> list?.let {
+                    binding.viewmodel?.run {
+                        card?.apply { selected?.let { account = list[it].id } }.let { card ->
                             when {
-                                this.item.id == null -> mViewModel.insert(it)
-                                else -> mViewModel.update(it)
+                                this@FragmentEditCard.item.id == null -> mViewModel.insert(card)
+                                else -> mViewModel.update(card)
                             }
                         }
                     }

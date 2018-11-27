@@ -23,16 +23,14 @@ class ViewModelApp(application: Application) : AndroidViewModel(application) {
 
     fun getGroup(id: Int?) = repository.getGroup(id)
     fun getAccount(id: Int?) = repository.getAccount(id)
-    fun getAccountByGroup(id_group: Int?) = repository.getAccountByGroup(id_group)
+    fun getAccountByCode(code: String?) = repository.getAccountByCode(code)
     fun getCatMain(id: Int?) = repository.getCatMain(id)
     fun getCatMainsByKind(kind: String?) = repository.getCatMainByKind(kind)
     fun getCatSub(id: Int?) = repository.getCatSub(id)
     fun getCatSubsByMain(id_main: Int?) = repository.getCatSubsByMain(id_main)
     fun getSpends(date: String?) = repository.getSpends(date)
-    fun getSpendCashByCode(code: String?) = repository.getSpendCash(code)
-    fun getSpendCardByCode(code: String?) = repository.getSpendCard(code)
     fun getIncomes(date: String?) = repository.getIncomes(date)
-    fun getCard(id: Int?) = repository.getCard(id)
+    fun getCardByCode(code: String?) = repository.getCardByCode(code)
 
     fun <T> insert(t: T) = scope.launch(Dispatchers.IO) { repository.insert(t) }
 

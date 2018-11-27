@@ -48,11 +48,11 @@ class FragmentEditCategoryMain : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
-                binding.viewmodel?.let { viewModel ->
-                    viewModel.categoryMain?.apply { viewModel.selected?.let { kind = mList[it] } }.let {
+                binding.viewmodel?.run {
+                    categoryMain?.apply { selected?.let { kind = mList[it] } }.let { main ->
                         when {
-                            this.item.id == null -> mViewModel.insert(it)
-                            else -> mViewModel.update(it)
+                            this@FragmentEditCategoryMain.item.id == null -> mViewModel.insert(main)
+                            else -> mViewModel.update(main)
                         }
                     }
                 }

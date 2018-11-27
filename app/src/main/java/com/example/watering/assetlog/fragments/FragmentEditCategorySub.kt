@@ -35,15 +35,16 @@ class FragmentEditCategorySub : Fragment() {
 
         setHasOptionsMenu(true)
 
-        mViewModel.allCatMains.observe(this, Observer { listCategoryMains -> listCategoryMains?.let { listCategoryMain ->
-            val listName = listCategoryMain.map { it.name }
-            when {
-                this.item.id != null -> mViewModel.getCatMain(this.item.categoryMain).observe(this, Observer { selected -> selected?.let {
-                    binding.viewmodel = ViewModelEditCategorySub(this.item, listName.indexOf(it.name))
-                } })
-                else -> binding.viewmodel = ViewModelEditCategorySub(this.item, 0)
+        mViewModel.allCatMains.observe(this, Observer { list -> list?.let {
+            list.map { it.name }.let { list ->
+                when {
+                    this.item.id != null -> mViewModel.getCatMain(this.item.categoryMain).observe(this, Observer { main -> main?.let {
+                        binding.viewmodel = ViewModelEditCategorySub(this.item, list.indexOf(main.name))
+                    } })
+                    else -> binding.viewmodel = ViewModelEditCategorySub(this.item, 0)
+                }
+                binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,list)
             }
-            binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
         } })
     }
 
@@ -56,12 +57,12 @@ class FragmentEditCategorySub : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
-                binding.viewmodel?.let { viewModel ->
-                    mViewModel.allCatMains.observe(this, Observer { categoryMains -> categoryMains?.let { list ->
-                        viewModel.categorySub?.apply { viewModel.selected?.let { categoryMain = list[it].id } }.let {
+                binding.viewmodel?.run {
+                    mViewModel.allCatMains.observe(this@FragmentEditCategorySub, Observer { list -> list?.let {
+                        categorySub?.apply { selected?.let { categoryMain = list[it].id } }.let { sub ->
                             when {
-                                this.item.id == null -> mViewModel.insert(it)
-                                else -> mViewModel.update(it)
+                                this@FragmentEditCategorySub.item.id == null -> mViewModel.insert(sub)
+                                else -> mViewModel.update(sub)
                             }
                         }
                     } })

@@ -33,11 +33,11 @@ class FragmentBookIncome : Fragment() {
 
         setHasOptionsMenu(false)
 
-        mViewModel.getIncomes(ModelCalendar.getToday()).observe(this, Observer { incomes -> incomes?.let {
-            mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_book_income).apply {
+        mViewModel.getIncomes(ModelCalendar.getToday()).observe(this, Observer { list -> list?.let {
+            mView.findViewById<RecyclerView>(R.id.recyclerview_fragment_book_income).run {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mView.context)
-                adapter = RecyclerViewAdapterBookIncome(it) { position -> itemClicked(it[position]) }
+                adapter = RecyclerViewAdapterBookIncome(list) { position -> itemClicked(list[position]) }
             }
         } })
 

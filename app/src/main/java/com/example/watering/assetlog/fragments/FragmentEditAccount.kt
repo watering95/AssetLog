@@ -35,15 +35,16 @@ class FragmentEditAccount : Fragment() {
 
         setHasOptionsMenu(true)
 
-        mViewModel.allGroups.observe(this, Observer { groups -> groups?.let {list ->
-            val listName = list.map { it.name }
-            when {
-                this.item.id != null -> mViewModel.getGroup(this.item.group).observe(this, Observer { selectedGroup -> selectedGroup?.let {
-                    binding.viewmodel = ViewModelEditAccount(this.item, listName.indexOf(it.name))
-                } })
-                else -> binding.viewmodel = ViewModelEditAccount(this.item, 0)
+        mViewModel.allGroups.observe(this, Observer { list -> list?.let {
+            list.map { it.name }.let { listOfAdapter ->
+                when {
+                    this.item.id != null -> mViewModel.getGroup(this.item.group).observe(this, Observer { group -> group?.let {
+                        binding.viewmodel = ViewModelEditAccount(this.item, listOfAdapter.indexOf(group.name))
+                    } })
+                    else -> binding.viewmodel = ViewModelEditAccount(this.item, 0)
+                }
+                binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listOfAdapter)
             }
-            binding.adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_item,listName)
         } })
     }
 
@@ -56,12 +57,12 @@ class FragmentEditAccount : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_edit_save -> {
-                mViewModel.allGroups.observe(this, Observer { groups -> groups?.let { list ->
-                    binding.viewmodel?.let { viewModel ->
-                        viewModel.account?.apply { viewModel.selected?.let { group = list[it].id } }.let {
+                mViewModel.allGroups.observe(this, Observer { list -> list?.let {
+                    binding.viewmodel?.run {
+                        account?.apply { selected?.let { group = list[it].id } }.let {account ->
                             when {
-                                this.item.id == null -> mViewModel.insert(it)
-                                else -> mViewModel.update(it)
+                                this@FragmentEditAccount.item.id == null -> mViewModel.insert(account)
+                                else -> mViewModel.update(account)
                             }
                         }
                     }}
