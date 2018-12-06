@@ -27,9 +27,11 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     fun getAccountByCode(code: String?): LiveData<Account> = daoAccount.getByCode(code)
     fun getCatMain(id: Int?): LiveData<CategoryMain> = daoCatMain.get(id)
     fun getCatMainByKind(kind: String?): LiveData<List<CategoryMain>> = daoCatMain.getByKind(kind)
+    fun getCatMainBySub(id_sub: Int?): LiveData<CategoryMain> = daoCatMain.getBySub(id_sub)
     fun getCardByCode(code: String?): LiveData<Card> = daoCard.getByCode(code)
     fun getIncomes(date: String?): LiveData<List<Income>> = daoIncome.get(date)
     fun getCatSub(id: Int?): LiveData<CategorySub> = daoCatSub.get(id)
+    fun getCatSubsByMain(nameOfMain: String?): LiveData<List<CategorySub>> = daoCatSub.getByMain(nameOfMain)
     fun getCatSubsByMain(id_main: Int?): LiveData<List<CategorySub>> = daoCatSub.getByMain(id_main)
     fun getSpends(date: String?): LiveData<List<Spend>> = daoSpend.get(date)
 

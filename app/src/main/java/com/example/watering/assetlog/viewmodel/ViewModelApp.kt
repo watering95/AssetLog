@@ -8,7 +8,7 @@ import com.example.watering.assetlog.R
 import com.example.watering.assetlog.model.AppRepository
 import kotlinx.coroutines.*
 
-class ViewModelApp(application: Application) : AndroidViewModel(application) {
+open class ViewModelApp(application: Application) : AndroidViewModel(application) {
     private var parentJob = Job()
     private val coroutineContext = parentJob + Dispatchers.Main
     private val scope = CoroutineScope(coroutineContext)
@@ -26,7 +26,9 @@ class ViewModelApp(application: Application) : AndroidViewModel(application) {
     fun getAccountByCode(code: String?) = repository.getAccountByCode(code)
     fun getCatMain(id: Int?) = repository.getCatMain(id)
     fun getCatMainsByKind(kind: String?) = repository.getCatMainByKind(kind)
+    fun getCatMainBySub(id_sub: Int?) = repository.getCatMainBySub(id_sub)
     fun getCatSub(id: Int?) = repository.getCatSub(id)
+    fun getCatSubsByMain(nameOfMain: String?) = repository.getCatSubsByMain(nameOfMain)
     fun getCatSubsByMain(id_main: Int?) = repository.getCatSubsByMain(id_main)
     fun getSpends(date: String?) = repository.getSpends(date)
     fun getIncomes(date: String?) = repository.getIncomes(date)

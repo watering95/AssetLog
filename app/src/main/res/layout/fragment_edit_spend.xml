@@ -3,9 +3,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="com.example.watering.assetlog.model.Converter"/>
-        <variable name="adapterMain" type="android.widget.ArrayAdapter"/>
-        <variable name="adapterSub" type="android.widget.ArrayAdapter"/>
-        <variable name="adapterApproval2" type="android.widget.ArrayAdapter"/>
         <variable name="viewmodel" type="com.example.watering.assetlog.viewmodel.ViewModelEditSpend"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,10 +13,10 @@
                 android:text="계좌 / 카드"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_approval2_fragment_edit_spend" app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/text_pay2_fragment_edit_spend" app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp"
-                app:layout_constraintTop_toTopOf="@+id/spinner_approval2_fragment_edit_spend"
-                app:layout_constraintBottom_toBottomOf="@+id/spinner_approval2_fragment_edit_spend"/>
+                app:layout_constraintTop_toTopOf="@+id/spinner_pay2_fragment_edit_spend"
+                app:layout_constraintBottom_toBottomOf="@+id/spinner_pay2_fragment_edit_spend"/>
         <TextView
                 android:text="부카테고리"
                 android:layout_width="80dp"
@@ -85,8 +82,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_categorymain_fragment_edit_spend"
-                android:adapter="@{adapterMain}"
-                android:selectedItemPosition="@={ viewmodel.idx_cat_main }"
+                android:entries="@{viewmodel.listOfMain}"
+                android:selectedItemPosition="@={ viewmodel.indexOfMain }"
                 app:layout_constraintStart_toEndOf="@+id/textView6"
                 android:layout_marginStart="8dp" android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/edit_amount_fragment_edit_spend"
@@ -95,8 +92,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_categorysub_fragment_edit_spend"
-                android:adapter="@{adapterSub}"
-                android:selectedItemPosition="@={ viewmodel.idx_cat_sub }"
+                android:entries="@{viewmodel.listOfSub}"
+                android:selectedItemPosition="@={ viewmodel.indexOfSub }"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/spinner_categorymain_fragment_edit_spend"
@@ -111,19 +108,19 @@
                 app:layout_constraintBottom_toBottomOf="@+id/spinner_categorymain_fragment_edit_spend"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
         <TextView
-                android:text="결재방식"
+                android:text="지불방식"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView5" app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp"
-                app:layout_constraintTop_toTopOf="@+id/spinner_approval1_fragment_edit_spend"
-                app:layout_constraintBottom_toBottomOf="@+id/spinner_approval1_fragment_edit_spend"/>
+                app:layout_constraintTop_toTopOf="@+id/spinner_pay1_fragment_edit_spend"
+                app:layout_constraintBottom_toBottomOf="@+id/spinner_pay1_fragment_edit_spend"/>
         <Spinner
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner_approval1_fragment_edit_spend"
+                android:id="@+id/spinner_pay1_fragment_edit_spend"
                 android:entries="@array/type"
-                android:selectedItemPosition="@={ viewmodel.idx_approval1 }"
+                android:selectedItemPosition="@={ viewmodel.indexOfPay1 }"
                 app:layout_constraintStart_toEndOf="@+id/textView5" android:layout_marginStart="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
@@ -131,12 +128,12 @@
         <Spinner
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:adapter="@{adapterApproval2}"
-                android:selectedItemPosition="@={ viewmodel.idx_approval2 }"
-                android:id="@+id/spinner_approval2_fragment_edit_spend" app:layout_constraintEnd_toEndOf="parent"
+                android:entries="@{viewmodel.listOfPay}"
+                android:selectedItemPosition="@={ viewmodel.indexOfPay2 }"
+                android:id="@+id/spinner_pay2_fragment_edit_spend" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintStart_toEndOf="@+id/text_approval2_fragment_edit_spend"
+                app:layout_constraintStart_toEndOf="@+id/text_pay2_fragment_edit_spend"
                 android:layout_marginStart="8dp" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/spinner_approval1_fragment_edit_spend"/>
+                app:layout_constraintTop_toBottomOf="@+id/spinner_pay1_fragment_edit_spend"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
