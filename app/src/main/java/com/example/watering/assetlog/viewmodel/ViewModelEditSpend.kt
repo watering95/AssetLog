@@ -11,6 +11,7 @@ class ViewModelEditSpend(application:Application) : ObservableViewModel(applicat
     @Bindable var listOfPay:LiveData<List<String?>>? = null
     @Bindable var indexOfPay1:Int = 0
     @Bindable var indexOfPay2:Int = 0
+    var id_sub:Int = 0
 
     var spend: Spend? = null
     @Bindable get() {
@@ -18,6 +19,7 @@ class ViewModelEditSpend(application:Application) : ObservableViewModel(applicat
     }
     set(value) {
         field = value
+        id_sub = value?.category!!
         notifyPropertyChanged(BR.spend)
     }
 
@@ -48,5 +50,6 @@ class ViewModelEditSpend(application:Application) : ObservableViewModel(applicat
         }
     set(value) {
         field = value
+        notifyPropertyChanged(BR.indexOfSub)
     }
 }

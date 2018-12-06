@@ -8,6 +8,7 @@ import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProviders
 import com.example.watering.assetlog.BR
 import com.example.watering.assetlog.R
@@ -41,8 +42,20 @@ class FragmentEditSpend : Fragment() {
             addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     when(propertyId) {
-                        BR.spend -> {  }
-                        BR.listOfSub -> {  }
+                        BR.spend -> {
+                            listOfMain.observe(this@FragmentEditSpend, Observer { list -> list?.let {
+                                getCatMainBySub(id_sub).observe(this@FragmentEditSpend, Observer {main -> main?.let {
+                                    indexOfMain = list.indexOf(main.name)
+                                } })
+                            } })
+                        }
+                        BR.listOfSub -> {
+                            listOfSub?.observe(this@FragmentEditSpend, Observer { list -> list?.let {
+                                getCatSub(id_sub).observe(this@FragmentEditSpend, Observer { sub -> sub?.let {
+                                    indexOfSub = list.indexOf(sub.name)
+                                } })
+                            } })
+                        }
                     }
                 }
             })
