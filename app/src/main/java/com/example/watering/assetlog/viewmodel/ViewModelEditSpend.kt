@@ -8,10 +8,10 @@ import com.example.watering.assetlog.entities.Spend
 
 class ViewModelEditSpend(application:Application) : ObservableViewModel(application) {
     @Bindable var listOfMain:LiveData<List<String?>> = Transformations.map(getCatMainsByKind("spend")) { list -> list.map { it.name }}
-    @Bindable var listOfPay:LiveData<List<String?>>? = null
     @Bindable var indexOfPay1:Int = 0
     @Bindable var indexOfPay2:Int = 0
     var id_sub:Int = 0
+    var code:String = ""
 
     var spend: Spend? = null
     @Bindable get() {
@@ -19,7 +19,11 @@ class ViewModelEditSpend(application:Application) : ObservableViewModel(applicat
     }
     set(value) {
         field = value
-        id_sub = value?.category!!
+        value?.apply {
+            id_sub = category!!
+            this@ViewModelEditSpend.code = this.code!!
+        }
+
         notifyPropertyChanged(BR.spend)
     }
 
@@ -51,5 +55,14 @@ class ViewModelEditSpend(application:Application) : ObservableViewModel(applicat
     set(value) {
         field = value
         notifyPropertyChanged(BR.indexOfSub)
+    }
+
+    var listOfPay:LiveData<List<String?>>? = null
+    @Bindable get() {
+        return field
+    }
+    set(value) {
+        field = value
+        notifyPropertyChanged(BR.listOfPay)
     }
 }

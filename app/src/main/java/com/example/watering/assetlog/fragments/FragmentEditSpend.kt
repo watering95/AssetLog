@@ -42,25 +42,13 @@ class FragmentEditSpend : Fragment() {
             addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     when(propertyId) {
-                        BR.spend -> {
-                            listOfMain.observe(this@FragmentEditSpend, Observer { list -> list?.let {
-                                getCatMainBySub(id_sub).observe(this@FragmentEditSpend, Observer {main -> main?.let {
-                                    indexOfMain = list.indexOf(main.name)
-                                } })
-                            } })
-                        }
-                        BR.listOfSub -> {
-                            listOfSub?.observe(this@FragmentEditSpend, Observer { list -> list?.let {
-                                getCatSub(id_sub).observe(this@FragmentEditSpend, Observer { sub -> sub?.let {
-                                    indexOfSub = list.indexOf(sub.name)
-                                } })
-                            } })
-                        }
+                        BR.spend -> onSpendChanged()
+                        BR.listOfSub -> onListOfSubChanged()
+                        BR.listOfPay -> onListOfPayChanged()
                     }
                 }
             })
         }
-
         binding.viewmodel?.run { spend = item }
         setHasOptionsMenu(true)
     }
@@ -81,5 +69,42 @@ class FragmentEditSpend : Fragment() {
         mFragmentManager.popBackStack()
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun onSpendChanged() {
+        binding.viewmodel?.run {
+            listOfMain.observe(this@FragmentEditSpend, Observer { list -> list?.let {
+                getCatMainBySub(id_sub).observe(this@FragmentEditSpend, Observer {main -> main?.let {
+                    indexOfMain = list.indexOf(main.name)
+                } })
+            } })
+            when(code[0]) {
+                '1' -> { indexOfPay1 = 0 }
+                '2' -> {
+                    indexOfPay1 = 1
+                    listOfPay = Transformations.map(allCards) { list -> list.map { it.number } }
+                }
+            }
+        }
+    }
+
+    fun onListOfSubChanged() {
+        binding.viewmodel?.run {
+            listOfSub?.observe(this@FragmentEditSpend, Observer { list -> list?.let {
+                getCatSub(id_sub).observe(this@FragmentEditSpend, Observer { sub -> sub?.let {
+                    indexOfSub = list.indexOf(sub.name)
+                } })
+            } })
+        }
+    }
+
+    fun onListOfPayChanged() {
+        binding.viewmodel?.run {
+            listOfPay?.observe(this@FragmentEditSpend, Observer { list -> list?.let {
+                getCardByCode(code).observe(this@FragmentEditSpend, Observer { card -> card?.let {
+                    indexOfPay2 = list.indexOf(card.number)
+                } })
+            } })
+        }
     }
 }
