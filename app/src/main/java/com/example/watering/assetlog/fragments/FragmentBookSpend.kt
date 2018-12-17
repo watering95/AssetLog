@@ -80,9 +80,9 @@ class FragmentBookSpend : Fragment() {
             }
         })
 
-        binding.floatingFragmentBookSpend.setOnClickListener { mViewModel.replaceFragement(mFragmentManager, FragmentEditSpend().initInstance(Spend())) }
+        binding.floatingFragmentBookSpend.setOnClickListener { mViewModel.replaceFragment(mFragmentManager, FragmentEditSpend().initInstance(Spend())) }
     }
     private fun itemClicked(item: Spend) {
-        mViewModel.replaceFragement(mFragmentManager, FragmentEditSpend().initInstance(item))
+        mViewModel.replaceFragment(mFragmentManager, FragmentEditSpend().initInstance(item))
     }
 }

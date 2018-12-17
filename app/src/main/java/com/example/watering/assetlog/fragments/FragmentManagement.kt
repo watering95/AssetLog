@@ -44,12 +44,12 @@ class FragmentManagement : Fragment() {
     private fun itemClicked(position: Int) {
         mViewModel.run {
             when (position) {
-                0 -> replaceFragement(mFragmentManager, mFragmentManagementGroup)
-                1 -> replaceFragement(mFragmentManager, mFragmentManagementAccount)
-                2 -> replaceFragement(mFragmentManager, mFragmentManagementCategoryMain)
-                3 -> replaceFragement(mFragmentManager, mFragmentManagementCategorySub)
-                4 -> replaceFragement(mFragmentManager, mFragmentManagementCard)
-                5 -> replaceFragement(mFragmentManager, mFragmentManagementDB)
+                0 -> replaceFragment(mFragmentManager, mFragmentManagementGroup)
+                1 -> replaceFragment(mFragmentManager, mFragmentManagementAccount)
+                2 -> replaceFragment(mFragmentManager, mFragmentManagementCategoryMain)
+                3 -> replaceFragment(mFragmentManager, mFragmentManagementCategorySub)
+                4 -> replaceFragment(mFragmentManager, mFragmentManagementCard)
+                5 -> replaceFragment(mFragmentManager, mFragmentManagementDB)
                 else -> {  }
             }
         }

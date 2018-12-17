@@ -6,7 +6,7 @@ object ModelCalendar {
     fun getToday(): String {
         return calendarToStr(Calendar.getInstance())
     }
-    fun changeDate(date:String, amount:Int):Calendar {
+    fun changeDate(date:String?, amount:Int):Calendar {
         val calendar = strToCalendar(date)
         calendar.add(Calendar.DATE, amount)
         return calendar
@@ -21,5 +21,12 @@ object ModelCalendar {
             calendar.set(Integer.parseInt(substring(0,4)),Integer.parseInt(substring(5,7))-1,Integer.parseInt(substring(8,10)))
         }
         return calendar
+    }
+    fun codeToDate(code:String?): String {
+        var date = ""
+        code?.run {
+            date = "$code.substring(2,6)-$code.substring(7,9)-$code.substring(10,12)"
+        }
+        return date
     }
 }

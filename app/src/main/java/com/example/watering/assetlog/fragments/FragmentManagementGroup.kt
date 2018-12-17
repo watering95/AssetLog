@@ -42,10 +42,10 @@ class FragmentManagementGroup : Fragment() {
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_group)
         floating.setOnClickListener {
-            mViewModel.replaceFragement(mFragmentManager, FragmentEditGroup().initInstance(Group()))
+            mViewModel.replaceFragment(mFragmentManager, FragmentEditGroup().initInstance(Group()))
         }
     }
     private fun itemClicked(item: Group) {
-        mViewModel.replaceFragement(mFragmentManager, FragmentEditGroup().initInstance(item))
+        mViewModel.replaceFragment(mFragmentManager, FragmentEditGroup().initInstance(item))
     }
 }

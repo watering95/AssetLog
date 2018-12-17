@@ -18,6 +18,9 @@ interface DaoCategorySub {
     @Query("SELECT * from tbl_category_sub WHERE _id = :id")
     fun get(id: Int?): LiveData<CategorySub>
 
+    @Query("SELECT * from tbl_category_sub WHERE id_main = (SELECT _id from tbl_category_main WHERE name = :nameOfMain) AND name = :nameOfSub")
+    fun get(nameOfSub: String?, nameOfMain: String?): LiveData<CategorySub>
+
     @Insert
     fun insert(categorySub: CategorySub)
 

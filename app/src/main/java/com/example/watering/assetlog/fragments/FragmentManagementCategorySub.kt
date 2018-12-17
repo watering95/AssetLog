@@ -41,9 +41,9 @@ class FragmentManagementCategorySub : Fragment() {
         } })
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_category_sub)
-        floating.setOnClickListener { mViewModel.replaceFragement(mFragmentManager, FragmentEditCategorySub().initInstance(CategorySub())) }
+        floating.setOnClickListener { mViewModel.replaceFragment(mFragmentManager, FragmentEditCategorySub().initInstance(CategorySub())) }
     }
     private fun itemClicked(item: CategorySub) {
-        mViewModel.replaceFragement(mFragmentManager, FragmentEditCategorySub().initInstance(item))
+        mViewModel.replaceFragment(mFragmentManager, FragmentEditCategorySub().initInstance(item))
     }
 }

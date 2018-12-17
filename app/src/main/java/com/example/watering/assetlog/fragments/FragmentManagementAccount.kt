@@ -41,9 +41,9 @@ class FragmentManagementAccount : Fragment() {
         } })
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_management_account)
-        floating.setOnClickListener { mViewModel.replaceFragement(mFragmentManager, FragmentEditAccount().initInstance(Account())) }
+        floating.setOnClickListener { mViewModel.replaceFragment(mFragmentManager, FragmentEditAccount().initInstance(Account())) }
     }
     private fun itemClicked(item: Account) {
-        mViewModel.replaceFragement(mFragmentManager, FragmentEditAccount().initInstance(item))
+        mViewModel.replaceFragment(mFragmentManager, FragmentEditAccount().initInstance(item))
     }
 }

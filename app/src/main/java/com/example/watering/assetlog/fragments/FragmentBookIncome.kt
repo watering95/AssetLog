@@ -42,9 +42,9 @@ class FragmentBookIncome : Fragment() {
         } })
 
         val floating = mView.findViewById<FloatingActionButton>(R.id.floating_fragment_book_income)
-        floating.setOnClickListener { mViewModel.replaceFragement(mFragmentManager, FragmentEditIncome().initInstance(Income())) }
+        floating.setOnClickListener { mViewModel.replaceFragment(mFragmentManager, FragmentEditIncome().initInstance(Income())) }
     }
     private fun itemClicked(item: Income) {
-        mViewModel.replaceFragement(mFragmentManager, FragmentEditIncome().initInstance(item))
+        mViewModel.replaceFragment(mFragmentManager, FragmentEditIncome().initInstance(item))
     }
 }

@@ -7,20 +7,29 @@ import com.example.watering.assetlog.BR
 import com.example.watering.assetlog.entities.Spend
 
 class ViewModelEditSpend(application:Application) : ObservableViewModel(application) {
-    @Bindable var listOfMain:LiveData<List<String?>> = Transformations.map(getCatMainsByKind("spend")) { list -> list.map { it.name }}
-    var id_sub:Int = 0
-    var code:String = ""
+    var oldCode:String = "000000000000"
+    var newCode:String = oldCode
+    var id_account:Int? = 0
+    var id_card:Int? = 0
 
-    var spend: Spend? = null
+    var listOfMain = MutableLiveData<List<String?>>()
+    @Bindable get() {
+        return field
+    }
+    set(value) {
+        field = value
+        notifyPropertyChanged(BR.listOfMain)
+    }
+
+    var spend: Spend = Spend()
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
 
-        value?.apply {
-            id_sub = category!!
-            this@ViewModelEditSpend.code = this.code!!
+        value.apply {
+            newCode = newCode.replaceRange(2,10, date?.removeRange(4,5)?.removeRange(6,7).toString())
         }
 
         notifyPropertyChanged(BR.spend)
@@ -32,6 +41,10 @@ class ViewModelEditSpend(application:Application) : ObservableViewModel(applicat
     }
     set(value) {
         field = value
+        listOfSub = Transformations.switchMap(listOfMain) { listOfMain ->
+            Transformations.map(getCatSubsByMain(listOfMain[field])) { listOfSub -> listOfSub.map { it.name } }
+        } as MutableLiveData<List<String?>>
+        indexOfSub = 0
         notifyPropertyChanged(BR.indexOfMain)
     }
 
@@ -46,8 +59,8 @@ class ViewModelEditSpend(application:Application) : ObservableViewModel(applicat
 
     var indexOfSub: Int = 0
     @Bindable get() {
-            return field
-        }
+        return field
+    }
     set(value) {
         field = value
         notifyPropertyChanged(BR.indexOfSub)
@@ -68,6 +81,12 @@ class ViewModelEditSpend(application:Application) : ObservableViewModel(applicat
     }
     set(value) {
         field = value
+        newCode = newCode.replaceRange(0,1,"${field+1}")
+        when(field) {
+            0 -> listOfPay2 = Transformations.map(allAccounts) { list -> list.map { it.number }} as MutableLiveData<List<String?>>
+            1 -> listOfPay2 = Transformations.map(allCards) { list -> list.map { it.number } } as MutableLiveData<List<String?>>
+        }
+        indexOfPay2 = 0
         notifyPropertyChanged(BR.indexOfPay1)
     }
 
