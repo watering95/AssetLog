@@ -44,9 +44,9 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
     fun getIncomes(date: String?) = repository.getIncomes(date)
     fun getCardByCode(code: String?) = repository.getCardByCode(code)
     fun getCardByNumber(number: String?) = repository.getCardByNumber(number)
-    fun getIOKRW(id_account: Int?, date: String?) = repository.getIOKRW(id_account, date)
+    private fun getIOKRW(id_account: Int?, date: String?) = repository.getIOKRW(id_account, date)
     fun getLastSpendCode(date: String?) = repository.getLastSpendCode(date)
-    fun getLastIOKRW(id_account: Int?, date: String?) = repository.getLastIOKRW(id_account, date)
+    private fun getLastIOKRW(id_account: Int?, date: String?) = repository.getLastIOKRW(id_account, date)
 
     private fun sumOfSpendsCash(id_account:Int?, date: String?) = repository.sumOfSpendsCash(id_account, date)
     private fun sumOfSpendsCard(id_account:Int?, date: String?) = repository.sumOfSpendsCard(id_account, date)
@@ -101,7 +101,7 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun modifyIOKRW(id_account:Int?, date: String?) {
+    private fun modifyIOKRW(id_account:Int?, date: String?) {
         Transformations.map(calculateEvaluationKRW(id_account, date)) { evaluation ->
             Transformations.map(getIOKRW(id_account, date)) { io ->
                 if(io.id == null) {

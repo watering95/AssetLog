@@ -16,8 +16,6 @@ import com.example.watering.assetlog.BR
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditSpendBinding
 import com.example.watering.assetlog.entities.Spend
-import com.example.watering.assetlog.entities.SpendCard
-import com.example.watering.assetlog.entities.SpendCash
 import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.viewmodel.ViewModelEditSpend
 import java.util.*
