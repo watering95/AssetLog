@@ -15,10 +15,6 @@ open class ObservableViewModel(application:Application): ViewModelApp(applicatio
         callbacks.add(callback)
     }
 
-    fun notifyChange() {
-        callbacks.notifyCallbacks(this, 0, null)
-    }
-
     fun notifyPropertyChanged(fieldId: Int) {
         callbacks.notifyCallbacks(this, fieldId, null)
     }

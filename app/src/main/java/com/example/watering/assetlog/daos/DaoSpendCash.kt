@@ -1,8 +1,7 @@
 package com.example.watering.assetlog.daos
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Query
+import androidx.room.*
 import com.example.watering.assetlog.entities.SpendCash
 
 @Dao
@@ -12,4 +11,13 @@ interface DaoSpendCash {
 
     @Query("SELECT * from tbl_spend_cash WHERE spend_code = :code LIMIT 1")
     fun get(code: String?): LiveData<SpendCash>
+
+    @Insert
+    fun insert(spendCash: SpendCash)
+
+    @Update
+    fun update(spendCash: SpendCash)
+
+    @Delete
+    fun delete(spendCash: SpendCash)
 }

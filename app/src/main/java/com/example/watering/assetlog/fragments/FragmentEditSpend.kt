@@ -8,16 +8,21 @@ import androidx.databinding.DataBindingUtil.inflate
 import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModelProviders
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.watering.assetlog.BR
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditSpendBinding
 import com.example.watering.assetlog.entities.Spend
+import com.example.watering.assetlog.entities.SpendCard
+import com.example.watering.assetlog.entities.SpendCash
 import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.viewmodel.ViewModelEditSpend
+import com.example.watering.assetlog.work.ModifyDairyKRWWorker
+import com.example.watering.assetlog.work.ModifyIOKRWWorker
 import java.util.*
 
 class FragmentEditSpend : Fragment() {
@@ -55,14 +60,18 @@ class FragmentEditSpend : Fragment() {
             listOfMain = Transformations.map(getCatMainsByKind("spend")) { list -> list.map { it.name } } as MutableLiveData<List<String?>>
 
             spend = this@FragmentEditSpend.spend
-
-            oldCode = this@FragmentEditSpend.spend.code!!
+            this@FragmentEditSpend.spend.code?.let { oldCode = it }
+            if(spend.id == null) {
+                spend = spend.apply { this.date = ModelCalendar.getToday() }
+                notifyPropertyChanged(BR.spend)
+            }
             when(oldCode[0]) {
                 '1' -> {
                     indexOfPay1 = 0
                     listOfPay2.observe(this@FragmentEditSpend, Observer { list -> list?.let {
                         getAccountByCode(oldCode).observe(this@FragmentEditSpend, Observer { account -> account?.let {
                             indexOfPay2 = list.indexOf(account.number)
+                            id_account = account.id
                         } })
                     } })
                 }
@@ -71,6 +80,8 @@ class FragmentEditSpend : Fragment() {
                     listOfPay2.observe(this@FragmentEditSpend, Observer { list -> list?.let {
                         getCardByCode(oldCode).observe(this@FragmentEditSpend, Observer { card -> card?.let {
                             indexOfPay2 = list.indexOf(card.number)
+                            id_card = card.id
+                            id_account = card.account
                         } })
                     } })
                 }
@@ -98,7 +109,7 @@ class FragmentEditSpend : Fragment() {
                                 when {
                                     Calendar.getInstance().before(select) -> Toast.makeText(activity, R.string.toast_date_error, Toast.LENGTH_SHORT).show()
                                     else -> {
-                                        spend.date = ModelCalendar.calendarToStr(select)
+                                        spend = spend.apply { this.date = ModelCalendar.calendarToStr(select) }
                                         notifyPropertyChanged(BR.spend)
                                     }
                                 }
@@ -123,9 +134,20 @@ class FragmentEditSpend : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_edit_save -> save()
-            R.id.menu_edit_delete -> binding.viewmodel?.run { delete(spend) }
+            R.id.menu_edit_delete -> binding.viewmodel?.run {
+                delete(spend)
+                when(oldCode[0]) {
+                    '1' -> getSpendCash(oldCode).observe(this@FragmentEditSpend, Observer { cash -> cash?.let {
+                        delete(cash)
+                        mFragmentManager.popBackStack()
+                    } })
+                    '2' -> getSpendCard(oldCode).observe(this@FragmentEditSpend, Observer { card -> card?.let {
+                        delete(card)
+                        mFragmentManager.popBackStack()
+                    } })
+                }
+            }
         }
-        mFragmentManager.popBackStack()
 
         return super.onOptionsItemSelected(item)
     }
@@ -152,6 +174,7 @@ class FragmentEditSpend : Fragment() {
                     Transformations.switchMap(listOfPay2) { list -> getCardByNumber(list[indexOfPay2])
                     }.observe(this@FragmentEditSpend, Observer { card -> card?.let {
                         id_card = card.id
+                        id_account = card.account
                     } })
                 }
             }
@@ -160,7 +183,46 @@ class FragmentEditSpend : Fragment() {
 
     fun save() {
         binding.viewmodel?.run {
+            Transformations.map(getLastSpendCode(spend.date)) { code ->
+                val index = code?.substring(10,12)?.toInt() ?: 0
+                newCode = newCode.replaceRange(10, 12, String.format("%02d", index + 1))
+                newCode
+            }.observe(this@FragmentEditSpend, Observer { code -> code?.let {
+                spend.code = code
 
+                if(spend.id == null) insert(spend)
+                else {
+                    update(spend)
+                    when(oldCode[0]) {
+                        '1' -> getSpendCash(oldCode).observe(this@FragmentEditSpend, Observer { cash -> cash?.let { delete(cash) } })
+                        '2' -> getSpendCard(oldCode).observe(this@FragmentEditSpend, Observer { card -> card?.let { delete(card) } })
+                    }
+                }
+
+                when(code[0]) {
+                    '1' -> {
+                        val spendCash = SpendCash().apply {
+                            this.code = code
+                            this.account = id_account
+                        }
+                        insert(spendCash)
+                    }
+                    '2' -> {
+                        val spendCard = SpendCard().apply {
+                            this.code = code
+                            this.card = id_card
+                        }
+                        insert(spendCard)
+                    }
+                }
+
+                val builder = Data.Builder()
+                val data = builder.putInt("ID",id_account!!).putString("DATE",spend.date).build()
+                val modifyIOWork = OneTimeWorkRequest.Builder(ModifyIOKRWWorker::class.java).setInputData(data).build()
+                val modifyDairyWork = OneTimeWorkRequest.Builder(ModifyDairyKRWWorker::class.java).setInputData(data).build()
+                WorkManager.getInstance().beginWith(modifyIOWork).then(modifyDairyWork).enqueue()
+                mFragmentManager.popBackStack()
+            } })
         }
     }
 }

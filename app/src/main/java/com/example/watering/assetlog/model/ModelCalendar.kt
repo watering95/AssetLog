@@ -22,11 +22,4 @@ object ModelCalendar {
         }
         return calendar
     }
-    fun codeToDate(code:String?): String {
-        var date = ""
-        code?.run {
-            date = "$code.substring(2,6)-$code.substring(7,9)-$code.substring(10,12)"
-        }
-        return date
-    }
 }
