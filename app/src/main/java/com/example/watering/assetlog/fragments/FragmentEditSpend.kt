@@ -10,9 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.example.watering.assetlog.BR
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditSpendBinding
@@ -21,8 +18,6 @@ import com.example.watering.assetlog.entities.SpendCard
 import com.example.watering.assetlog.entities.SpendCash
 import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.viewmodel.ViewModelEditSpend
-import com.example.watering.assetlog.work.ModifyDairyKRWWorker
-import com.example.watering.assetlog.work.ModifyIOKRWWorker
 import java.util.*
 
 class FragmentEditSpend : Fragment() {
@@ -182,12 +177,18 @@ class FragmentEditSpend : Fragment() {
     }
 
     fun save() {
+        var savedSpend = false
+        var savedIO = false
+        var savedDairy = false
+
         binding.viewmodel?.run {
             Transformations.map(getLastSpendCode(spend.date)) { code ->
-                val index = code?.substring(10,12)?.toInt() ?: 0
+                val index = code?.substring(10,12)?.toInt() ?: -1
                 newCode = newCode.replaceRange(10, 12, String.format("%02d", index + 1))
                 newCode
             }.observe(this@FragmentEditSpend, Observer { code -> code?.let {
+                if(savedSpend) return@Observer
+
                 spend.code = code
 
                 if(spend.id == null) insert(spend)
@@ -215,13 +216,21 @@ class FragmentEditSpend : Fragment() {
                         insert(spendCard)
                     }
                 }
+                savedSpend = true
 
-                val builder = Data.Builder()
-                val data = builder.putInt("ID",id_account!!).putString("DATE",spend.date).build()
-                val modifyIOWork = OneTimeWorkRequest.Builder(ModifyIOKRWWorker::class.java).setInputData(data).build()
-                val modifyDairyWork = OneTimeWorkRequest.Builder(ModifyDairyKRWWorker::class.java).setInputData(data).build()
-                WorkManager.getInstance().beginWith(modifyIOWork).then(modifyDairyWork).enqueue()
-                mFragmentManager.popBackStack()
+                modifyIOKRW(id_account, spend.date).observe(this@FragmentEditSpend, Observer { io -> io?.let {
+                    if(savedIO) return@Observer
+                    if(io.id == null) insert(io) else update(io)
+                    savedIO = true
+
+                    modifyDairyKRW(id_account, spend.date).observe(this@FragmentEditSpend, Observer { dairy -> dairy?.let {
+                        if(savedDairy) return@Observer
+                        if(dairy.id == null) insert(dairy) else update(dairy)
+                        savedDairy = true
+                        mFragmentManager.popBackStack()
+                    } })
+                } })
+
             } })
         }
     }

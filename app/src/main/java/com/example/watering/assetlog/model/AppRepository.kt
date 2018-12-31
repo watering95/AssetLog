@@ -55,6 +55,10 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     fun sumOfIncome(id_account: Int?, date: String?) = daoIncome.sum(id_account, date)
     fun sum(column: String?, id_account: Int?, date: String?) = daoIOKRW.sum(column, id_account, date)
 
+    fun close() {
+        if(db.isOpen) db.openHelper.close()
+    }
+
     @WorkerThread
     fun <T> insert(t: T) {
         if(t is Group) daoGroup.insert(t)

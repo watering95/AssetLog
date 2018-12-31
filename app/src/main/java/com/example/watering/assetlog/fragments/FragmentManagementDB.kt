@@ -33,7 +33,10 @@ class FragmentManagementDB : Fragment() {
     }
     private fun itemClicked(position: Int) {
         when(position) {
-            0 -> { mMainActivity.mGoogleDrive.signIn(GoogleDrive.REQUEST_CODE_SIGN_IN_UP) }
+            0 -> {
+                mMainActivity.mViewModel.close()
+                mMainActivity.mGoogleDrive.signIn(GoogleDrive.REQUEST_CODE_SIGN_IN_UP)
+            }
             1 -> { mMainActivity.mGoogleDrive.signIn(GoogleDrive.REQUEST_CODE_SIGN_IN_DOWN) }
             2 -> { mMainActivity.mGoogleDrive.deleteDBFile() }
         }
