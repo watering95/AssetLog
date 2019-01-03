@@ -50,10 +50,15 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     fun getLastSpendCode(date: String?) = daoSpend.getLastCode(date)
     fun getLastIOKRW(id_account: Int?, date: String?) = daoIOKRW.getLast(id_account, date)
 
-    fun sumOfSpendsCash(id_account: Int?, date: String?) = daoSpend.sumOfSpendsCash(id_account, date)
-    fun sumOfSpendsCard(id_account: Int?, date: String?) = daoSpend.sumOfSpendsCard(id_account, date)
-    fun sumOfIncome(id_account: Int?, date: String?) = daoIncome.sum(id_account, date)
-    fun sum(column: String?, id_account: Int?, date: String?) = daoIOKRW.sum(column, id_account, date)
+    fun sumOfSpendCashInDate(id_account: Int?, date: String?) = daoSpend.sumOfSpendsCash(id_account, date)
+    fun sumOfSpendCardInDate(id_account: Int?, date: String?) = daoSpend.sumOfSpendsCard(id_account, date)
+    fun sumOfIncomeInDate(id_account: Int?, date: String?) = daoIncome.sum(id_account, date)
+    fun sumUntilDate(column: String?, id_account: Int?, date: String?) = daoIOKRW.sum(column, id_account, date)
+    fun sumOfInputUntilDate(id_account: Int?, date: String?) = daoIOKRW.sumOfInput(id_account, date)
+    fun sumOfOutputUntilDate(id_account: Int?, date: String?) = daoIOKRW.sumOfOutput(id_account, date)
+    fun sumOfIncomeUntilDate(id_account: Int?, date: String?) = daoIOKRW.sumOfIncome(id_account, date)
+    fun sumOfSpendCardUntilDate(id_account: Int?, date: String?) = daoIOKRW.sumOfSpendCard(id_account, date)
+    fun sumOfSpendCashUntilDate(id_account: Int?, date: String?) = daoIOKRW.sumOfSpendCash(id_account, date)
 
     fun close() {
         if(db.isOpen) db.openHelper.close()

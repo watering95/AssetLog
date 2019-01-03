@@ -83,7 +83,9 @@ class FragmentEditSpend : Fragment() {
             }
 
             getCatMainBySub(this@FragmentEditSpend.spend.category).observe(this@FragmentEditSpend, Observer { main -> main?.let {
-                Transformations.map(listOfMain) { list -> indexOfMain = list.indexOf(main.name) }
+                Transformations.map(listOfMain) { list -> list.indexOf(main.name) }.observe(this@FragmentEditSpend, Observer { index -> index?.let {
+                    indexOfMain = index
+                } })
                 listOfSub = Transformations.map(getCatSubsByMain(main.id)) { list ->
                     list.map { it.name }.apply {
                         getCatSub(this@FragmentEditSpend.spend.category).observe(this@FragmentEditSpend, Observer { sub -> sub?.let {
@@ -177,18 +179,12 @@ class FragmentEditSpend : Fragment() {
     }
 
     fun save() {
-        var savedSpend = false
-        var savedIO = false
-        var savedDairy = false
-
         binding.viewmodel?.run {
             Transformations.map(getLastSpendCode(spend.date)) { code ->
                 val index = code?.substring(10,12)?.toInt() ?: -1
                 newCode = newCode.replaceRange(10, 12, String.format("%02d", index + 1))
                 newCode
-            }.observe(this@FragmentEditSpend, Observer { code -> code?.let {
-                if(savedSpend) return@Observer
-
+            }.observeOnce(this@FragmentEditSpend, Observer { code -> code?.let {
                 spend.code = code
 
                 if(spend.id == null) insert(spend)
@@ -216,22 +212,25 @@ class FragmentEditSpend : Fragment() {
                         insert(spendCard)
                     }
                 }
-                savedSpend = true
 
-                modifyIOKRW(id_account, spend.date).observe(this@FragmentEditSpend, Observer { io -> io?.let {
-                    if(savedIO) return@Observer
+                modifyIOKRW(id_account, spend.date).observeOnce(this@FragmentEditSpend, Observer { io -> io?.let {
                     if(io.id == null) insert(io) else update(io)
-                    savedIO = true
 
-                    modifyDairyKRW(id_account, spend.date).observe(this@FragmentEditSpend, Observer { dairy -> dairy?.let {
-                        if(savedDairy) return@Observer
+                    modifyDairyKRW(id_account, spend.date).observeOnce(this@FragmentEditSpend, Observer { dairy -> dairy?.let {
                         if(dairy.id == null) insert(dairy) else update(dairy)
-                        savedDairy = true
                         mFragmentManager.popBackStack()
                     } })
                 } })
-
             } })
         }
+    }
+
+    private fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+        observeForever(object: Observer<T> {
+            override fun onChanged(t: T) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 }
