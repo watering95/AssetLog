@@ -136,11 +136,25 @@ class FragmentEditSpend : Fragment() {
                 when(oldCode[0]) {
                     '1' -> getSpendCash(oldCode).observe(this@FragmentEditSpend, Observer { cash -> cash?.let {
                         delete(cash)
-                        mFragmentManager.popBackStack()
+                        modifyIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
+                            if(io.id == null) insert(io) else update(io)
+
+                            modifyDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                if(dairy.id == null) insert(dairy) else update(dairy)
+                                mFragmentManager.popBackStack()
+                            } })
+                        } })
                     } })
                     '2' -> getSpendCard(oldCode).observe(this@FragmentEditSpend, Observer { card -> card?.let {
                         delete(card)
-                        mFragmentManager.popBackStack()
+                        modifyIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
+                            if(io.id == null) insert(io) else update(io)
+
+                            modifyDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                if(dairy.id == null) insert(dairy) else update(dairy)
+                                mFragmentManager.popBackStack()
+                            } })
+                        } })
                     } })
                 }
             }
@@ -184,7 +198,7 @@ class FragmentEditSpend : Fragment() {
                 val index = code?.substring(10,12)?.toInt() ?: -1
                 newCode = newCode.replaceRange(10, 12, String.format("%02d", index + 1))
                 newCode
-            }.observeOnce(this@FragmentEditSpend, Observer { code -> code?.let {
+            }.observeOnce(Observer { code -> code?.let {
                 spend.code = code
 
                 if(spend.id == null) insert(spend)
@@ -213,10 +227,10 @@ class FragmentEditSpend : Fragment() {
                     }
                 }
 
-                modifyIOKRW(id_account, spend.date).observeOnce(this@FragmentEditSpend, Observer { io -> io?.let {
+                modifyIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
                     if(io.id == null) insert(io) else update(io)
 
-                    modifyDairyKRW(id_account, spend.date).observeOnce(this@FragmentEditSpend, Observer { dairy -> dairy?.let {
+                    modifyDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                         if(dairy.id == null) insert(dairy) else update(dairy)
                         mFragmentManager.popBackStack()
                     } })
@@ -225,7 +239,7 @@ class FragmentEditSpend : Fragment() {
         }
     }
 
-    private fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+    private fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
         observeForever(object: Observer<T> {
             override fun onChanged(t: T) {
                 observer.onChanged(t)

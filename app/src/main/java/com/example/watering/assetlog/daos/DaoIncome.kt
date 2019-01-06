@@ -1,8 +1,7 @@
 package com.example.watering.assetlog.daos
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Query
+import androidx.room.*
 import com.example.watering.assetlog.entities.Income
 
 @Dao
@@ -15,4 +14,13 @@ interface DaoIncome {
 
     @Query("SELECT total(amount) FROM tbl_income WHERE id_account = :id_account AND date = :date")
     fun sum(id_account:Int?, date: String?): LiveData<Int>
+
+    @Insert
+    fun insert(income: Income)
+
+    @Update
+    fun update(income: Income)
+
+    @Delete
+    fun delete(income: Income)
 }

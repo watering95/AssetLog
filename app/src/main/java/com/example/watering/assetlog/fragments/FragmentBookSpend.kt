@@ -82,7 +82,8 @@ class FragmentBookSpend : Fragment() {
 
         binding.floatingFragmentBookSpend.setOnClickListener {
             val spend = Spend().apply { date = binding.date }
-            mViewModel.replaceFragment(mFragmentManager, FragmentEditSpend().initInstance(spend)) }
+            mViewModel.replaceFragment(mFragmentManager, FragmentEditSpend().initInstance(spend))
+        }
     }
     private fun itemClicked(item: Spend) {
         mViewModel.replaceFragment(mFragmentManager, FragmentEditSpend().initInstance(item))

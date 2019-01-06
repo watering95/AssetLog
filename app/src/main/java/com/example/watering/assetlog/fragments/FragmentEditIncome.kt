@@ -1,34 +1,104 @@
 package com.example.watering.assetlog.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil.inflate
+import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.watering.assetlog.MainActivity
+import androidx.lifecycle.*
+import androidx.lifecycle.Observer
+import com.example.watering.assetlog.BR
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditIncomeBinding
 import com.example.watering.assetlog.entities.Income
-import com.example.watering.assetlog.viewmodel.ViewModelApp
+import com.example.watering.assetlog.model.ModelCalendar
+import com.example.watering.assetlog.viewmodel.ViewModelEditIncome
+import java.util.*
 
 class FragmentEditIncome : Fragment() {
-    private lateinit var item: Income
-    private lateinit var mViewModel: ViewModelApp
+    private lateinit var income: Income
     private lateinit var binding: FragmentEditIncomeBinding
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_income, container, false)
+        binding.setLifecycleOwner(this)
+        binding.viewmodel = ViewModelProviders.of(this).get(ViewModelEditIncome::class.java)
+
         initLayout()
         return binding.root
     }
     fun initInstance(item: Income):FragmentEditIncome {
-        this.item = item
+        income = item
         return this
     }
+
+    @SuppressLint("ClickableViewAccessibility")
     private fun initLayout() {
-        val activity = activity as MainActivity
-        mViewModel = activity.mViewModel
+        binding.viewmodel?.run {
+            listOfMain = Transformations.map(getCatMainsByKind("income")) { list -> list.map { it.name } } as MutableLiveData<List<String?>>
+            listOfAccount = Transformations.map(allAccounts) { list -> list.map { it.number } } as MutableLiveData<List<String?>>
+
+            income = this@FragmentEditIncome.income
+            if(income.id == null) {
+                income = income.apply { this.date = ModelCalendar.getToday() }
+                notifyPropertyChanged(BR.income)
+            }
+
+            getCatMainBySub(this@FragmentEditIncome.income.category).observe(this@FragmentEditIncome, Observer { main -> main?.let {
+                Transformations.map(listOfMain) { list -> list.indexOf(main.name) }.observe(this@FragmentEditIncome, Observer { index -> index?.let {
+                    indexOfMain = index
+                } })
+                listOfSub = Transformations.map(getCatSubsByMain(main.id)) { list ->
+                    list.map { it.name }.apply {
+                        getCatSub(this@FragmentEditIncome.income.category).observe(this@FragmentEditIncome, Observer { sub -> sub?.let {
+                            indexOfSub = indexOf(sub.name)
+                            listOfAccount.observe(this@FragmentEditIncome, Observer { list -> list?.let {
+                                getAccount(income.account).observe(this@FragmentEditIncome, Observer { account -> account?.let {
+                                    indexOfAccount = list.indexOf(account.number)
+                                    id_account = account.id
+                                } })
+                            } })
+                        } })
+                    }
+                } as MutableLiveData<List<String?>>
+            } })
+
+            addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+                override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                    when(propertyId) {
+                        BR.indexOfSub -> onIndexOfSubChanged()
+                        BR.indexOfAccount -> onIndexOfAccountChanged()
+                    }
+                }
+            })
+        }
+
+        binding.editDateFragmentEditIncome.setOnTouchListener { _, event ->
+            when(event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    binding.viewmodel?.run {
+                        val dialog = DialogDate().newInstance(income.date, object:DialogDate.Complete {
+                            override fun onComplete(date: String?) {
+                                val select = ModelCalendar.strToCalendar(date)
+                                when {
+                                    Calendar.getInstance().before(select) -> Toast.makeText(activity, R.string.toast_date_error, Toast.LENGTH_SHORT).show()
+                                    else -> {
+                                        income = income.apply { this.date = ModelCalendar.calendarToStr(select) }
+                                        notifyPropertyChanged(BR.spend)
+                                    }
+                                }
+                            }
+                        })
+                        dialog.show(fragmentManager, "dialog")
+                    }
+                }
+            }
+            return@setOnTouchListener false
+        }
 
         setHasOptionsMenu(true)
     }
@@ -41,13 +111,60 @@ class FragmentEditIncome : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
-            R.id.menu_edit_save -> {
+            R.id.menu_edit_save -> save()
+            R.id.menu_edit_delete -> binding.viewmodel?.run {
+                delete(income)
+                modifyIOKRW(id_account, income.date).observeOnce(Observer { io -> io?.let {
+                    if(io.id == null) insert(io) else update(io)
 
+                    modifyDairyKRW(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                        if(dairy.id == null) insert(dairy) else update(dairy)
+                        mFragmentManager.popBackStack()
+                    } })
+                } })
             }
-            R.id.menu_edit_delete -> { mViewModel.delete(this.item) }
         }
-        mFragmentManager.popBackStack()
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun onIndexOfSubChanged() {
+        binding.viewmodel?.run {
+            Transformations.switchMap(listOfMain) { listOfMain ->
+                Transformations.switchMap(listOfSub) { listOfSub -> getCatSub(listOfSub[indexOfSub], listOfMain[indexOfMain]) }
+            }.observe(this@FragmentEditIncome, Observer { sub -> sub?.let {
+                income.category = sub.id
+            } })
+        }
+    }
+    fun onIndexOfAccountChanged() {
+        binding.viewmodel?.run {
+            Transformations.switchMap(listOfAccount) { list -> getAccountByNumber(list[indexOfAccount]) }.observe(this@FragmentEditIncome, Observer { account -> account?.let {
+                id_account = account.id
+            } })
+        }
+    }
+    fun save() {
+        binding.viewmodel?.run {
+            if(income.id == null) insert(income) else update(income)
+
+            modifyIOKRW(id_account, income.date).observeOnce(Observer { io -> io?.let {
+                if(io.id == null) insert(io) else update(io)
+
+                modifyDairyKRW(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                    if(dairy.id == null) insert(dairy) else update(dairy)
+                    mFragmentManager.popBackStack()
+                } })
+            } })
+        }
+    }
+
+    private fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
+        observeForever(object: Observer<T> {
+            override fun onChanged(t: T) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 }
