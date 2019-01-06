@@ -58,6 +58,7 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
     fun getCardByCode(code: String?) = repository.getCardByCode(code)
     fun getCardByNumber(number: String?) = repository.getCardByNumber(number)
     fun getLastSpendCode(date: String?) = repository.getLastSpendCode(date)
+    fun getLogs(id_account: Int?) = repository.getLogs(id_account)
 
     private fun getIOKRW(id_account: Int?, date: String?) = repository.getIOKRW(id_account, date)
     private fun getDairyKRW(id_account: Int?, date: String?) = repository.getDairyKRW(id_account, date)

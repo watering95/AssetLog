@@ -10,7 +10,7 @@
             android:layout_height="match_parent">
 
         <TextView
-                android:text="부카테고리"
+                android:text="@string/sub_category"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView11"
@@ -28,7 +28,7 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintStart_toEndOf="@+id/textView11" android:layout_marginStart="8dp"/>
         <TextView
-                android:text="날짜"
+                android:text="@string/date"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView4" app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@+id/textView8"
                 android:layout_marginStart="8dp" android:inputType="text"/>
         <TextView
-                android:text="내역"
+                android:text="@string/details"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
@@ -73,7 +73,7 @@
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@+id/textView9"
                 android:layout_marginStart="8dp"/>
         <TextView
-                android:text="금액"
+                android:text="@string/amount"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView9"
@@ -90,14 +90,14 @@
                 android:layout_marginEnd="8dp" app:layout_constraintStart_toEndOf="@+id/textView10"
                 android:layout_marginStart="8dp"/>
         <TextView
-                android:text="주카테고리"
+                android:text="@string/main_category"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView10"
                 app:layout_constraintTop_toTopOf="@+id/spinner_categorymain_fragment_edit_income" app:layout_constraintBottom_toBottomOf="@+id/spinner_categorymain_fragment_edit_income"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
         <TextView
-                android:text="계좌번호"
+                android:text="@string/account_number"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView12" app:layout_constraintStart_toStartOf="parent"

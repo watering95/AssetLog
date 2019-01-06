@@ -9,4 +9,7 @@ import com.example.watering.assetlog.entities.DairyTotal
 interface DaoDairyTotal {
     @Query("SELECT * from tbl_info_dairy_total")
     fun getAll(): LiveData<List<DairyTotal>>
+
+@Query("SELECT * FROM tbl_info_dairy_total WHERE id_account = :id_account ORDER BY date DESC")
+    fun getLogs(id_account: Int?): LiveData<List<DairyTotal>>
 }

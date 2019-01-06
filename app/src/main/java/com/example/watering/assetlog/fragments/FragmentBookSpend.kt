@@ -31,7 +31,6 @@ class FragmentBookSpend : Fragment() {
     }
     private fun initLayout() {
         val activity = activity as MainActivity
-        activity.supportActionBar?.setTitle(R.string.title_spend)
 
         mViewModel = activity.mViewModel
         binding.date = ModelCalendar.getToday()

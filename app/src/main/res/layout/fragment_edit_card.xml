@@ -61,7 +61,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"/>
         <TextView
-                android:text="카드번호"
+                android:text="@string/card_number"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_number_fragment_edit_card"
@@ -70,7 +70,7 @@
                 app:layout_constraintTop_toTopOf="@+id/edit_number_fragment_edit_card"
                 app:layout_constraintBottom_toBottomOf="@+id/edit_number_fragment_edit_card"/>
         <TextView
-                android:text="이름"
+                android:text="@string/name"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_name_fragment_edit_card" app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +78,7 @@
                 app:layout_constraintTop_toTopOf="@+id/edit_name_fragment_edit_card"
                 app:layout_constraintBottom_toBottomOf="@+id/edit_name_fragment_edit_card"/>
         <TextView
-                android:text="회사"
+                android:text="@string/company"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_company_fragment_edit_card"
@@ -86,7 +86,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/edit_company_fragment_edit_card"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
         <TextView
-                android:text="인출일"
+                android:text="@string/withdraw_date"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_date_fragment_edit_card"

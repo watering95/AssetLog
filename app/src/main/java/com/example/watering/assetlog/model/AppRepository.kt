@@ -19,6 +19,7 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     private val daoSpendCard = db.daoSpendCard()
     private val daoIOKRW = db.daoIOKRW()
     private val daoDairyKRW = db.daoDairyKRW()
+    private val daoDairyTotal = db.daoDairyTotal()
 
     var allGroups: LiveData<List<Group>> = daoGroup.getAll()
     var allAccounts: LiveData<List<Account>> = daoAccount.getAll()
@@ -46,6 +47,7 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     fun getSpendCard(code: String?) = daoSpendCard.get(code)
     fun getIOKRW(id_account: Int?, date: String?) = daoIOKRW.get(id_account, date)
     fun getDairyKRW(id_account: Int?, date: String?) = daoDairyKRW.get(id_account, date)
+    fun getLogs(id_account: Int?) = daoDairyTotal.getLogs(id_account)
 
     fun getLastSpendCode(date: String?) = daoSpend.getLastCode(date)
     fun getLastIOKRW(id_account: Int?, date: String?) = daoIOKRW.getLast(id_account, date)

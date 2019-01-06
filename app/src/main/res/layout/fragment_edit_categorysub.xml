@@ -35,7 +35,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/edit_name_fragment_edit_categorysub"
                 app:layout_constraintStart_toEndOf="@+id/text_categorymain_fragment_edit_categorysub"/>
         <TextView
-                android:text="이름"
+                android:text="@string/name"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_name_fragment_edit_categorysub" app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
                 app:layout_constraintTop_toTopOf="@+id/edit_name_fragment_edit_categorysub"
                 app:layout_constraintBottom_toBottomOf="@+id/edit_name_fragment_edit_categorysub"/>
         <TextView
-                android:text="주카테고리"
+                android:text="@string/main_category"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_categorymain_fragment_edit_categorysub"
