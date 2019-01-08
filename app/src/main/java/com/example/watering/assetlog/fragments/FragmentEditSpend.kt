@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import com.example.watering.assetlog.BR
+import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditSpendBinding
 import com.example.watering.assetlog.entities.Spend
@@ -42,6 +43,7 @@ class FragmentEditSpend : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initLayout() {
+        (activity as MainActivity).supportActionBar?.setTitle(R.string.title_spend)
         binding.viewmodel?.run {
             addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {

@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import com.example.watering.assetlog.BR
+import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditIncomeBinding
 import com.example.watering.assetlog.entities.Income
@@ -38,6 +39,8 @@ class FragmentEditIncome : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initLayout() {
+        (activity as MainActivity).supportActionBar?.setTitle(R.string.title_income)
+
         binding.viewmodel?.run {
             listOfMain = Transformations.map(getCatMainsByKind("income")) { list -> list.map { it.name } } as MutableLiveData<List<String?>>
             listOfAccount = Transformations.map(allAccounts) { list -> list.map { it.number } } as MutableLiveData<List<String?>>

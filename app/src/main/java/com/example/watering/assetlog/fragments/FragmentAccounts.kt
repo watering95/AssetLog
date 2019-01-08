@@ -7,19 +7,23 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.watering.assetlog.BR
+import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentAccountsBinding
 import com.example.watering.assetlog.view.RecyclerViewAdapterAccounts
 import com.example.watering.assetlog.viewmodel.ViewModelAccounts
 
 class FragmentAccounts : Fragment() {
+    private val mViewModel by lazy { (activity as MainActivity).mViewModel }
     private lateinit var binding: FragmentAccountsBinding
+    private val mFragmentManager by lazy { (activity as MainActivity).supportFragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_accounts, container, false)
@@ -46,6 +50,19 @@ class FragmentAccounts : Fragment() {
         binding.recyclerviewFragmentAccounts.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@FragmentAccounts.context)
+        }
+
+        binding.floatingFragmentAccounts.setOnClickListener {
+            val dialog = DialogInOut().newInstance(object : DialogInOut.Complete {
+                override fun onComplete(select: Int) {
+                    when(select) {
+                        0 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutKRW())
+                        1 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutForeign())
+                        2 -> {}
+                    }
+                }
+            })
+            dialog.show(fragmentManager, "dialog")
         }
     }
     private fun itemClicked(position: Int) {
