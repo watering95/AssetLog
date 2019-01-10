@@ -8,17 +8,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             card_view:cardCornerRadius="8dp"
-            card_view:cardBackgroundColor="@color/colorYellow" card_view:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp" card_view:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp" card_view:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" card_view:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp">
+            card_view:cardBackgroundColor="@color/colorWhiteRed" card_view:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="2dp" card_view:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="2dp" card_view:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="4dp" card_view:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="4dp">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
             <TextView
-                    android:text="TextView"
+                    android:text="text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/text_date_card_accounts" android:layout_marginTop="8dp"
@@ -26,15 +26,16 @@
                     android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
                     card_view:layout_constraintBottom_toBottomOf="parent"/>
             <TextView
-                    android:text="TextView"
+                    android:text="text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/text_principal_card_accounts" card_view:layout_constraintStart_toEndOf="@+id/text_date_card_accounts"
-                    android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+                    android:id="@+id/text_principal_card_accounts"
+                    card_view:layout_constraintStart_toEndOf="@+id/text_date_card_accounts"
+                    android:layout_marginStart="16dp" android:layout_marginTop="8dp"
                     card_view:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
                     card_view:layout_constraintBottom_toBottomOf="parent"/>
             <TextView
-                    android:text="TextView"
+                    android:text="text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/text_evaluation_card_accounts"
@@ -42,9 +43,10 @@
                     card_view:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintVertical_bias="0.0"
-                    card_view:layout_constraintStart_toEndOf="@+id/text_principal_card_accounts" android:layout_marginStart="8dp"/>
+                    card_view:layout_constraintStart_toEndOf="@+id/text_principal_card_accounts"
+                    android:layout_marginStart="32dp"/>
             <TextView
-                    android:text="TextView"
+                    android:text="text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/text_rate_card_accounts"
@@ -53,7 +55,7 @@
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintVertical_bias="0.0"
                     card_view:layout_constraintStart_toEndOf="@+id/text_evaluation_card_accounts"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginEnd="8dp" card_view:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

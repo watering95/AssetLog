@@ -17,6 +17,8 @@ import com.example.watering.assetlog.BR
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentAccountsBinding
+import com.example.watering.assetlog.entities.DairyTotal
+import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.view.RecyclerViewAdapterAccounts
 import com.example.watering.assetlog.viewmodel.ViewModelAccounts
 
@@ -24,6 +26,7 @@ class FragmentAccounts : Fragment() {
     private val mViewModel by lazy { (activity as MainActivity).mViewModel }
     private lateinit var binding: FragmentAccountsBinding
     private val mFragmentManager by lazy { (activity as MainActivity).supportFragmentManager as FragmentManager }
+    private lateinit var logs:List<DairyTotal>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_accounts, container, false)
@@ -55,9 +58,10 @@ class FragmentAccounts : Fragment() {
         binding.floatingFragmentAccounts.setOnClickListener {
             val dialog = DialogInOut().newInstance(object : DialogInOut.Complete {
                 override fun onComplete(select: Int) {
+                    val today = ModelCalendar.getToday()
                     when(select) {
-                        0 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutKRW())
-                        1 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutForeign())
+                        0 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutKRW().initInstance(binding.viewmodel?.id_account, today))
+                        1 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutForeign().initInstance(binding.viewmodel?.id_account, today))
                         2 -> {}
                     }
                 }
@@ -66,8 +70,21 @@ class FragmentAccounts : Fragment() {
         }
     }
     private fun itemClicked(position: Int) {
-
+        binding.viewmodel?.run {
+            val dialog = DialogInOut().newInstance(object : DialogInOut.Complete {
+                override fun onComplete(select: Int) {
+                    val date = logs[position].date
+                    when(select) {
+                        0 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutKRW().initInstance(binding.viewmodel?.id_account, date))
+                        1 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutForeign().initInstance(binding.viewmodel?.id_account, date))
+                        2 -> {}
+                    }
+                }
+            })
+            dialog.show(fragmentManager, "dialog")
+        }
     }
+
     fun onIndexOfAccountChanged() {
         binding.viewmodel?.run {
             Transformations.switchMap(listOfAccount) { list ->
@@ -75,6 +92,7 @@ class FragmentAccounts : Fragment() {
             }.observe(this@FragmentAccounts, Observer { id -> id?.let {
                 id_account = id
                 getLogs(id_account).observe(this@FragmentAccounts, Observer { logs -> logs?.let {
+                    this@FragmentAccounts.logs = logs
                     binding.recyclerviewFragmentAccounts.run {
                         adapter = RecyclerViewAdapterAccounts(logs) { position -> itemClicked(position) }
                     }

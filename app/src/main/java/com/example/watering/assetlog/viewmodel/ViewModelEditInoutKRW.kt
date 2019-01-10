@@ -3,15 +3,18 @@ package com.example.watering.assetlog.viewmodel
 import android.app.Application
 import androidx.databinding.Bindable
 import com.example.watering.assetlog.BR
+import com.example.watering.assetlog.entities.IOKRW
 
 class ViewModelEditInoutKRW(application:Application) : ObservableViewModel(application) {
+    var io:IOKRW = IOKRW()
 
-    var date = ""
+    var date:String? = ""
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
+        io.date = value
         notifyPropertyChanged(BR.date)
     }
 
@@ -24,25 +27,27 @@ class ViewModelEditInoutKRW(application:Application) : ObservableViewModel(appli
         notifyPropertyChanged(BR.principal)
     }
 
-    var withdraw = 0
+    var withdraw:Int? = 0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
+        io.output = value
         notifyPropertyChanged(BR.withdraw)
     }
 
-    var evaluation = 0
+    var evaluation:Int? = 0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
+        io.evaluation_krw = value
         notifyPropertyChanged(BR.evaluation)
     }
 
-    var spend = 0
+    var spend:Int? = 0
     @Bindable get() {
         return field
     }
@@ -51,7 +56,7 @@ class ViewModelEditInoutKRW(application:Application) : ObservableViewModel(appli
         notifyPropertyChanged(BR.spend)
     }
 
-    var income = 0
+    var income:Int? = 0
     @Bindable get() {
         return field
     }
@@ -60,12 +65,13 @@ class ViewModelEditInoutKRW(application:Application) : ObservableViewModel(appli
         notifyPropertyChanged(BR.income)
     }
 
-    var deposit = 0
+    var deposit:Int? = 0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
+        io.input = value
         notifyPropertyChanged(BR.deposit)
     }
 }

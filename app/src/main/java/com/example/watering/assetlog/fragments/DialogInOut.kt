@@ -3,7 +3,6 @@ package com.example.watering.assetlog.fragments
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -35,7 +34,10 @@ class DialogInOut: DialogFragment() {
 
         listView.choiceMode = ListView.CHOICE_MODE_SINGLE
         listView.adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, list)
-        listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> complete.onComplete(position) }
+        listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            complete.onComplete(position)
+            dismiss()
+        }
 
         builder.setView(view).setTitle(getString(R.string.title_select))
 

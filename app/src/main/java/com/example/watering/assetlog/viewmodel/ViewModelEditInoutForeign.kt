@@ -2,13 +2,11 @@ package com.example.watering.assetlog.viewmodel
 
 import android.app.Application
 import androidx.databinding.Bindable
-import androidx.lifecycle.*
 import com.example.watering.assetlog.BR
-import com.example.watering.assetlog.entities.Spend
 
 class ViewModelEditInoutForeign(application:Application) : ObservableViewModel(application) {
 
-    var date = ""
+    var date:String? = ""
     @Bindable get() {
         return field
     }
