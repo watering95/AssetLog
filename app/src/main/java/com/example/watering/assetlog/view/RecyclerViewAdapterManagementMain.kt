@@ -26,7 +26,7 @@ class RecyclerViewAdapterManagementMain(val lists:ArrayList<String>, private val
     }
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        var title: TextView = view.findViewById(R.id.text_title_management_main)
+        private var title: TextView = view.findViewById(R.id.text_title_management_main)
 
         fun bind(list: String, position: Int, clickListener: (Int) -> Unit) {
             title.text = list

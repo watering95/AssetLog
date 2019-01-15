@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil.inflate
-import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
@@ -19,6 +18,7 @@ class FragmentEditInoutForeign : Fragment() {
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
     private var id_account:Int? = 0
     private var date:String? = ""
+    private var currency:Int? = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_inout_foreign, container, false)
@@ -42,13 +42,19 @@ class FragmentEditInoutForeign : Fragment() {
 
         binding.viewmodel?.run {
             date = this@FragmentEditInoutForeign.date
-            addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
-                override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                    when(propertyId) {
 
-                    }
-                }
-            })
+            modifyIOForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign,  Observer { io -> io?.let {
+                deposit = io.input
+                withdraw = io.output
+                deposit_krw = io.input_krw
+                withdraw_krw = io.output_krw
+                indexOfCurrency = io.currency
+                evaluation_krw = io.evaluation_krw
+                this.io = io
+                modifyDairyForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign, Observer { dairy -> dairy?.let {
+                    principal = dairy.principal
+                } })
+            } })
         }
 
         setHasOptionsMenu(true)
@@ -69,8 +75,15 @@ class FragmentEditInoutForeign : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun save() {
+    private fun save() {
+        binding.viewmodel?.run {
+            if(io.id == null) insert(io) else update(io)
 
+            modifyDairyForeign(id_account, date, currency).observeOnce(Observer { dairy -> dairy?.let {
+                if(dairy.id == null) insert(dairy) else update(dairy)
+                mFragmentManager.popBackStack()
+            } })
+        }
     }
 
     private fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {

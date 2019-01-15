@@ -194,7 +194,7 @@ class FragmentEditSpend : Fragment() {
         }
     }
 
-    fun save() {
+    private fun save() {
         binding.viewmodel?.run {
             Transformations.map(getLastSpendCode(spend.date)) { code ->
                 val index = code?.substring(10,12)?.toInt() ?: -1

@@ -28,7 +28,7 @@ class RecyclerViewAdapterManagementAccount(val lists:List<Account>, private val 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         var number: TextView = view.findViewById(R.id.text_number_card_management_account)
         private var institute: TextView = view.findViewById(R.id.text_institute_card_management_account)
-        var description: TextView = view.findViewById(R.id.text_description_card_management_account)
+        private var description: TextView = view.findViewById(R.id.text_description_card_management_account)
 
         fun bind(account: Account, position: Int, clickListener: (Int) -> Unit) {
             number.text = account.number

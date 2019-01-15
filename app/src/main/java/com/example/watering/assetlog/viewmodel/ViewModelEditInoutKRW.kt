@@ -3,6 +3,7 @@ package com.example.watering.assetlog.viewmodel
 import android.app.Application
 import androidx.databinding.Bindable
 import com.example.watering.assetlog.BR
+import com.example.watering.assetlog.entities.DairyKRW
 import com.example.watering.assetlog.entities.IOKRW
 
 class ViewModelEditInoutKRW(application:Application) : ObservableViewModel(application) {
@@ -18,7 +19,7 @@ class ViewModelEditInoutKRW(application:Application) : ObservableViewModel(appli
         notifyPropertyChanged(BR.date)
     }
 
-    var principal = 0
+    var principal: Int? = 0
     @Bindable get() {
         return field
     }

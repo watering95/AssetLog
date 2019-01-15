@@ -9,4 +9,7 @@ import com.example.watering.assetlog.entities.DairyForeign
 interface DaoDairyForeign {
     @Query("SELECT * from tbl_info_dairy_foreign")
     fun getAll(): LiveData<List<DairyForeign>>
+
+    @Query("SELECT * FROM tbl_info_dairy_foreign WHERE id_account = :id_account AND date = :date AND id_currency = :currency")
+    fun get(id_account: Int?, date: String?, currency: Int?): LiveData<DairyForeign>
 }

@@ -49,6 +49,9 @@ class FragmentEditInoutKRW : Fragment() {
                 spend = io.spend_card!! + io.spend_cash!!
                 withdraw = io.output
                 this.io = io
+                modifyDairyKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { dairy -> dairy?.let {
+                    principal = dairy.principal_krw
+                }})
             } })
         }
 
@@ -70,14 +73,13 @@ class FragmentEditInoutKRW : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun save() {
+    private fun save() {
         binding.viewmodel?.run {
             if(io.id == null) insert(io) else update(io)
-
             modifyDairyKRW(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
                 if(dairy.id == null) insert(dairy) else update(dairy)
                 mFragmentManager.popBackStack()
-            } })
+            }})
         }
     }
 

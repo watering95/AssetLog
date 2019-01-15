@@ -147,7 +147,7 @@ class FragmentEditIncome : Fragment() {
             } })
         }
     }
-    fun save() {
+    private fun save() {
         binding.viewmodel?.run {
             if(income.id == null) insert(income) else update(income)
 
