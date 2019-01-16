@@ -78,7 +78,10 @@ class FragmentEditInoutKRW : Fragment() {
             if(io.id == null) insert(io) else update(io)
             modifyDairyKRW(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
                 if(dairy.id == null) insert(dairy) else update(dairy)
-                mFragmentManager.popBackStack()
+                modifyDairyTotal(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
+                    if(dairy.id == null) insert(dairy) else update(dairy)
+                    mFragmentManager.popBackStack()
+                }})
             }})
         }
     }

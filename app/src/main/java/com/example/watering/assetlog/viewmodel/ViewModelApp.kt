@@ -7,10 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.watering.assetlog.R
-import com.example.watering.assetlog.entities.DairyForeign
-import com.example.watering.assetlog.entities.DairyKRW
-import com.example.watering.assetlog.entities.IOForeign
-import com.example.watering.assetlog.entities.IOKRW
+import com.example.watering.assetlog.entities.*
 import com.example.watering.assetlog.model.AppRepository
 import com.example.watering.assetlog.model.ModelCalendar
 import kotlinx.coroutines.*
@@ -69,14 +66,14 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
                     Transformations.switchMap(sumOfIncomeInDate(id_account, date)) { sumOfIncome ->
                         Transformations.map(getIOKRW(id_account, date)) { io ->
                             if(io == null) {
-                                val newIO = IOKRW()
-                                newIO.date = date
-                                newIO.evaluation_krw = evaluation - sumOfSpendsCard - sumOfSpendsCash + sumOfIncome
-                                newIO.account = id_account
-                                newIO.spend_cash = sumOfSpendsCash
-                                newIO.spend_card = sumOfSpendsCard
-                                newIO.income = sumOfIncome
-                                newIO
+                                val new = IOKRW()
+                                new.date = date
+                                new.evaluation_krw = evaluation - sumOfSpendsCard - sumOfSpendsCash + sumOfIncome
+                                new.account = id_account
+                                new.spend_cash = sumOfSpendsCash
+                                new.spend_card = sumOfSpendsCard
+                                new.income = sumOfIncome
+                                new
                             } else {
                                 io.evaluation_krw = evaluation - sumOfSpendsCard - sumOfSpendsCash + sumOfIncome - io.output!! + io.input!!
                                 io.spend_cash = sumOfSpendsCash
@@ -94,12 +91,12 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
         return Transformations.switchMap(calculateEvaluationKRWInForeign(id_account, date, currency)) { evaluation ->
             Transformations.map(getIOForeign(id_account, date, currency)) { io ->
                 if(io == null) {
-                    val newIO = IOForeign()
-                    newIO.account = id_account
-                    newIO.currency = currency
-                    newIO.date = date
-                    newIO.evaluation_krw = evaluation
-                    newIO
+                    val new = IOForeign()
+                    new.account = id_account
+                    new.currency = currency
+                    new.date = date
+                    new.evaluation_krw = evaluation
+                    new
                 } else {
                     io.evaluation_krw = evaluation
                     io
@@ -112,12 +109,12 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
             Transformations.switchMap(calculatePrincipalInKRW(id_account, date)) { principal ->
                 Transformations.map(calculateRateInKRW(id_account, date)) { rate ->
                     if(dairy == null) {
-                        val newDairy = DairyKRW()
-                        newDairy.principal_krw = principal
-                        newDairy.rate = rate
-                        newDairy.account = id_account
-                        newDairy.date = date
-                        newDairy
+                        val new = DairyKRW()
+                        new.principal_krw = principal
+                        new.rate = rate
+                        new.account = id_account
+                        new.date = date
+                        new
                     } else {
                         dairy.principal_krw = principal
                         dairy.rate = rate
@@ -133,13 +130,13 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
                 Transformations.switchMap(calculatePrincipalKRWInForeign(id_account, date, currency)) { principal_krw ->
                     Transformations.map(calculateRateInForeign(id_account, date, currency)) { rate ->
                         if(dairy == null) {
-                            val newDairy = DairyForeign()
-                            newDairy.principal = principal
-                            newDairy.principal_krw = principal_krw
-                            newDairy.rate = rate
-                            newDairy.account = id_account
-                            newDairy.date = date
-                            newDairy
+                            val new = DairyForeign()
+                            new.principal = principal
+                            new.principal_krw = principal_krw
+                            new.rate = rate
+                            new.account = id_account
+                            new.date = date
+                            new
                         } else {
                             dairy.principal = principal
                             dairy.principal_krw = principal_krw
@@ -151,13 +148,57 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
             }
         }
     }
+    fun modifyDairyTotal(id_account: Int?, date: String?): LiveData<DairyTotal> {
+        return Transformations.switchMap(getDairyForeignForDate(id_account, date)) { list_dairy_foreign ->
+            Transformations.switchMap(getIOForeignForDate(id_account, date)) { list_io_foreign ->
+                Transformations.switchMap(getLastDairyKRW(id_account, date)) { dairy_krw ->
+                    Transformations.switchMap(getLastIOKRW(id_account, date)) { io_krw ->
+                        Transformations.map(getDairyTotal(id_account, date)) { dairy_total ->
+                            var principal = 0
+                            var evaluation = 0
+                            var rate = 0.0
+
+                            dairy_krw?.run { principal = principal_krw!! }
+                            io_krw?.run { evaluation = evaluation_krw!! }
+
+                            list_dairy_foreign.forEach { principal += it.principal_krw!! }
+                            list_io_foreign.forEach { evaluation += it.evaluation_krw!!.toInt() }
+
+                            if(principal != 0 && evaluation != 0) rate = evaluation.toDouble() / principal * 100 - 100
+
+                            if(dairy_total == null) {
+                                val new = DairyTotal()
+                                new.account = id_account
+                                new.date = date
+                                new.evaluation_krw = evaluation
+                                new.principal_krw = principal
+                                new.rate = rate
+                                new
+                            } else {
+                                dairy_total.evaluation_krw = evaluation
+                                dairy_total.principal_krw = principal
+                                dairy_total.rate = rate
+                                dairy_total
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private fun getIOKRW(id_account: Int?, date: String?) = repository.getIOKRW(id_account, date)
     private fun getIOForeign(id_account: Int?, date: String?, currency: Int?) = repository.getIOForeign(id_account, date, currency)
     private fun getDairyKRW(id_account: Int?, date: String?) = repository.getDairyKRW(id_account, date)
     private fun getDairyForeign(id_account: Int?, date: String?, currency: Int?) = repository.getDairyForeign(id_account, date, currency)
+    private fun getDairyTotal(id_account: Int?, date: String?) = repository.getDairyTotal(id_account, date)
+
     private fun getLastIOKRW(id_account: Int?, date: String?) = repository.getLastIOKRW(id_account, date)
     private fun getLastIOForeign(id_account: Int?, date: String?, currency: Int?) = repository.getLastIOForeign(id_account, date, currency)
+    private fun getLastDairyKRW(id_account: Int?, date: String?) = repository.getLastDairyKRW(id_account, date)
+
+    private fun getDairyForeignForDate(id_account: Int?, date: String?) = repository.getDairyForeignForDate(id_account, date)
+    private fun getIOForeignForDate(id_account: Int?, date: String?) = repository.getIOForeignForDate(id_account, date)
 
     private fun sumOfSpendCashInDate(id_account:Int?, date: String?) = repository.sumOfSpendCashInDate(id_account, date)
     private fun sumOfSpendCardInDate(id_account:Int?, date: String?) = repository.sumOfSpendCardInDate(id_account, date)
@@ -216,17 +257,25 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
     }
     private fun calculateRateInKRW(id_account: Int?, date: String?): LiveData<Double> {
         return Transformations.switchMap(getIOKRW(id_account, date)) { io ->
-            Transformations.map(calculatePrincipalInKRW(id_account, date)) { principal ->
-                val rate = io.evaluation_krw!!.toDouble() / principal * 100 - 100
-                rate
+            Transformations.switchMap(getLastIOKRW(id_account, date)) { lastIO ->
+                Transformations.map(calculatePrincipalInKRW(id_account, date)) { principal ->
+                    var rate = 0.0
+                    if(io == null) rate = lastIO.evaluation_krw!!.toDouble() / principal * 100 - 100
+                    else rate = io.evaluation_krw!!.toDouble() / principal * 100 - 100
+                    rate
+                }
             }
         }
     }
     private fun calculateRateInForeign(id_account: Int?, date: String?, currency: Int?): LiveData<Double> {
         return Transformations.switchMap(getIOForeign(id_account, date, currency)) { io ->
-            Transformations.map(calculatePrincipalKRWInForeign(id_account, date, currency)) { principal ->
-                val rate = io.evaluation_krw!! / principal * 100 - 100
-                rate
+            Transformations.switchMap(getLastIOForeign(id_account, date, currency)) { lastIO ->
+                Transformations.map(calculatePrincipalKRWInForeign(id_account, date, currency)) { principal ->
+                    var rate = 0.0
+                    if(io == null) rate = lastIO.evaluation_krw!! / principal * 100 - 100
+                    else rate = io.evaluation_krw!! / principal * 100 - 100
+                    rate
+                }
             }
         }
     }

@@ -51,11 +51,15 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     fun getIOForeign(id_account: Int?, date: String?, currency: Int?) = daoIOForeign.get(id_account, date, currency)
     fun getDairyKRW(id_account: Int?, date: String?) = daoDairyKRW.get(id_account, date)
     fun getDairyForeign(id_account: Int?, date: String?, currency: Int?) = daoDairyForeign.get(id_account, date, currency)
+    fun getDairyTotal(id_account: Int?, date: String?) = daoDairyTotal.get(id_account, date)
     fun getLogs(id_account: Int?) = daoDairyTotal.getLogs(id_account)
+    fun getDairyForeignForDate(id_account: Int?, date: String?) = daoDairyForeign.getForDate(id_account, date)
+    fun getIOForeignForDate(id_account: Int?, date: String?) = daoIOForeign.getForDate(id_account, date)
 
     fun getLastSpendCode(date: String?) = daoSpend.getLastCode(date)
     fun getLastIOKRW(id_account: Int?, date: String?) = daoIOKRW.getLast(id_account, date)
     fun getLastIOForeign(id_account: Int?, date: String?, currency: Int?) = daoIOForeign.getLast(id_account, date, currency)
+    fun getLastDairyKRW(id_account: Int?, date: String?) = daoDairyKRW.getLast(id_account, date)
 
     fun sumOfSpendCashInDate(id_account: Int?, date: String?) = daoSpend.sumOfSpendsCash(id_account, date)
     fun sumOfSpendCardInDate(id_account: Int?, date: String?) = daoSpend.sumOfSpendsCard(id_account, date)
@@ -87,7 +91,10 @@ class AppRepository(application: Application, scope:CoroutineScope) {
         if(t is SpendCash) daoSpendCash.insert(t)
         if(t is SpendCard) daoSpendCard.insert(t)
         if(t is IOKRW) daoIOKRW.insert(t)
+        if(t is IOForeign) daoIOForeign.insert(t)
         if(t is DairyKRW) daoDairyKRW.insert(t)
+        if(t is DairyForeign) daoDairyForeign.insert(t)
+        if(t is DairyTotal) daoDairyTotal.insert(t)
     }
 
     @WorkerThread
@@ -102,7 +109,10 @@ class AppRepository(application: Application, scope:CoroutineScope) {
         if(t is SpendCash) daoSpendCash.update(t)
         if(t is SpendCard) daoSpendCard.update(t)
         if(t is IOKRW) daoIOKRW.update(t)
+        if(t is IOForeign) daoIOForeign.update(t)
         if(t is DairyKRW) daoDairyKRW.update(t)
+        if(t is DairyForeign) daoDairyForeign.update(t)
+        if(t is DairyTotal) daoDairyTotal.update(t)
     }
 
     @WorkerThread
@@ -117,6 +127,9 @@ class AppRepository(application: Application, scope:CoroutineScope) {
         if(t is SpendCash) daoSpendCash.delete(t)
         if(t is SpendCard) daoSpendCard.delete(t)
         if(t is IOKRW) daoIOKRW.delete(t)
+        if(t is IOForeign) daoIOForeign.delete(t)
         if(t is DairyKRW) daoDairyKRW.delete(t)
+        if(t is DairyForeign) daoDairyForeign.delete(t)
+        if(t is DairyTotal) daoDairyTotal.delete(t)
     }
 }

@@ -143,7 +143,10 @@ class FragmentEditSpend : Fragment() {
 
                             modifyDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                                 if(dairy.id == null) insert(dairy) else update(dairy)
-                                mFragmentManager.popBackStack()
+                                modifyDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                    if(dairy.id == null) insert(dairy) else update(dairy)
+                                    mFragmentManager.popBackStack()
+                                } })
                             } })
                         } })
                     } })
@@ -154,7 +157,10 @@ class FragmentEditSpend : Fragment() {
 
                             modifyDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                                 if(dairy.id == null) insert(dairy) else update(dairy)
-                                mFragmentManager.popBackStack()
+                                modifyDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                    if(dairy.id == null) insert(dairy) else update(dairy)
+                                    mFragmentManager.popBackStack()
+                                } })
                             } })
                         } })
                     } })
@@ -234,7 +240,10 @@ class FragmentEditSpend : Fragment() {
 
                     modifyDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                         if(dairy.id == null) insert(dairy) else update(dairy)
-                        mFragmentManager.popBackStack()
+                        modifyDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                            if(dairy.id == null) insert(dairy) else update(dairy)
+                            mFragmentManager.popBackStack()
+                        } })
                     } })
                 } })
             } })

@@ -3,7 +3,6 @@ package com.example.watering.assetlog.viewmodel
 import android.app.Application
 import androidx.databinding.Bindable
 import com.example.watering.assetlog.BR
-import com.example.watering.assetlog.entities.DairyKRW
 import com.example.watering.assetlog.entities.IOKRW
 
 class ViewModelEditInoutKRW(application:Application) : ObservableViewModel(application) {

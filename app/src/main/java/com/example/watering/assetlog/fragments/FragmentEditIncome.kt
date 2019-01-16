@@ -156,7 +156,10 @@ class FragmentEditIncome : Fragment() {
 
                 modifyDairyKRW(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
                     if(dairy.id == null) insert(dairy) else update(dairy)
-                    mFragmentManager.popBackStack()
+                    modifyDairyTotal(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                        if(dairy.id == null) insert(dairy) else update(dairy)
+                        mFragmentManager.popBackStack()
+                    } })
                 } })
             } })
         }
