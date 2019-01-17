@@ -3,15 +3,20 @@ package com.example.watering.assetlog.fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil.inflate
+import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
+import com.example.watering.assetlog.BR
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditInoutForeignBinding
+import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.viewmodel.ViewModelEditInoutForeign
+import java.util.*
 
 class FragmentEditInoutForeign : Fragment() {
     private lateinit var binding: FragmentEditInoutForeignBinding
@@ -41,20 +46,34 @@ class FragmentEditInoutForeign : Fragment() {
         (activity as MainActivity).supportActionBar?.setTitle(R.string.title_inout_foreign)
 
         binding.viewmodel?.run {
-            date = this@FragmentEditInoutForeign.date
+            addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+                override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                    when(propertyId) {
+                        BR.date -> onDateChanged()
+                    }
+                }
+            })
 
-            modifyIOForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign,  Observer { io -> io?.let {
-                deposit = io.input
-                withdraw = io.output
-                deposit_krw = io.input_krw
-                withdraw_krw = io.output_krw
-                indexOfCurrency = io.currency
-                evaluation_krw = io.evaluation_krw
-                this.io = io
-                modifyDairyForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign, Observer { dairy -> dairy?.let {
-                    principal = dairy.principal
-                } })
-            } })
+            date = this@FragmentEditInoutForeign.date
+            notifyPropertyChanged(BR.date)
+        }
+
+        binding.buttonDateFragmentEditInoutForeign.setOnClickListener {
+            binding.viewmodel?.run {
+                val dialog = DialogDate().newInstance(date, object:DialogDate.Complete {
+                    override fun onComplete(date: String?) {
+                        val select = ModelCalendar.strToCalendar(date)
+                        when {
+                            Calendar.getInstance().before(select) -> Toast.makeText(activity, R.string.toast_date_error, Toast.LENGTH_SHORT).show()
+                            else -> {
+                                this@run.date = ModelCalendar.calendarToStr(select)
+                                notifyPropertyChanged(BR.date)
+                            }
+                        }
+                    }
+                })
+                dialog.show(fragmentManager, "dialog")
+            }
         }
 
         setHasOptionsMenu(true)
@@ -84,6 +103,23 @@ class FragmentEditInoutForeign : Fragment() {
                 modifyDairyTotal(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
                     if(dairy.id == null) insert(dairy) else update(dairy)
                     mFragmentManager.popBackStack()
+                } })
+            } })
+        }
+    }
+
+    private fun onDateChanged() {
+        binding.viewmodel?.run {
+            modifyIOForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign,  Observer { io -> io?.let {
+                deposit = io.input
+                withdraw = io.output
+                deposit_krw = io.input_krw
+                withdraw_krw = io.output_krw
+                indexOfCurrency = io.currency
+                evaluation_krw = io.evaluation_krw
+                this.io = io
+                modifyDairyForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign, Observer { dairy -> dairy?.let {
+                    principal = dairy.principal
                 } })
             } })
         }

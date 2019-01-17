@@ -80,27 +80,22 @@ class FragmentEditIncome : Fragment() {
             })
         }
 
-        binding.editDateFragmentEditIncome.setOnTouchListener { _, event ->
-            when(event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    binding.viewmodel?.run {
-                        val dialog = DialogDate().newInstance(income.date, object:DialogDate.Complete {
-                            override fun onComplete(date: String?) {
-                                val select = ModelCalendar.strToCalendar(date)
-                                when {
-                                    Calendar.getInstance().before(select) -> Toast.makeText(activity, R.string.toast_date_error, Toast.LENGTH_SHORT).show()
-                                    else -> {
-                                        income = income.apply { this.date = ModelCalendar.calendarToStr(select) }
-                                        notifyPropertyChanged(BR.spend)
-                                    }
-                                }
+        binding.buttonDateFragmentEditIncome.setOnClickListener {
+            binding.viewmodel?.run {
+                val dialog = DialogDate().newInstance(income.date, object:DialogDate.Complete {
+                    override fun onComplete(date: String?) {
+                        val select = ModelCalendar.strToCalendar(date)
+                        when {
+                            Calendar.getInstance().before(select) -> Toast.makeText(activity, R.string.toast_date_error, Toast.LENGTH_SHORT).show()
+                            else -> {
+                                income = income.apply { this.date = ModelCalendar.calendarToStr(select) }
+                                notifyPropertyChanged(BR.income)
                             }
-                        })
-                        dialog.show(fragmentManager, "dialog")
+                        }
                     }
-                }
+                })
+                dialog.show(fragmentManager, "dialog")
             }
-            return@setOnTouchListener false
         }
 
         setHasOptionsMenu(true)

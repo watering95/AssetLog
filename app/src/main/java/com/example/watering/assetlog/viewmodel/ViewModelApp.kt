@@ -259,9 +259,10 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
         return Transformations.switchMap(getIOKRW(id_account, date)) { io ->
             Transformations.switchMap(getLastIOKRW(id_account, date)) { lastIO ->
                 Transformations.map(calculatePrincipalInKRW(id_account, date)) { principal ->
-                    var rate = 0.0
-                    if(io == null) rate = lastIO.evaluation_krw!!.toDouble() / principal * 100 - 100
-                    else rate = io.evaluation_krw!!.toDouble() / principal * 100 - 100
+                    val rate = if(io == null) {
+                        if(lastIO == null) 0.0 else lastIO.evaluation_krw!!.toDouble() / principal * 100 - 100
+                    }
+                    else io.evaluation_krw!!.toDouble() / principal * 100 - 100
                     rate
                 }
             }
@@ -271,9 +272,10 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
         return Transformations.switchMap(getIOForeign(id_account, date, currency)) { io ->
             Transformations.switchMap(getLastIOForeign(id_account, date, currency)) { lastIO ->
                 Transformations.map(calculatePrincipalKRWInForeign(id_account, date, currency)) { principal ->
-                    var rate = 0.0
-                    if(io == null) rate = lastIO.evaluation_krw!! / principal * 100 - 100
-                    else rate = io.evaluation_krw!! / principal * 100 - 100
+                    val rate = if(io == null) {
+                        if(lastIO == null) 0.0 else lastIO.evaluation_krw!! / principal * 100 - 100
+                    }
+                    else io.evaluation_krw!! / principal * 100 - 100
                     rate
                 }
             }
@@ -283,7 +285,7 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
         val before = ModelCalendar.calendarToStr(ModelCalendar.changeDate(date, -1))
 
         return Transformations.map(getLastIOKRW(id_account, before)) { last ->
-            val evaluation = last.evaluation_krw
+            val evaluation = if(last == null) 0 else last.evaluation_krw
             evaluation
         }
     }
@@ -291,7 +293,7 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
         val before = ModelCalendar.calendarToStr(ModelCalendar.changeDate(date, -1))
 
         return Transformations.map(getLastIOForeign(id_account, before, currency)) { last ->
-            val evaluation = last.evaluation_krw
+            val evaluation = if(last == null) 0.0 else last.evaluation_krw
             evaluation
         }
     }

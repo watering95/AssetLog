@@ -3,15 +3,20 @@ package com.example.watering.assetlog.fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil.inflate
+import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
+import com.example.watering.assetlog.BR
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditInoutKrwBinding
+import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.viewmodel.ViewModelEditInoutKRW
+import java.util.*
 
 class FragmentEditInoutKRW : Fragment() {
     private lateinit var binding: FragmentEditInoutKrwBinding
@@ -40,19 +45,34 @@ class FragmentEditInoutKRW : Fragment() {
         (activity as MainActivity).supportActionBar?.setTitle(R.string.title_inout_krw)
 
         binding.viewmodel?.run {
-            date = this@FragmentEditInoutKRW.date
+            addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+                override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                    when(propertyId) {
+                        BR.date -> onDateChanged()
+                    }
+                }
+            })
 
-            modifyIOKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { io -> io?.let {
-                income = io.income
-                evaluation = io.evaluation_krw
-                deposit = io.input
-                spend = io.spend_card!! + io.spend_cash!!
-                withdraw = io.output
-                this.io = io
-                modifyDairyKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { dairy -> dairy?.let {
-                    principal = dairy.principal_krw
-                }})
-            } })
+            date = this@FragmentEditInoutKRW.date
+            notifyPropertyChanged(BR.date)
+        }
+
+        binding.buttonDateFragmentEditInoutKrw.setOnClickListener {
+            binding.viewmodel?.run {
+                val dialog = DialogDate().newInstance(date, object:DialogDate.Complete {
+                    override fun onComplete(date: String?) {
+                        val select = ModelCalendar.strToCalendar(date)
+                        when {
+                            Calendar.getInstance().before(select) -> Toast.makeText(activity, R.string.toast_date_error, Toast.LENGTH_SHORT).show()
+                            else -> {
+                                this@run.date = ModelCalendar.calendarToStr(select)
+                                notifyPropertyChanged(BR.date)
+                            }
+                        }
+                    }
+                })
+                dialog.show(fragmentManager, "dialog")
+            }
         }
 
         setHasOptionsMenu(true)
@@ -83,6 +103,22 @@ class FragmentEditInoutKRW : Fragment() {
                     mFragmentManager.popBackStack()
                 }})
             }})
+        }
+    }
+
+    private fun onDateChanged() {
+        binding.viewmodel?.run {
+            modifyIOKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { io -> io?.let {
+                income = io.income
+                evaluation = io.evaluation_krw
+                deposit = io.input
+                spend = io.spend_card!! + io.spend_cash!!
+                withdraw = io.output
+                this.io = io
+                modifyDairyKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { dairy -> dairy?.let {
+                    principal = dairy.principal_krw
+                }})
+            } })
         }
     }
 
