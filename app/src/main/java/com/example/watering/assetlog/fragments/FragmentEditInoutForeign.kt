@@ -41,7 +41,6 @@ class FragmentEditInoutForeign : Fragment() {
         return this
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun initLayout() {
         (activity as MainActivity).supportActionBar?.setTitle(R.string.title_inout_foreign)
 

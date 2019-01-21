@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">나의 자산</string>
+    <string name="total_principal">총자산</string>
+    <string name="total_evaluation">총평가액</string>
+    <string name="total_rate">총수익율</string>
     <string name="group">그룹</string>
     <string name="save">저장</string>
     <string name="delete">삭제</string>

@@ -41,7 +41,6 @@ class FragmentEditSpend : Fragment() {
         return this
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun initLayout() {
         (activity as MainActivity).supportActionBar?.setTitle(R.string.title_spend)
         binding.viewmodel?.run {
