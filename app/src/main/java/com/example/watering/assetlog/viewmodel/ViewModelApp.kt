@@ -39,9 +39,11 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
     }
 
     fun getGroup(id: Int?) = repository.getGroup(id)
+    fun getGroupByName(name: String?) = repository.getGroupByName(name)
     fun getAccount(id: Int?) = repository.getAccount(id)
     fun getAccountByCode(code: String?) = repository.getAccountByCode(code)
     fun getAccountByNumber(number: String?) = repository.getAccountByNumber(number)
+    fun getAccountsByGroup(id: Int?) = repository.getAccountsByGroup(id)
     fun getCatMain(id: Int?) = repository.getCatMain(id)
     fun getCatMainsByKind(kind: String?) = repository.getCatMainByKind(kind)
     fun getCatMainBySub(id_sub: Int?) = repository.getCatMainBySub(id_sub)

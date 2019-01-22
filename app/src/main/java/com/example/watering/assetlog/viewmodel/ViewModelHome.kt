@@ -32,4 +32,22 @@ class ViewModelHome(application:Application) : ObservableViewModel(application) 
         field = value
         notifyPropertyChanged(BR.listOfMain)
     }
+
+    var listOfGroup: LiveData<List<String?>> = MutableLiveData<List<String?>>()
+    @Bindable get() {
+        return field
+    }
+    set(value) {
+        field = value
+        notifyPropertyChanged(BR.listOfGroup)
+    }
+
+    var indexOfGroup = 0
+        @Bindable get() {
+            return field
+        }
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.indexOfGroup)
+        }
 }

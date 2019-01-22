@@ -23,7 +23,6 @@
     <string name="company">회사</string>
     <string name="kind">종류</string>
     <string name="krw">원화</string>
-    <string name="foreign">외화</string>
     <string name="income">수입</string>
     <string name="spend">지출</string>
     <string name="deposit_amount">입금액</string>

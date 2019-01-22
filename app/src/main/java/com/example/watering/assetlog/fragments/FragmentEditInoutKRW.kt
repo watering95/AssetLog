@@ -1,6 +1,5 @@
 package com.example.watering.assetlog.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast

@@ -30,9 +30,11 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     var allCards: LiveData<List<Card>> = daoCard.getAll()
 
     fun getGroup(id: Int?) = daoGroup.get(id)
+    fun getGroupByName(name: String?) = daoGroup.getByName(name)
     fun getAccount(id: Int?) = daoAccount.get(id)
     fun getAccountByCode(code: String?) = daoAccount.getByCode(code)
     fun getAccountByNumber(number: String?) = daoAccount.getByNumber(number)
+    fun getAccountsByGroup(id: Int?) = daoAccount.getByGroup(id)
     fun getCatMain(id: Int?) = daoCatMain.get(id)
     fun getCatMainByKind(kind: String?) = daoCatMain.getByKind(kind)
     fun getCatMainBySub(id_sub: Int?) = daoCatMain.getBySub(id_sub)
