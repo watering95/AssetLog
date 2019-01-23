@@ -44,6 +44,7 @@ class FragmentHome : Fragment() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     when(propertyId) {
                         BR.indexOfGroup -> onIndexOfGroupChanged()
+                        BR.list -> onListChanged()
                     }
                 }
             })
@@ -69,20 +70,30 @@ class FragmentHome : Fragment() {
                     }
                 }
             }.observe(this@FragmentHome, Observer { accounts -> accounts?.let {
-                val list = accounts.map {
+                total_evaluation = 0
+                total_principal = 0
+                list = accounts.map { account ->
                     val home = Home()
-                    modifyDairyTotal(it.id, ModelCalendar.getToday()).observeOnce(Observer { dairy -> dairy?.let {
+                    modifyDairyTotal(account.id, ModelCalendar.getToday()).observeOnce(Observer { dairy -> dairy?.let {
                         home.evaluation_krw = dairy.evaluation_krw
+                        total_evaluation += dairy.evaluation_krw!!
                         home.principal_krw = dairy.principal_krw
+                        total_principal += dairy.principal_krw!!
                         home.rate = dairy.rate
+                        home.account = account.number
+                        if(account == accounts.last()) notifyPropertyChanged(BR.list)
                     } })
-                    home.account = it.number
                     home
                 }
-                binding.recyclerviewFragmentHome.run {
-                    adapter = RecyclerViewAdapterHome(list) { position -> itemClicked(position) }
-                }
             } })
+        }
+    }
+
+    fun onListChanged() {
+        binding.viewmodel?.run {
+            binding.recyclerviewFragmentHome.run {
+                adapter = RecyclerViewAdapterHome(list) { position -> itemClicked(position) }
+            }
         }
     }
 
