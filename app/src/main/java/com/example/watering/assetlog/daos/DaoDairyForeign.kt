@@ -6,14 +6,17 @@ import com.example.watering.assetlog.entities.DairyForeign
 
 @Dao
 interface DaoDairyForeign {
-    @Query("SELECT * from tbl_info_dairy_foreign")
+    @Query("SELECT * from tbl_Info_Dairy_Foreign")
     fun getAll(): LiveData<List<DairyForeign>>
 
-    @Query("SELECT * FROM tbl_info_dairy_foreign WHERE id_account = :id_account AND date = :date AND id_currency = :currency")
+    @Query("SELECT * FROM tbl_Info_Dairy_Foreign WHERE id_account = :id_account AND date = :date AND id_currency = :currency")
     fun get(id_account: Int?, date: String?, currency: Int?): LiveData<DairyForeign>
 
-    @Query("SELECT * FROM tbl_info_dairy_foreign WHERE id_account = :id_account AND date = :date")
+    @Query("SELECT * FROM tbl_Info_Dairy_Foreign WHERE id_account = :id_account AND date = :date")
     fun getForDate(id_account: Int?, date: String?): LiveData<List<DairyForeign>>
+
+    @Query("SELECT * FROM tbl_Info_Dairy_Foreign WHERE id_account = :id_account AND date <= :date GROUP BY id_currency")
+    fun getLast(id_account: Int?, date: String?): LiveData<List<DairyForeign>>
 
     @Insert
     fun insert(dairy: DairyForeign)

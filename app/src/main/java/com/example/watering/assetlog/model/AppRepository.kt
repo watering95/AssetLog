@@ -62,6 +62,8 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     fun getLastIOKRW(id_account: Int?, date: String?) = daoIOKRW.getLast(id_account, date)
     fun getLastIOForeign(id_account: Int?, date: String?, currency: Int?) = daoIOForeign.getLast(id_account, date, currency)
     fun getLastDairyKRW(id_account: Int?, date: String?) = daoDairyKRW.getLast(id_account, date)
+    fun getLastIOForeign(id_account: Int?, date: String?) = daoIOForeign.getLast(id_account, date)
+    fun getLastDairyForeign(id_account: Int?, date: String?) = daoDairyForeign.getLast(id_account, date)
 
     fun sumOfSpendCashInDate(id_account: Int?, date: String?) = daoSpend.sumOfSpendsCash(id_account, date)
     fun sumOfSpendCardInDate(id_account: Int?, date: String?) = daoSpend.sumOfSpendsCard(id_account, date)

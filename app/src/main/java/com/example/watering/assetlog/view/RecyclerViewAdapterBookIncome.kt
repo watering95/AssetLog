@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.entities.Income
+import java.text.DecimalFormat
 
 class RecyclerViewAdapterBookIncome(val lists:List<Income>, private val clickListener: (Int) -> Unit): RecyclerView.Adapter<RecyclerViewAdapterBookIncome.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,8 +31,9 @@ class RecyclerViewAdapterBookIncome(val lists:List<Income>, private val clickLis
         var amount: TextView = view.findViewById(R.id.text_amount_card_book_income)
 
         fun bind(income: Income, position: Int, clickListener: (Int) -> Unit) {
+            val df = DecimalFormat("#,###")
             detail.text = income.details
-            amount.text = String.format("%d",income.amount)
+            amount.text = df.format(income.amount)
             view.setOnClickListener { clickListener(position) }
         }
     }

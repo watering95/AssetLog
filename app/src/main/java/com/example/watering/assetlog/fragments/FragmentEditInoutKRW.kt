@@ -94,9 +94,9 @@ class FragmentEditInoutKRW : Fragment() {
     private fun save() {
         binding.viewmodel?.run {
             if(io.id == null) insert(io) else update(io)
-            modifyDairyKRW(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
+            loadingDairyKRW(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
                 if(dairy.id == null) insert(dairy) else update(dairy)
-                modifyDairyTotal(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
+                loadingDairyTotal(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
                     if(dairy.id == null) insert(dairy) else update(dairy)
                     mFragmentManager.popBackStack()
                 }})
@@ -106,14 +106,14 @@ class FragmentEditInoutKRW : Fragment() {
 
     private fun onDateChanged() {
         binding.viewmodel?.run {
-            modifyIOKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { io -> io?.let {
+            loadingIOKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { io -> io?.let {
                 income = io.income
                 evaluation = io.evaluation_krw
                 deposit = io.input
                 spend = io.spend_card!! + io.spend_cash!!
                 withdraw = io.output
                 this.io = io
-                modifyDairyKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { dairy -> dairy?.let {
+                loadingDairyKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { dairy -> dairy?.let {
                     principal = dairy.principal_krw
                 }})
             } })

@@ -110,10 +110,10 @@ class FragmentEditIncome : Fragment() {
             R.id.menu_edit_save -> save()
             R.id.menu_edit_delete -> binding.viewmodel?.run {
                 delete(income)
-                modifyIOKRW(id_account, income.date).observeOnce(Observer { io -> io?.let {
+                loadingIOKRW(id_account, income.date).observeOnce(Observer { io -> io?.let {
                     if(io.id == null) insert(io) else update(io)
 
-                    modifyDairyKRW(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                    loadingDairyKRW(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
                         if(dairy.id == null) insert(dairy) else update(dairy)
                         mFragmentManager.popBackStack()
                     } })
@@ -144,12 +144,12 @@ class FragmentEditIncome : Fragment() {
         binding.viewmodel?.run {
             if(income.id == null) insert(income) else update(income)
 
-            modifyIOKRW(id_account, income.date).observeOnce(Observer { io -> io?.let {
+            loadingIOKRW(id_account, income.date).observeOnce(Observer { io -> io?.let {
                 if(io.id == null) insert(io) else update(io)
 
-                modifyDairyKRW(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                loadingDairyKRW(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
                     if(dairy.id == null) insert(dairy) else update(dairy)
-                    modifyDairyTotal(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                    loadingDairyTotal(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
                         if(dairy.id == null) insert(dairy) else update(dairy)
                         mFragmentManager.popBackStack()
                     } })

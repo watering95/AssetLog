@@ -61,7 +61,7 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
     fun getLastSpendCode(date: String?) = repository.getLastSpendCode(date)
     fun getLogs(id_account: Int?) = repository.getLogs(id_account)
 
-    fun modifyIOKRW(id_account: Int?, date: String?): LiveData<IOKRW> {
+    fun loadingIOKRW(id_account: Int?, date: String?): LiveData<IOKRW> {
         return Transformations.switchMap(calculateEvaluationInKRW(id_account, date)) { evaluation ->
             Transformations.switchMap(sumOfSpendCashInDate(id_account, date)) { sumOfSpendsCash ->
                 Transformations.switchMap(sumOfSpendCardInDate(id_account, date)) { sumOfSpendsCard ->
@@ -89,7 +89,7 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
             }
         }
     }
-    fun modifyIOForeign(id_account: Int?, date: String?, currency: Int?): LiveData<IOForeign> {
+    fun loadingIOForeign(id_account: Int?, date: String?, currency: Int?): LiveData<IOForeign> {
         return Transformations.switchMap(calculateEvaluationKRWInForeign(id_account, date, currency)) { evaluation ->
             Transformations.map(getIOForeign(id_account, date, currency)) { io ->
                 if(io == null) {
@@ -106,7 +106,7 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
             }
         }
     }
-    fun modifyDairyKRW(id_account: Int?, date: String?): LiveData<DairyKRW> {
+    fun loadingDairyKRW(id_account: Int?, date: String?): LiveData<DairyKRW> {
         return Transformations.switchMap(getDairyKRW(id_account, date)) { dairy ->
             Transformations.switchMap(calculatePrincipalInKRW(id_account, date)) { principal ->
                 Transformations.map(calculateRateInKRW(id_account, date)) { rate ->
@@ -126,7 +126,7 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
             }
         }
     }
-    fun modifyDairyForeign(id_account: Int?, date: String?, currency: Int?): LiveData<DairyForeign> {
+    fun loadingDairyForeign(id_account: Int?, date: String?, currency: Int?): LiveData<DairyForeign> {
         return Transformations.switchMap(getDairyForeign(id_account, date, currency)) { dairy ->
             Transformations.switchMap(calculatePrincipalInForeign(id_account, date, currency)) { principal ->
                 Transformations.switchMap(calculatePrincipalKRWInForeign(id_account, date, currency)) { principal_krw ->
@@ -150,9 +150,9 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
             }
         }
     }
-    fun modifyDairyTotal(id_account: Int?, date: String?): LiveData<DairyTotal> {
-        return Transformations.switchMap(getDairyForeignForDate(id_account, date)) { list_dairy_foreign ->
-            Transformations.switchMap(getIOForeignForDate(id_account, date)) { list_io_foreign ->
+    fun loadingDairyTotal(id_account: Int?, date: String?): LiveData<DairyTotal> {
+        return Transformations.switchMap(getLastDairyForeign(id_account, date)) { list_dairy_foreign ->
+            Transformations.switchMap(getLastIOForeign(id_account, date)) { list_io_foreign ->
                 Transformations.switchMap(getLastDairyKRW(id_account, date)) { dairy_krw ->
                     Transformations.switchMap(getLastIOKRW(id_account, date)) { io_krw ->
                         Transformations.map(getDairyTotal(id_account, date)) { dairy_total ->
@@ -198,6 +198,8 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
     private fun getLastIOKRW(id_account: Int?, date: String?) = repository.getLastIOKRW(id_account, date)
     private fun getLastIOForeign(id_account: Int?, date: String?, currency: Int?) = repository.getLastIOForeign(id_account, date, currency)
     private fun getLastDairyKRW(id_account: Int?, date: String?) = repository.getLastDairyKRW(id_account, date)
+    private fun getLastIOForeign(id_account: Int?, date: String?) = repository.getLastIOForeign(id_account, date)
+    private fun getLastDairyForeign(id_account: Int?, date: String?) = repository.getLastDairyForeign(id_account, date)
 
     private fun getDairyForeignForDate(id_account: Int?, date: String?) = repository.getDairyForeignForDate(id_account, date)
     private fun getIOForeignForDate(id_account: Int?, date: String?) = repository.getIOForeignForDate(id_account, date)

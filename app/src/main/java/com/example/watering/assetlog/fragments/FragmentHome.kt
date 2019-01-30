@@ -69,19 +69,28 @@ class FragmentHome : Fragment() {
                         Transformations.map(getAccountsByGroup(group.id)) { accounts -> accounts }
                     }
                 }
-            }.observe(this@FragmentHome, Observer { accounts -> accounts?.let {
-                total_evaluation = 0
-                total_principal = 0
+            }.observeOnce(Observer { accounts -> accounts?.let {
                 list = accounts.map { account ->
                     val home = Home()
-                    modifyDairyTotal(account.id, ModelCalendar.getToday()).observeOnce(Observer { dairy -> dairy?.let {
+                    loadingDairyTotal(account.id, ModelCalendar.getToday()).observeOnce(Observer { dairy -> dairy?.let {
+                        if(account == accounts.first()) {
+                            total_evaluation = 0
+                            total_principal = 0
+                        }
                         home.evaluation_krw = dairy.evaluation_krw
                         total_evaluation += dairy.evaluation_krw!!
                         home.principal_krw = dairy.principal_krw
                         total_principal += dairy.principal_krw!!
                         home.rate = dairy.rate
                         home.account = account.number
-                        if(account == accounts.last()) notifyPropertyChanged(BR.list)
+                        home.description = account.institute + " " + account.description
+                        if(account == accounts.last()) {
+                            list = list.map {
+                                it.total = total_evaluation
+                                it
+                            }
+                            notifyPropertyChanged(BR.list)
+                        }
                     } })
                     home
                 }

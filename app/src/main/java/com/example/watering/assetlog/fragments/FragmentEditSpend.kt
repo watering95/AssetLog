@@ -131,12 +131,12 @@ class FragmentEditSpend : Fragment() {
                 when(oldCode[0]) {
                     '1' -> getSpendCash(oldCode).observe(this@FragmentEditSpend, Observer { cash -> cash?.let {
                         delete(cash)
-                        modifyIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
+                        loadingIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
                             if(io.id == null) insert(io) else update(io)
 
-                            modifyDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                            loadingDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                                 if(dairy.id == null) insert(dairy) else update(dairy)
-                                modifyDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                loadingDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                                     if(dairy.id == null) insert(dairy) else update(dairy)
                                     mFragmentManager.popBackStack()
                                 } })
@@ -145,12 +145,12 @@ class FragmentEditSpend : Fragment() {
                     } })
                     '2' -> getSpendCard(oldCode).observe(this@FragmentEditSpend, Observer { card -> card?.let {
                         delete(card)
-                        modifyIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
+                        loadingIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
                             if(io.id == null) insert(io) else update(io)
 
-                            modifyDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                            loadingDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                                 if(dairy.id == null) insert(dairy) else update(dairy)
-                                modifyDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                loadingDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                                     if(dairy.id == null) insert(dairy) else update(dairy)
                                     mFragmentManager.popBackStack()
                                 } })
@@ -228,12 +228,12 @@ class FragmentEditSpend : Fragment() {
                     }
                 }
 
-                modifyIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
+                loadingIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
                     if(io.id == null) insert(io) else update(io)
 
-                    modifyDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                    loadingDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                         if(dairy.id == null) insert(dairy) else update(dairy)
-                        modifyDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                        loadingDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                             if(dairy.id == null) insert(dairy) else update(dairy)
                             mFragmentManager.popBackStack()
                         } })

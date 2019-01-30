@@ -57,11 +57,11 @@ class ViewModelHome(application:Application) : ObservableViewModel(application) 
     }
 
     var indexOfGroup = 0
-        @Bindable get() {
-            return field
-        }
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.indexOfGroup)
-        }
+    @Bindable get() {
+        return field
+    }
+    set(value) {
+        field = value
+        notifyPropertyChanged(BR.indexOfGroup)
+    }
 }

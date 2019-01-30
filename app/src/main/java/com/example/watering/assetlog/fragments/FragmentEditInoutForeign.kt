@@ -96,9 +96,9 @@ class FragmentEditInoutForeign : Fragment() {
         binding.viewmodel?.run {
             if(io.id == null) insert(io) else update(io)
 
-            modifyDairyForeign(id_account, date, currency).observeOnce(Observer { dairy -> dairy?.let {
+            loadingDairyForeign(id_account, date, currency).observeOnce(Observer { dairy -> dairy?.let {
                 if(dairy.id == null) insert(dairy) else update(dairy)
-                modifyDairyTotal(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
+                loadingDairyTotal(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
                     if(dairy.id == null) insert(dairy) else update(dairy)
                     mFragmentManager.popBackStack()
                 } })
@@ -108,7 +108,7 @@ class FragmentEditInoutForeign : Fragment() {
 
     private fun onDateChanged() {
         binding.viewmodel?.run {
-            modifyIOForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign,  Observer { io -> io?.let {
+            loadingIOForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign,  Observer { io -> io?.let {
                 deposit = io.input
                 withdraw = io.output
                 deposit_krw = io.input_krw
@@ -116,7 +116,7 @@ class FragmentEditInoutForeign : Fragment() {
                 indexOfCurrency = io.currency
                 evaluation_krw = io.evaluation_krw
                 this.io = io
-                modifyDairyForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign, Observer { dairy -> dairy?.let {
+                loadingDairyForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign, Observer { dairy -> dairy?.let {
                     principal = dairy.principal
                 } })
             } })

@@ -35,6 +35,7 @@
     <string name="main_category">주카테고리</string>
     <string name="sub_category">부카테고리</string>
     <string name="payment_methode">지불방식</string>
+    <string name="db_file_list">DB 파일 목록</string>
     <string name="title_spend">가계부 : 지출</string>
     <string name="title_income">가계부 : 수입</string>
     <string name="title_home">Home</string>
