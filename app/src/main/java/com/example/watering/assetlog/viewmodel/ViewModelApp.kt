@@ -70,16 +70,16 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
                             if(io == null) {
                                 val new = IOKRW()
                                 new.date = date
-                                new.evaluation_krw = evaluation - sumOfSpendsCard - sumOfSpendsCash + sumOfIncome
+                                new.evaluationKRW = evaluation - sumOfSpendsCard - sumOfSpendsCash + sumOfIncome
                                 new.account = id_account
-                                new.spend_cash = sumOfSpendsCash
-                                new.spend_card = sumOfSpendsCard
+                                new.spendCash = sumOfSpendsCash
+                                new.spendCard = sumOfSpendsCard
                                 new.income = sumOfIncome
                                 new
                             } else {
-                                io.evaluation_krw = evaluation - sumOfSpendsCard - sumOfSpendsCash + sumOfIncome - io.output!! + io.input!!
-                                io.spend_cash = sumOfSpendsCash
-                                io.spend_card = sumOfSpendsCard
+                                io.evaluationKRW = evaluation - sumOfSpendsCard - sumOfSpendsCash + sumOfIncome - io.output!! + io.input!!
+                                io.spendCash = sumOfSpendsCash
+                                io.spendCard = sumOfSpendsCard
                                 io.income = sumOfIncome
                                 io
                             }
@@ -97,10 +97,10 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
                     new.account = id_account
                     new.currency = currency
                     new.date = date
-                    new.evaluation_krw = evaluation
+                    new.evaluationKRW = evaluation
                     new
                 } else {
-                    io.evaluation_krw = evaluation
+                    io.evaluationKRW = evaluation
                     io
                 }
             }
@@ -112,13 +112,13 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
                 Transformations.map(calculateRateInKRW(id_account, date)) { rate ->
                     if(dairy == null) {
                         val new = DairyKRW()
-                        new.principal_krw = principal
+                        new.principalKRW = principal
                         new.rate = rate
                         new.account = id_account
                         new.date = date
                         new
                     } else {
-                        dairy.principal_krw = principal
+                        dairy.principalKRW = principal
                         dairy.rate = rate
                         dairy
                     }
@@ -134,14 +134,14 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
                         if(dairy == null) {
                             val new = DairyForeign()
                             new.principal = principal
-                            new.principal_krw = principal_krw
+                            new.principalKRW = principal_krw
                             new.rate = rate
                             new.account = id_account
                             new.date = date
                             new
                         } else {
                             dairy.principal = principal
-                            dairy.principal_krw = principal_krw
+                            dairy.principalKRW = principal_krw
                             dairy.rate = rate
                             dairy
                         }
@@ -160,11 +160,11 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
                             var evaluation = 0
                             var rate = 0.0
 
-                            dairy_krw?.run { principal = principal_krw!! }
-                            io_krw?.run { evaluation = evaluation_krw!! }
+                            dairy_krw?.run { principal = principalKRW!! }
+                            io_krw?.run { evaluation = evaluationKRW!! }
 
-                            list_dairy_foreign.forEach { principal += it.principal_krw!! }
-                            list_io_foreign.forEach { evaluation += it.evaluation_krw!!.toInt() }
+                            list_dairy_foreign.forEach { principal += it.principalKRW!! }
+                            list_io_foreign.forEach { evaluation += it.evaluationKRW!!.toInt() }
 
                             if(principal != 0 && evaluation != 0) rate = evaluation.toDouble() / principal * 100 - 100
 
@@ -172,13 +172,13 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
                                 val new = DairyTotal()
                                 new.account = id_account
                                 new.date = date
-                                new.evaluation_krw = evaluation
-                                new.principal_krw = principal
+                                new.evaluationKRW = evaluation
+                                new.principalKRW = principal
                                 new.rate = rate
                                 new
                             } else {
-                                dairy_total.evaluation_krw = evaluation
-                                dairy_total.principal_krw = principal
+                                dairy_total.evaluationKRW = evaluation
+                                dairy_total.principalKRW = principal
                                 dairy_total.rate = rate
                                 dairy_total
                             }
@@ -254,8 +254,8 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
                 sum_input_krw?.let { input = it }
                 sum_output_krw?.let { output = it }
 
-                val principal_krw = input - output
-                principal_krw
+                val result = input - output
+                result
             }
         }
     }
@@ -264,9 +264,9 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
             Transformations.switchMap(getLastIOKRW(id_account, date)) { lastIO ->
                 Transformations.map(calculatePrincipalInKRW(id_account, date)) { principal ->
                     val rate = if(io == null) {
-                        if(lastIO == null) 0.0 else lastIO.evaluation_krw!!.toDouble() / principal * 100 - 100
+                        if(lastIO == null) 0.0 else lastIO.evaluationKRW!!.toDouble() / principal * 100 - 100
                     }
-                    else io.evaluation_krw!!.toDouble() / principal * 100 - 100
+                    else io.evaluationKRW!!.toDouble() / principal * 100 - 100
                     rate
                 }
             }
@@ -277,9 +277,9 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
             Transformations.switchMap(getLastIOForeign(id_account, date, currency)) { lastIO ->
                 Transformations.map(calculatePrincipalKRWInForeign(id_account, date, currency)) { principal ->
                     val rate = if(io == null) {
-                        if(lastIO == null) 0.0 else lastIO.evaluation_krw!! / principal * 100 - 100
+                        if(lastIO == null) 0.0 else lastIO.evaluationKRW!! / principal * 100 - 100
                     }
-                    else io.evaluation_krw!! / principal * 100 - 100
+                    else io.evaluationKRW!! / principal * 100 - 100
                     rate
                 }
             }
@@ -289,7 +289,7 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
         val before = ModelCalendar.calendarToStr(ModelCalendar.changeDate(date, -1))
 
         return Transformations.map(getLastIOKRW(id_account, before)) { last ->
-            val evaluation = if(last == null) 0 else last.evaluation_krw
+            val evaluation = if(last == null) 0 else last.evaluationKRW
             evaluation
         }
     }
@@ -297,7 +297,7 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
         val before = ModelCalendar.calendarToStr(ModelCalendar.changeDate(date, -1))
 
         return Transformations.map(getLastIOForeign(id_account, before, currency)) { last ->
-            val evaluation = if(last == null) 0.0 else last.evaluation_krw
+            val evaluation = if(last == null) 0.0 else last.evaluationKRW
             evaluation
         }
     }

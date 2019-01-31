@@ -66,7 +66,7 @@ class FragmentEditSpend : Fragment() {
                     listOfPay2.observe(this@FragmentEditSpend, Observer { list -> list?.let {
                         getAccountByCode(oldCode).observe(this@FragmentEditSpend, Observer { account -> account?.let {
                             indexOfPay2 = list.indexOf(account.number)
-                            id_account = account.id
+                            idAccount = account.id
                         } })
                     } })
                 }
@@ -75,8 +75,8 @@ class FragmentEditSpend : Fragment() {
                     listOfPay2.observe(this@FragmentEditSpend, Observer { list -> list?.let {
                         getCardByCode(oldCode).observe(this@FragmentEditSpend, Observer { card -> card?.let {
                             indexOfPay2 = list.indexOf(card.number)
-                            id_card = card.id
-                            id_account = card.account
+                            idCard = card.id
+                            idAccount = card.account
                         } })
                     } })
                 }
@@ -131,12 +131,12 @@ class FragmentEditSpend : Fragment() {
                 when(oldCode[0]) {
                     '1' -> getSpendCash(oldCode).observe(this@FragmentEditSpend, Observer { cash -> cash?.let {
                         delete(cash)
-                        loadingIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
+                        loadingIOKRW(idAccount, spend.date).observeOnce(Observer { io -> io?.let {
                             if(io.id == null) insert(io) else update(io)
 
-                            loadingDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                            loadingDairyKRW(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                                 if(dairy.id == null) insert(dairy) else update(dairy)
-                                loadingDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                loadingDairyTotal(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                                     if(dairy.id == null) insert(dairy) else update(dairy)
                                     mFragmentManager.popBackStack()
                                 } })
@@ -145,12 +145,12 @@ class FragmentEditSpend : Fragment() {
                     } })
                     '2' -> getSpendCard(oldCode).observe(this@FragmentEditSpend, Observer { card -> card?.let {
                         delete(card)
-                        loadingIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
+                        loadingIOKRW(idAccount, spend.date).observeOnce(Observer { io -> io?.let {
                             if(io.id == null) insert(io) else update(io)
 
-                            loadingDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                            loadingDairyKRW(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                                 if(dairy.id == null) insert(dairy) else update(dairy)
-                                loadingDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                loadingDairyTotal(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                                     if(dairy.id == null) insert(dairy) else update(dairy)
                                     mFragmentManager.popBackStack()
                                 } })
@@ -179,14 +179,14 @@ class FragmentEditSpend : Fragment() {
                 '1' -> {
                     Transformations.switchMap(listOfPay2) { list -> getAccountByNumber(list[indexOfPay2])
                     }.observe(this@FragmentEditSpend, Observer { account -> account?.let {
-                        id_account = account.id
+                        idAccount = account.id
                     } })
                 }
                 '2' -> {
                     Transformations.switchMap(listOfPay2) { list -> getCardByNumber(list[indexOfPay2])
                     }.observe(this@FragmentEditSpend, Observer { card -> card?.let {
-                        id_card = card.id
-                        id_account = card.account
+                        idCard = card.id
+                        idAccount = card.account
                     } })
                 }
             }
@@ -215,25 +215,25 @@ class FragmentEditSpend : Fragment() {
                     '1' -> {
                         val spendCash = SpendCash().apply {
                             this.code = code
-                            this.account = id_account
+                            this.account = idAccount
                         }
                         insert(spendCash)
                     }
                     '2' -> {
                         val spendCard = SpendCard().apply {
                             this.code = code
-                            this.card = id_card
+                            this.card = idCard
                         }
                         insert(spendCard)
                     }
                 }
 
-                loadingIOKRW(id_account, spend.date).observeOnce(Observer { io -> io?.let {
+                loadingIOKRW(idAccount, spend.date).observeOnce(Observer { io -> io?.let {
                     if(io.id == null) insert(io) else update(io)
 
-                    loadingDairyKRW(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                    loadingDairyKRW(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                         if(dairy.id == null) insert(dairy) else update(dairy)
-                        loadingDairyTotal(id_account, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                        loadingDairyTotal(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
                             if(dairy.id == null) insert(dairy) else update(dairy)
                             mFragmentManager.popBackStack()
                         } })

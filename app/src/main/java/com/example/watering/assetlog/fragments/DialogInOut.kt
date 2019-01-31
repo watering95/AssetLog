@@ -1,5 +1,6 @@
 package com.example.watering.assetlog.fragments
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
@@ -23,6 +24,7 @@ class DialogInOut: DialogFragment() {
         return this
     }
 
+    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         mActivity = activity as MainActivity
         val inflater = mActivity.layoutInflater

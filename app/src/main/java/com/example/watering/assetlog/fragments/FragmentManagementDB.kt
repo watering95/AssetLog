@@ -64,7 +64,7 @@ class FragmentManagementDB : Fragment() {
         }
     }
 
-    fun getList() {
+    private fun getList() {
         binding.viewmodel?.run {
             listOfFile = mMainActivity.getDatabasePath(dbFileName).parentFile.list().filterNotNull()
             binding.recyclerviewFileFragmentManagementDb.run {

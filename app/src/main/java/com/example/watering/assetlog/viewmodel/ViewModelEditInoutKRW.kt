@@ -43,7 +43,7 @@ class ViewModelEditInoutKRW(application:Application) : ObservableViewModel(appli
     }
     set(value) {
         field = value
-        io.evaluation_krw = value
+        io.evaluationKRW = value
         notifyPropertyChanged(BR.evaluation)
     }
 

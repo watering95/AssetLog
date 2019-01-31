@@ -18,7 +18,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/text_name_fragment_edit_categorymain"
-                android:layout_marginStart="8dp" android:inputType="text"/>
+                android:layout_marginStart="8dp" android:inputType="text"
+        />
         <Spinner
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

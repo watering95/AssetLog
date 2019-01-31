@@ -9,8 +9,8 @@ import com.example.watering.assetlog.entities.Spend
 class ViewModelEditSpend(application:Application) : ObservableViewModel(application) {
     var oldCode:String = "000000000000"
     var newCode:String = oldCode
-    var id_account:Int? = 0
-    var id_card:Int? = 0
+    var idAccount:Int? = 0
+    var idCard:Int? = 0
 
     var listOfMain = MutableLiveData<List<String?>>()
     @Bindable get() {

@@ -20,7 +20,7 @@ import java.util.*
 class FragmentEditInoutForeign : Fragment() {
     private lateinit var binding: FragmentEditInoutForeignBinding
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
-    private var id_account:Int? = 0
+    private var idAccount:Int? = 0
     private var date:String? = ""
     private var currency:Int? = 0
 
@@ -35,7 +35,7 @@ class FragmentEditInoutForeign : Fragment() {
     }
 
     fun initInstance(id_account:Int?, date:String?):FragmentEditInoutForeign {
-        this.id_account = id_account
+        this.idAccount = id_account
         this.date = date
         return this
     }
@@ -96,9 +96,9 @@ class FragmentEditInoutForeign : Fragment() {
         binding.viewmodel?.run {
             if(io.id == null) insert(io) else update(io)
 
-            loadingDairyForeign(id_account, date, currency).observeOnce(Observer { dairy -> dairy?.let {
+            loadingDairyForeign(idAccount, date, currency).observeOnce(Observer { dairy -> dairy?.let {
                 if(dairy.id == null) insert(dairy) else update(dairy)
-                loadingDairyTotal(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
+                loadingDairyTotal(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
                     if(dairy.id == null) insert(dairy) else update(dairy)
                     mFragmentManager.popBackStack()
                 } })
@@ -108,15 +108,15 @@ class FragmentEditInoutForeign : Fragment() {
 
     private fun onDateChanged() {
         binding.viewmodel?.run {
-            loadingIOForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign,  Observer { io -> io?.let {
+            loadingIOForeign(idAccount, date, currency).observe(this@FragmentEditInoutForeign,  Observer { io -> io?.let {
                 deposit = io.input
                 withdraw = io.output
-                deposit_krw = io.input_krw
-                withdraw_krw = io.output_krw
+                depositKRW = io.inputKRW
+                withdrawKRW = io.outputKRW
                 indexOfCurrency = io.currency
-                evaluation_krw = io.evaluation_krw
+                evaluationKRW = io.evaluationKRW
                 this.io = io
-                loadingDairyForeign(id_account, date, currency).observe(this@FragmentEditInoutForeign, Observer { dairy -> dairy?.let {
+                loadingDairyForeign(idAccount, date, currency).observe(this@FragmentEditInoutForeign, Observer { dairy -> dairy?.let {
                     principal = dairy.principal
                 } })
             } })

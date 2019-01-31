@@ -47,10 +47,10 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
-    def room_version = "2.1.0-alpha03"
+    def room_version = "2.1.0-alpha04"
     def lifecycle_version = "2.0.0"
     def coroutines_version = "1.0.0"
-    def work_version = "1.0.0-beta02"
+    def work_version = "1.0.0-beta03"
 
     // Room components
     implementation "androidx.room:room-runtime:$room_version"

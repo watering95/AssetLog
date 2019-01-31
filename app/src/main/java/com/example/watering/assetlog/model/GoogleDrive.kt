@@ -20,7 +20,7 @@ import java.util.*
 
 class GoogleDrive(val context: Context) {
     private val dbFileName = "AssetLog.db"
-    private val TAG = "AssetLog"
+    private val tag = "AssetLog"
     lateinit var driveResourceClient: DriveResourceClient
     lateinit var driveClient: DriveClient
     lateinit var currentDriveId: DriveId
@@ -51,7 +51,7 @@ class GoogleDrive(val context: Context) {
         }
 
         driveResourceClient.createContents().continueWithTask { createFileIntentSender(it.result, fileInputStream, date) }
-            .addOnFailureListener { Log.w(TAG,"Failed to create new contents.", it) }
+            .addOnFailureListener { Log.w(tag,"Failed to create new contents.", it) }
     }
     private fun createFileIntentSender(driveContents: DriveContents?, file: FileInputStream, date: String): Task<Void> {
         val context = this.context as AppCompatActivity
@@ -64,7 +64,7 @@ class GoogleDrive(val context: Context) {
                 outputStream?.write(readBuffer)
             }
         } catch (e: IOException) {
-            Log.w(TAG, "Unable to write file contents.", e)
+            Log.w(tag, "Unable to write file contents.", e)
         }
 
         val filename = "AssetLog_$date.db"
@@ -91,9 +91,9 @@ class GoogleDrive(val context: Context) {
                 context.startIntentSenderForResult(it,
                     REQUEST_CODE_OPENER,null,0,0,0)
             } catch(e: IntentSender.SendIntentException) {
-                Log.w(TAG, "Unable to send intent", e)
+                Log.w(tag, "Unable to send intent", e)
             }
-        }.addOnFailureListener { Log.e(TAG, "Unable to create OpenFileActivityIntent", it) }
+        }.addOnFailureListener { Log.e(tag, "Unable to create OpenFileActivityIntent", it) }
     }
     fun loadCurrentFile() {
         val file = currentDriveId.asDriveFile()
@@ -104,7 +104,7 @@ class GoogleDrive(val context: Context) {
         }.addOnSuccessListener {
             driveContents = it
             refreshDBFromCurrentFile()
-        }.addOnFailureListener { Log.e(TAG, "Unable to retrieve file metadata and contents", it) }
+        }.addOnFailureListener { Log.e(tag, "Unable to retrieve file metadata and contents", it) }
     }
     private fun refreshDBFromCurrentFile() {
         currentDriveId.let {

@@ -8,7 +8,7 @@ import com.example.watering.assetlog.BR
 import com.example.watering.assetlog.entities.Income
 
 class ViewModelEditIncome(application: Application) : ObservableViewModel(application) {
-    var id_account:Int? = 0
+    var idAccount:Int? = 0
 
     var income: Income = Income()
     @Bindable get() {

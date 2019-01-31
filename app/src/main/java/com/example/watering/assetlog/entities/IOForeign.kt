@@ -18,11 +18,11 @@ class IOForeign {
     @ColumnInfo(name = "output")
     var output: Double? = 0.0
     @ColumnInfo(name = "input_krw")
-    var input_krw: Int? = 0
+    var inputKRW: Int? = 0
     @ColumnInfo(name = "output_krw")
-    var output_krw: Int? = 0
+    var outputKRW: Int? = 0
     @ColumnInfo(name = "id_currency")
     var currency: Int? = 0
     @ColumnInfo(name = "evaluation")
-    var evaluation_krw: Double? = 0.0
+    var evaluationKRW: Double? = 0.0
 }

@@ -24,21 +24,21 @@ class ViewModelEditInoutForeign(application:Application) : ObservableViewModel(a
     set(value) {
         field = value
         io.input = value
-        if(deposit != 0.0) deposit_rate = deposit_krw?.div(deposit!!)
-        notifyPropertyChanged(BR.deposit_rate)
+        if(deposit != 0.0) rateDeposit = depositKRW?.div(deposit!!)
+        notifyPropertyChanged(BR.rateDeposit)
         notifyPropertyChanged(BR.deposit)
     }
 
-    var deposit_krw: Int? = 0
+    var depositKRW: Int? = 0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
-        io.input_krw = value
-        if(deposit != 0.0) deposit_rate = deposit_krw?.div(deposit!!)
-        notifyPropertyChanged(BR.deposit_rate)
-        notifyPropertyChanged(BR.deposit_krw)
+        io.inputKRW = value
+        if(deposit != 0.0) rateDeposit = depositKRW?.div(deposit!!)
+        notifyPropertyChanged(BR.rateDeposit)
+        notifyPropertyChanged(BR.depositKRW)
     }
 
     var withdraw: Double? = 0.0
@@ -48,21 +48,21 @@ class ViewModelEditInoutForeign(application:Application) : ObservableViewModel(a
     set(value) {
         field = value
         io.output = value
-        if(withdraw != 0.0) withdraw_rate = withdraw_krw?.div(withdraw!!)
-        notifyPropertyChanged(BR.withdraw_rate)
+        if(withdraw != 0.0) rateWithdraw = withdrawKRW?.div(withdraw!!)
+        notifyPropertyChanged(BR.rateWithdraw)
         notifyPropertyChanged(BR.withdraw)
     }
 
-    var withdraw_krw: Int? = 0
+    var withdrawKRW: Int? = 0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
-        io.output_krw = value
-        if(withdraw != 0.0) withdraw_rate = withdraw_krw?.div(withdraw!!)
-        notifyPropertyChanged(BR.withdraw_rate)
-        notifyPropertyChanged(BR.withdraw_krw)
+        io.outputKRW = value
+        if(withdraw != 0.0) rateWithdraw = withdrawKRW?.div(withdraw!!)
+        notifyPropertyChanged(BR.rateWithdraw)
+        notifyPropertyChanged(BR.withdrawKRW)
     }
 
     var principal: Double? = 0.0
@@ -84,42 +84,42 @@ class ViewModelEditInoutForeign(application:Application) : ObservableViewModel(a
         notifyPropertyChanged(BR.indexOfCurrency)
     }
 
-    var deposit_rate: Double? = 0.0
+    var rateDeposit: Double? = 0.0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
-        notifyPropertyChanged(BR.deposit_rate)
+        notifyPropertyChanged(BR.rateDeposit)
     }
 
-    var withdraw_rate: Double? = 0.0
+    var rateWithdraw: Double? = 0.0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
-        notifyPropertyChanged(BR.withdraw_rate)
+        notifyPropertyChanged(BR.rateWithdraw)
     }
 
-    var evaluation_rate: Double? = 0.0
+    var rateEvaluation: Double? = 0.0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
-        notifyPropertyChanged(BR.evaluation_rate)
+        notifyPropertyChanged(BR.rateEvaluation)
     }
 
-    var evaluation_krw: Double? = 0.0
+    var evaluationKRW: Double? = 0.0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
-        io.evaluation_krw = value
-        if(principal != 0.0) evaluation_rate = evaluation_krw?.div(principal!!)
-        notifyPropertyChanged(BR.evaluation_rate)
-        notifyPropertyChanged(BR.evaluation_krw)
+        io.evaluationKRW = value
+        if(principal != 0.0) rateEvaluation = evaluationKRW?.div(principal!!)
+        notifyPropertyChanged(BR.rateEvaluation)
+        notifyPropertyChanged(BR.evaluationKRW)
     }
 }

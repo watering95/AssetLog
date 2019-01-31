@@ -20,7 +20,7 @@ import java.util.*
 class FragmentEditInoutKRW : Fragment() {
     private lateinit var binding: FragmentEditInoutKrwBinding
     private val mFragmentManager by lazy { fragmentManager as FragmentManager }
-    private var id_account:Int? = 0
+    private var idAccount:Int? = 0
     private var date:String? = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -34,7 +34,7 @@ class FragmentEditInoutKRW : Fragment() {
     }
 
     fun initInstance(id_account:Int?, date:String?):FragmentEditInoutKRW {
-        this.id_account = id_account
+        this.idAccount = id_account
         this.date = date
         return this
     }
@@ -94,9 +94,9 @@ class FragmentEditInoutKRW : Fragment() {
     private fun save() {
         binding.viewmodel?.run {
             if(io.id == null) insert(io) else update(io)
-            loadingDairyKRW(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
+            loadingDairyKRW(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
                 if(dairy.id == null) insert(dairy) else update(dairy)
-                loadingDairyTotal(id_account, date).observeOnce(Observer { dairy -> dairy?.let {
+                loadingDairyTotal(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
                     if(dairy.id == null) insert(dairy) else update(dairy)
                     mFragmentManager.popBackStack()
                 }})
@@ -106,15 +106,15 @@ class FragmentEditInoutKRW : Fragment() {
 
     private fun onDateChanged() {
         binding.viewmodel?.run {
-            loadingIOKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { io -> io?.let {
+            loadingIOKRW(idAccount, date).observe(this@FragmentEditInoutKRW, Observer { io -> io?.let {
                 income = io.income
-                evaluation = io.evaluation_krw
+                evaluation = io.evaluationKRW
                 deposit = io.input
-                spend = io.spend_card!! + io.spend_cash!!
+                spend = io.spendCard!! + io.spendCash!!
                 withdraw = io.output
                 this.io = io
-                loadingDairyKRW(id_account, date).observe(this@FragmentEditInoutKRW, Observer { dairy -> dairy?.let {
-                    principal = dairy.principal_krw
+                loadingDairyKRW(idAccount, date).observe(this@FragmentEditInoutKRW, Observer { dairy -> dairy?.let {
+                    principal = dairy.principalKRW
                 }})
             } })
         }

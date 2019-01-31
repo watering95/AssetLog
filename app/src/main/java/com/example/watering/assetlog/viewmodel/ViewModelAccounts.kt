@@ -6,7 +6,7 @@ import androidx.lifecycle.*
 import com.example.watering.assetlog.BR
 
 class ViewModelAccounts(application:Application) : ObservableViewModel(application) {
-    var id_account = 0
+    var idAccount = 0
 
     var indexOfAccount = 0
     @Bindable get() {

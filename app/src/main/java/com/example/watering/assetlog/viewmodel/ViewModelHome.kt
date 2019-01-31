@@ -16,35 +16,35 @@ class ViewModelHome(application:Application) : ObservableViewModel(application) 
         notifyPropertyChanged(BR.list)
     }
 
-    var total_principal: Int = 0
+    var totalPrincipal: Int = 0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
-        if(total_evaluation != 0) total_rate = total_evaluation.toDouble() / total_principal * 100 - 100
-        notifyPropertyChanged(BR.total_principal)
-        notifyPropertyChanged(BR.total_rate)
+        if(totalEvaluation != 0) totalRate = totalEvaluation.toDouble() / totalPrincipal * 100 - 100
+        notifyPropertyChanged(BR.totalPrincipal)
+        notifyPropertyChanged(BR.totalRate)
     }
 
-    var total_evaluation: Int = 0
+    var totalEvaluation: Int = 0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
-        if(total_evaluation != 0) total_rate = total_evaluation.toDouble() / total_principal * 100 - 100
-        notifyPropertyChanged(BR.total_evaluation)
-        notifyPropertyChanged(BR.total_rate)
+        if(totalEvaluation != 0) totalRate = totalEvaluation.toDouble() / totalPrincipal * 100 - 100
+        notifyPropertyChanged(BR.totalEvaluation)
+        notifyPropertyChanged(BR.totalRate)
     }
 
-    var total_rate: Double = 0.0
+    var totalRate: Double = 0.0
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
-        notifyPropertyChanged(BR.total_rate)
+        notifyPropertyChanged(BR.totalRate)
     }
 
     var listOfGroup: LiveData<List<String?>> = MutableLiveData<List<String?>>()

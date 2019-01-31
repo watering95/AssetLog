@@ -74,19 +74,19 @@ class FragmentHome : Fragment() {
                     val home = Home()
                     loadingDairyTotal(account.id, ModelCalendar.getToday()).observeOnce(Observer { dairy -> dairy?.let {
                         if(account == accounts.first()) {
-                            total_evaluation = 0
-                            total_principal = 0
+                            totalEvaluation = 0
+                            totalPrincipal = 0
                         }
-                        home.evaluation_krw = dairy.evaluation_krw
-                        total_evaluation += dairy.evaluation_krw!!
-                        home.principal_krw = dairy.principal_krw
-                        total_principal += dairy.principal_krw!!
+                        home.evaluationKRW = dairy.evaluationKRW
+                        totalEvaluation += dairy.evaluationKRW!!
+                        home.principalKRW = dairy.principalKRW
+                        totalPrincipal += dairy.principalKRW!!
                         home.rate = dairy.rate
                         home.account = account.number
                         home.description = account.institute + " " + account.description
                         if(account == accounts.last()) {
                             list = list.map {
-                                it.total = total_evaluation
+                                it.total = totalEvaluation
                                 it
                             }
                             notifyPropertyChanged(BR.list)

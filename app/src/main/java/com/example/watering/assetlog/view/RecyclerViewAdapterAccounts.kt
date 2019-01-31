@@ -36,8 +36,8 @@ class RecyclerViewAdapterAccounts(val lists:List<DairyTotal>, private val clickL
         fun bind(dairyTotal: DairyTotal, position: Int, clickListener: (Int) -> Unit) {
             val df = DecimalFormat("#,###")
             date.text = dairyTotal.date
-            principal.text = df.format(dairyTotal.principal_krw)
-            evaluation.text = df.format(dairyTotal.evaluation_krw)
+            principal.text = df.format(dairyTotal.principalKRW)
+            evaluation.text = df.format(dairyTotal.evaluationKRW)
             rate.text = String.format(Locale.getDefault(),"%.2f",dairyTotal.rate)
             view.setOnClickListener { clickListener(position) }
         }

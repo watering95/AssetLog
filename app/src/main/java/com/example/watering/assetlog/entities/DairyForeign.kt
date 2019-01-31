@@ -16,7 +16,7 @@ class DairyForeign {
     @ColumnInfo(name = "principal")
     var principal: Double? = 0.0
     @ColumnInfo(name = "principal_krw")
-    var principal_krw: Int? = 0
+    var principalKRW: Int? = 0
     @ColumnInfo(name = "rate")
     var rate:Double? = 0.0
     @ColumnInfo(name = "id_currency")

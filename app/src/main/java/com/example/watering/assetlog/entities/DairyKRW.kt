@@ -14,7 +14,7 @@ class DairyKRW {
     @ColumnInfo(name = "id_account")
     var account: Int? = null
     @ColumnInfo(name = "principal")
-    var principal_krw: Int? = 0
+    var principalKRW: Int? = 0
     @ColumnInfo(name = "rate")
     var rate: Double? = 0.0
 }

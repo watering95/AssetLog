@@ -107,7 +107,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/spinner_categorymain_fragment_edit_spend"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
         <TextView
-                android:text="@string/payment_methode"
+                android:text="@string/payment_method"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView5" app:layout_constraintStart_toStartOf="parent"

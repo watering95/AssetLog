@@ -20,9 +20,9 @@ class IOKRW {
     @ColumnInfo(name = "income")
     var income: Int? = 0
     @ColumnInfo(name = "spend_cash")
-    var spend_cash: Int? = 0
+    var spendCash: Int? = 0
     @ColumnInfo(name = "spend_card")
-    var spend_card: Int? = 0
+    var spendCard: Int? = 0
     @ColumnInfo(name = "evaluation")
-    var evaluation_krw: Int? = 0
+    var evaluationKRW: Int? = 0
 }

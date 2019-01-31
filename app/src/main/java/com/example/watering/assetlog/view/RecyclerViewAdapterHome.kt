@@ -32,18 +32,18 @@ class RecyclerViewAdapterHome(val lists:List<Home>, private val clickListener: (
         private var principal: TextView = view.findViewById(R.id.text_principal_card_home)
         private var evaluation: TextView = view.findViewById(R.id.text_evaluation_card_home)
         private var rate: TextView = view.findViewById(R.id.text_rate_card_home)
-        private var rate_account: TextView = view.findViewById(R.id.text_rate_account_card_home)
+        private var ratioAccount: TextView = view.findViewById(R.id.text_rate_account_card_home)
 
         fun bind(home: Home, position: Int, clickListener: (Int) -> Unit) {
             val df = DecimalFormat("#,###")
-            val rate_ = if(home.evaluation_krw == 0) 0.0 else home.evaluation_krw!!.toDouble()/home.total!!*100
+            val ratio = if(home.evaluationKRW == 0) 0.0 else home.evaluationKRW!!.toDouble()/home.total!!*100
 
             accountNumber.text = home.account
             accountDescription.text = home.description
-            principal.text = df.format(home.principal_krw)
-            evaluation.text = df.format(home.evaluation_krw)
+            principal.text = df.format(home.principalKRW)
+            evaluation.text = df.format(home.evaluationKRW)
             rate.text = String.format(Locale.getDefault(), "%.2f", home.rate)
-            rate_account.text = String.format(Locale.getDefault(), "%.2f", rate_).plus("%")
+            ratioAccount.text = String.format(Locale.getDefault(), "%.2f", ratio).plus("%")
             view.setOnClickListener { clickListener(position) }
         }
     }

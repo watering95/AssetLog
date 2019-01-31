@@ -32,7 +32,7 @@
                 app:layout_constraintTop_toTopOf="@+id/text_total_principal_fragment_home"
                 app:layout_constraintBottom_toBottomOf="@+id/text_total_principal_fragment_home"/>
         <TextView
-                android:text="@{ Converter.intToStr(viewmodel.total_principal) }"
+                android:text="@{ Converter.intToStr(viewmodel.totalPrincipal) }"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_total_principal_fragment_home"
@@ -49,7 +49,7 @@
                 app:layout_constraintTop_toTopOf="@+id/text_total_evaluation_fragment_home"
                 app:layout_constraintBottom_toBottomOf="@+id/text_total_evaluation_fragment_home"/>
         <TextView
-                android:text="@{ Converter.intToStr(viewmodel.total_evaluation) }"
+                android:text="@{ Converter.intToStr(viewmodel.totalEvaluation) }"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_total_evaluation_fragment_home" android:layout_marginTop="8dp"
@@ -66,7 +66,7 @@
                 app:layout_constraintTop_toTopOf="@+id/text_total_rate_fragment_home"
                 app:layout_constraintBottom_toBottomOf="@+id/text_total_rate_fragment_home"/>
         <TextView
-                android:text="@{ Converter.doubleToStr(viewmodel.total_rate) }"
+                android:text="@{ Converter.doubleToStr(viewmodel.totalRate) }"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_total_rate_fragment_home" android:layout_marginTop="8dp"

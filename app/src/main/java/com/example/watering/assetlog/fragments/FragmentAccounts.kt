@@ -60,8 +60,8 @@ class FragmentAccounts : Fragment() {
                 override fun onComplete(select: Int) {
                     val today = ModelCalendar.getToday()
                     when(select) {
-                        0 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutKRW().initInstance(binding.viewmodel?.id_account, today))
-                        1 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutForeign().initInstance(binding.viewmodel?.id_account, today))
+                        0 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutKRW().initInstance(binding.viewmodel?.idAccount, today))
+                        1 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutForeign().initInstance(binding.viewmodel?.idAccount, today))
                         2 -> {}
                     }
                 }
@@ -75,8 +75,8 @@ class FragmentAccounts : Fragment() {
                 override fun onComplete(select: Int) {
                     val date = logs[position].date
                     when(select) {
-                        0 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutKRW().initInstance(binding.viewmodel?.id_account, date))
-                        1 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutForeign().initInstance(binding.viewmodel?.id_account, date))
+                        0 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutKRW().initInstance(binding.viewmodel?.idAccount, date))
+                        1 -> mViewModel.replaceFragment(mFragmentManager, FragmentEditInoutForeign().initInstance(binding.viewmodel?.idAccount, date))
                         2 -> {}
                     }
                 }
@@ -90,8 +90,8 @@ class FragmentAccounts : Fragment() {
             Transformations.switchMap(listOfAccount) { list ->
                 Transformations.map(getAccountByNumber(list[indexOfAccount])) { account -> account.id }
             }.observe(this@FragmentAccounts, Observer { id -> id?.let {
-                id_account = id
-                getLogs(id_account).observe(this@FragmentAccounts, Observer { logs -> logs?.let {
+                idAccount = id
+                getLogs(idAccount).observe(this@FragmentAccounts, Observer { logs -> logs?.let {
                     this@FragmentAccounts.logs = logs
                     binding.recyclerviewFragmentAccounts.run {
                         adapter = RecyclerViewAdapterAccounts(logs) { position -> itemClicked(position) }

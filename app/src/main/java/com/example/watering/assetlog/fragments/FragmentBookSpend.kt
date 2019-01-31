@@ -53,7 +53,7 @@ class FragmentBookSpend : Fragment() {
             val date = ModelCalendar.changeDate(binding.date.toString(), -1)
             binding.date = ModelCalendar.calendarToStr(date)
         }
-        binding.buttonForwordFragmentBookSpend.setOnClickListener {
+        binding.buttonForwardFragmentBookSpend.setOnClickListener {
             val date = ModelCalendar.changeDate(binding.date.toString(), 1)
             when {
                 Calendar.getInstance().before(date) -> Toast.makeText(activity, R.string.toast_date_error, Toast.LENGTH_SHORT).show()

@@ -60,7 +60,7 @@ class FragmentEditIncome : Fragment() {
                             listOfAccount.observe(this@FragmentEditIncome, Observer { list -> list?.let {
                                 getAccount(income.account).observe(this@FragmentEditIncome, Observer { account -> account?.let {
                                     indexOfAccount = list.indexOf(account.number)
-                                    id_account = account.id
+                                    idAccount = account.id
                                 } })
                             } })
                         } })
@@ -110,10 +110,10 @@ class FragmentEditIncome : Fragment() {
             R.id.menu_edit_save -> save()
             R.id.menu_edit_delete -> binding.viewmodel?.run {
                 delete(income)
-                loadingIOKRW(id_account, income.date).observeOnce(Observer { io -> io?.let {
+                loadingIOKRW(idAccount, income.date).observeOnce(Observer { io -> io?.let {
                     if(io.id == null) insert(io) else update(io)
 
-                    loadingDairyKRW(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                    loadingDairyKRW(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
                         if(dairy.id == null) insert(dairy) else update(dairy)
                         mFragmentManager.popBackStack()
                     } })
@@ -136,7 +136,7 @@ class FragmentEditIncome : Fragment() {
     fun onIndexOfAccountChanged() {
         binding.viewmodel?.run {
             Transformations.switchMap(listOfAccount) { list -> getAccountByNumber(list[indexOfAccount]) }.observe(this@FragmentEditIncome, Observer { account -> account?.let {
-                id_account = account.id
+                idAccount = account.id
             } })
         }
     }
@@ -144,12 +144,12 @@ class FragmentEditIncome : Fragment() {
         binding.viewmodel?.run {
             if(income.id == null) insert(income) else update(income)
 
-            loadingIOKRW(id_account, income.date).observeOnce(Observer { io -> io?.let {
+            loadingIOKRW(idAccount, income.date).observeOnce(Observer { io -> io?.let {
                 if(io.id == null) insert(io) else update(io)
 
-                loadingDairyKRW(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                loadingDairyKRW(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
                     if(dairy.id == null) insert(dairy) else update(dairy)
-                    loadingDairyTotal(id_account, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                    loadingDairyTotal(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
                         if(dairy.id == null) insert(dairy) else update(dairy)
                         mFragmentManager.popBackStack()
                     } })
