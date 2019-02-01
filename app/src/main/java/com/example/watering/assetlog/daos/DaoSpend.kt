@@ -12,9 +12,6 @@ interface DaoSpend {
     @Query("SELECT * from tbl_spend WHERE date_use = :date")
     fun get(date: String?): LiveData<List<Spend>>
 
-    @Query("SELECT * FROM tbl_spend WHERE spend_code = :code")
-    fun getByCode(code: String?): LiveData<Spend>
-
     @Query("SELECT spend_code from tbl_spend WHERE date_use = :date ORDER BY spend_code DESC LIMIT 1")
     fun getLastCode(date: String?): LiveData<String>
 

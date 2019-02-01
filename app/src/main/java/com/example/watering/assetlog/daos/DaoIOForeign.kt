@@ -12,9 +12,6 @@ interface DaoIOForeign {
     @Query("SELECT * FROM tbl_Info_IO_Foreign WHERE id_account = :id_account AND date = :date AND id_currency = :currency")
     fun get(id_account: Int?, date: String?, currency: Int?): LiveData<IOForeign>
 
-    @Query("SELECT * FROM tbl_Info_IO_Foreign WHERE id_account = :id_account AND date = :date")
-    fun getForDate(id_account: Int?, date: String?): LiveData<List<IOForeign>>
-
     @Query("SELECT * FROM tbl_Info_IO_Foreign WHERE id_account = :id_account AND date <= :date GROUP BY id_currency")
     fun getLast(id_account: Int?, date: String?): LiveData<List<IOForeign>>
 

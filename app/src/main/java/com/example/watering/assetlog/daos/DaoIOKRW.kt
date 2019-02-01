@@ -15,9 +15,6 @@ interface DaoIOKRW {
     @Query("SELECT * FROM tbl_Info_IO WHERE id_account = :id_account AND date <= :date ORDER BY date DESC LIMIT 1")
     fun getLast(id_account:Int?, date: String?): LiveData<IOKRW>
 
-    @Query("SELECT SUM(:column) FROM tbl_Info_IO WHERE id_account = :id_account AND date <= :date")
-    fun sum(column:String?, id_account: Int?, date: String?): LiveData<Int>
-
     @Query("SELECT SUM(input) FROM tbl_Info_IO WHERE id_account = :id_account AND date <= :date")
     fun sumOfInput(id_account: Int?, date: String?): LiveData<Int>
 

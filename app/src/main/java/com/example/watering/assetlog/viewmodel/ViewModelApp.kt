@@ -51,7 +51,6 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
     fun getCatSub(nameOfSub:String?, nameOfMain:String?) = repository.getCatSub(nameOfSub, nameOfMain)
     fun getCatSubsByMain(nameOfMain: String?) = repository.getCatSubsByMain(nameOfMain)
     fun getCatSubsByMain(id_main: Int?) = repository.getCatSubsByMain(id_main)
-    fun getSpendByCode(code: String?) = repository.getSpendByCode(code)
     fun getSpends(date: String?) = repository.getSpends(date)
     fun getSpendCash(code: String?) = repository.getSpendCash(code)
     fun getSpendCard(code: String?) = repository.getSpendCard(code)
@@ -201,13 +200,9 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
     private fun getLastIOForeign(id_account: Int?, date: String?) = repository.getLastIOForeign(id_account, date)
     private fun getLastDairyForeign(id_account: Int?, date: String?) = repository.getLastDairyForeign(id_account, date)
 
-    private fun getDairyForeignForDate(id_account: Int?, date: String?) = repository.getDairyForeignForDate(id_account, date)
-    private fun getIOForeignForDate(id_account: Int?, date: String?) = repository.getIOForeignForDate(id_account, date)
-
     private fun sumOfSpendCashInDate(id_account:Int?, date: String?) = repository.sumOfSpendCashInDate(id_account, date)
     private fun sumOfSpendCardInDate(id_account:Int?, date: String?) = repository.sumOfSpendCardInDate(id_account, date)
     private fun sumOfIncomeInDate(id_account:Int?, date: String?) = repository.sumOfIncomeInDate(id_account, date)
-    private fun sumUntilDate(column:String?, id_account:Int?, date: String?) = repository.sumUntilDate(column, id_account, date)
     private fun sumOfInputInKRWUntilDate(id_account: Int?, date: String?) = repository.sumOfInputInKRWUntilDate(id_account, date)
     private fun sumOfOutputInKRWUntilDate(id_account: Int?, date: String?) = repository.sumOfOutputInKRWUntilDate(id_account, date)
     private fun sumOfInputInForeignUntilDate(id_account: Int?, date: String?, currency: Int?) = repository.sumOfInputInForeignUntilDate(id_account, date, currency)
