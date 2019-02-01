@@ -16,10 +16,10 @@ interface DaoSpend {
     fun getLastCode(date: String?): LiveData<String>
 
     @Query("SELECT total(A.amount) FROM tbl_spend AS A LEFT JOIN tbl_spend_cash AS B ON A.spend_code = B.spend_code WHERE B.id_account = :id_account AND A.date_use = :date")
-    fun sumOfSpendsCash(id_account: Int?, date: String?): LiveData<Int>
+    fun sumOfSpendCash(id_account: Int?, date: String?): LiveData<Int>
 
     @Query("SELECT total(A.amount) FROM tbl_spend AS A LEFT JOIN tbl_spend_card AS B ON A.spend_code = B.spend_code JOIN tbl_card AS C ON B.id_card = C._id WHERE C.id_account = :id_account AND A.date_use = :date")
-    fun sumOfSpendsCard(id_account: Int?, date: String?): LiveData<Int>
+    fun sumOfSpendCard(id_account: Int?, date: String?): LiveData<Int>
 
     @Insert
     fun insert(spend: Spend)
