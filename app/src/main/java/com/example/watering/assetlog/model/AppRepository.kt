@@ -55,6 +55,10 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     fun getDairyTotal(id_account: Int?, date: String?) = daoDairyTotal.get(id_account, date)
     fun getLogs(id_account: Int?) = daoDairyTotal.getLogs(id_account)
 
+    fun getAfterOfDairyKRW(id_account: Int?, date: String?) = daoDairyKRW.getAfter(id_account, date)
+    fun getAfterOfDairyForeign(id_account: Int?, date: String?, currency: Int?) = daoDairyForeign.getAfter(id_account, date, currency)
+    fun getAfterOfDairyTotal(id_account: Int?, date: String?) = daoDairyTotal.getAfter(id_account, date)
+
     fun getLastSpendCode(date: String?) = daoSpend.getLastCode(date)
     fun getLastIOKRW(id_account: Int?, date: String?) = daoIOKRW.getLast(id_account, date)
     fun getLastIOForeign(id_account: Int?, date: String?, currency: Int?) = daoIOForeign.getLast(id_account, date, currency)

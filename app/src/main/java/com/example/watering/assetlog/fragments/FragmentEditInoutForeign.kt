@@ -15,6 +15,8 @@ import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditInoutForeignBinding
 import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.viewmodel.ViewModelEditInoutForeign
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class FragmentEditInoutForeign : Fragment() {
@@ -26,7 +28,7 @@ class FragmentEditInoutForeign : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_inout_foreign, container, false)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
         binding.viewmodel = ViewModelProviders.of(this).get(ViewModelEditInoutForeign::class.java)
 
         initLayout()
@@ -94,15 +96,28 @@ class FragmentEditInoutForeign : Fragment() {
 
     private fun save() {
         binding.viewmodel?.run {
-            if(io.id == null) insert(io) else update(io)
+            val jobIO = if(io.id == null) insert(io) else update(io)
 
-            loadingDairyForeign(idAccount, date, currency).observeOnce(Observer { dairy -> dairy?.let {
-                if(dairy.id == null) insert(dairy) else update(dairy)
-                loadingDairyTotal(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
-                    if(dairy.id == null) insert(dairy) else update(dairy)
-                    mFragmentManager.popBackStack()
+            runBlocking {
+                jobIO.cancelAndJoin()
+
+                loadingDairyForeign(idAccount, date, currency).observeOnce(Observer { dairy -> dairy?.let {
+                    val jobDairyForeign = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                    runBlocking {
+                        jobDairyForeign.cancelAndJoin()
+
+                        loadingDairyTotal(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
+                            val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                            runBlocking {
+                                jobDairyTotal.cancelAndJoin()
+                                mFragmentManager.popBackStack()
+                            }
+                        } })
+                    }
                 } })
-            } })
+            }
         }
     }
 

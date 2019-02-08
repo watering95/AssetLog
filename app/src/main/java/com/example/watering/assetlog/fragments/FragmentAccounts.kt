@@ -30,7 +30,7 @@ class FragmentAccounts : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_accounts, container, false)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
         binding.viewmodel = ViewModelProviders.of(this).get(ViewModelAccounts::class.java)
         initLayout()
         return binding.root

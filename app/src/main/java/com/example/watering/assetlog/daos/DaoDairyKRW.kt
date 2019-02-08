@@ -15,6 +15,9 @@ interface DaoDairyKRW {
     @Query("SELECT * FROM tbl_Info_Dairy WHERE id_account = :id_account AND date <= :date ORDER BY date DESC LIMIT 1")
     fun getLast(id_account:Int?, date: String?): LiveData<DairyKRW>
 
+    @Query("SELECT date FROM tbl_Info_Dairy WHERE id_account = :id_account AND date > :date")
+    fun getAfter(id_account: Int?, date: String?): LiveData<List<String>>
+
     @Insert
     fun insert(dairy: DairyKRW)
 

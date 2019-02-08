@@ -18,6 +18,9 @@ import com.example.watering.assetlog.entities.SpendCard
 import com.example.watering.assetlog.entities.SpendCash
 import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.viewmodel.ViewModelEditSpend
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class FragmentEditSpend : Fragment() {
@@ -27,7 +30,7 @@ class FragmentEditSpend : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_spend, container, false)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
         binding.viewmodel = ViewModelProviders.of(this).get(ViewModelEditSpend::class.java)
 
         initLayout()
@@ -127,35 +130,44 @@ class FragmentEditSpend : Fragment() {
         when(item?.itemId) {
             R.id.menu_edit_save -> save()
             R.id.menu_edit_delete -> binding.viewmodel?.run {
-                delete(spend)
+                var jobDelete = Job()
+
                 when(oldCode[0]) {
                     '1' -> getSpendCash(oldCode).observe(this@FragmentEditSpend, Observer { cash -> cash?.let {
-                        delete(cash)
-                        loadingIOKRW(idAccount, spend.date).observeOnce(Observer { io -> io?.let {
-                            if(io.id == null) insert(io) else update(io)
-
-                            loadingDairyKRW(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
-                                if(dairy.id == null) insert(dairy) else update(dairy)
-                                loadingDairyTotal(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
-                                    if(dairy.id == null) insert(dairy) else update(dairy)
-                                    mFragmentManager.popBackStack()
-                                } })
-                            } })
-                        } })
-                    } })
+                        jobDelete = delete(cash)
+                    }})
                     '2' -> getSpendCard(oldCode).observe(this@FragmentEditSpend, Observer { card -> card?.let {
-                        delete(card)
-                        loadingIOKRW(idAccount, spend.date).observeOnce(Observer { io -> io?.let {
-                            if(io.id == null) insert(io) else update(io)
+                        jobDelete = delete(card)
+                    }})
+                }
+
+                runBlocking {
+                    delete(spend).cancelAndJoin()
+                    jobDelete.cancelAndJoin()
+
+                    loadingIOKRW(idAccount, spend.date).observeOnce(Observer { io -> io?.let {
+                        val jobIO = if(io.id == null) insert(io) else update(io)
+
+                        runBlocking {
+                            jobIO.cancelAndJoin()
 
                             loadingDairyKRW(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
-                                if(dairy.id == null) insert(dairy) else update(dairy)
-                                loadingDairyTotal(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
-                                    if(dairy.id == null) insert(dairy) else update(dairy)
-                                    mFragmentManager.popBackStack()
-                                } })
+                                val jobDairyKRW = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                                runBlocking {
+                                    jobDairyKRW.cancelAndJoin()
+
+                                    loadingDairyTotal(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                        val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                                        runBlocking {
+                                            jobDairyTotal.cancelAndJoin()
+                                            mFragmentManager.popBackStack()
+                                        }
+                                    } })
+                                }
                             } })
-                        } })
+                        }
                     } })
                 }
             }
@@ -167,7 +179,10 @@ class FragmentEditSpend : Fragment() {
     fun onIndexOfSubChanged() {
         binding.viewmodel?.run {
             Transformations.switchMap(listOfMain) { listOfMain ->
-                Transformations.switchMap(listOfSub) { listOfSub -> getCatSub(listOfSub[indexOfSub], listOfMain[indexOfMain]) }
+                Transformations.switchMap(listOfSub) { listOfSub ->
+                    if(indexOfSub < 0 || indexOfMain < 0) null
+                    else getCatSub(listOfSub[indexOfSub], listOfMain[indexOfMain])
+                }
             }.observe(this@FragmentEditSpend, Observer { sub -> sub?.let {
                 spend.category = sub.id
             } })
@@ -202,16 +217,21 @@ class FragmentEditSpend : Fragment() {
             }.observeOnce(Observer { code -> code?.let {
                 spend.code = code
 
-                if(spend.id == null) insert(spend)
+                var jobDelete = Job()
+                val jobSpend1 = if(spend.id == null) insert(spend)
                 else {
-                    update(spend)
                     when(oldCode[0]) {
-                        '1' -> getSpendCash(oldCode).observe(this@FragmentEditSpend, Observer { cash -> cash?.let { delete(cash) } })
-                        '2' -> getSpendCard(oldCode).observe(this@FragmentEditSpend, Observer { card -> card?.let { delete(card) } })
+                        '1' -> getSpendCash(oldCode).observe(this@FragmentEditSpend, Observer { cash -> cash?.let {
+                            jobDelete = delete(cash)
+                        } })
+                        '2' -> getSpendCard(oldCode).observe(this@FragmentEditSpend, Observer { card -> card?.let {
+                            jobDelete = delete(card)
+                        } })
                     }
+                    update(spend)
                 }
 
-                when(code[0]) {
+                val jobSpend2 = when(code[0]) {
                     '1' -> {
                         val spendCash = SpendCash().apply {
                             this.code = code
@@ -226,19 +246,39 @@ class FragmentEditSpend : Fragment() {
                         }
                         insert(spendCard)
                     }
+                    else -> insert(null)
                 }
 
-                loadingIOKRW(idAccount, spend.date).observeOnce(Observer { io -> io?.let {
-                    if(io.id == null) insert(io) else update(io)
+                runBlocking {
+                    jobSpend1.cancelAndJoin()
+                    jobSpend2.cancelAndJoin()
+                    jobDelete.cancelAndJoin()
 
-                    loadingDairyKRW(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
-                        if(dairy.id == null) insert(dairy) else update(dairy)
-                        loadingDairyTotal(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
-                            if(dairy.id == null) insert(dairy) else update(dairy)
-                            mFragmentManager.popBackStack()
-                        } })
+                    loadingIOKRW(idAccount, spend.date).observeOnce(Observer { io -> io?.let {
+                        val jobIO = if(io.id == null) insert(io) else update(io)
+
+                        runBlocking {
+                            jobIO.cancelAndJoin()
+
+                            loadingDairyKRW(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                val jobDairyKRW = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                                runBlocking {
+                                    jobDairyKRW.cancelAndJoin()
+
+                                    loadingDairyTotal(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
+                                        val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                                        runBlocking {
+                                            jobDairyTotal.cancelAndJoin()
+                                            mFragmentManager.popBackStack()
+                                        }
+                                    } })
+                                }
+                            } })
+                        }
                     } })
-                } })
+                }
             } })
         }
     }

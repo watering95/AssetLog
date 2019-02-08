@@ -16,6 +16,8 @@ import com.example.watering.assetlog.databinding.FragmentEditIncomeBinding
 import com.example.watering.assetlog.entities.Income
 import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.viewmodel.ViewModelEditIncome
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class FragmentEditIncome : Fragment() {
@@ -25,7 +27,7 @@ class FragmentEditIncome : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_income, container, false)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
         binding.viewmodel = ViewModelProviders.of(this).get(ViewModelEditIncome::class.java)
 
         initLayout()
@@ -109,15 +111,26 @@ class FragmentEditIncome : Fragment() {
         when(item?.itemId) {
             R.id.menu_edit_save -> save()
             R.id.menu_edit_delete -> binding.viewmodel?.run {
-                delete(income)
-                loadingIOKRW(idAccount, income.date).observeOnce(Observer { io -> io?.let {
-                    if(io.id == null) insert(io) else update(io)
+                runBlocking {
+                    delete(income).cancelAndJoin()
 
-                    loadingDairyKRW(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
-                        if(dairy.id == null) insert(dairy) else update(dairy)
-                        mFragmentManager.popBackStack()
+                    loadingIOKRW(idAccount, income.date).observeOnce(Observer { io -> io?.let {
+                        val jobIO = if(io.id == null) insert(io) else update(io)
+
+                        runBlocking {
+                            jobIO.cancelAndJoin()
+
+                            loadingDairyKRW(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                                val jobDairy = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                                runBlocking {
+                                    jobDairy.cancelAndJoin()
+                                    mFragmentManager.popBackStack()
+                                }
+                            } })
+                        }
                     } })
-                } })
+                }
             }
         }
 
@@ -127,7 +140,10 @@ class FragmentEditIncome : Fragment() {
     fun onIndexOfSubChanged() {
         binding.viewmodel?.run {
             Transformations.switchMap(listOfMain) { listOfMain ->
-                Transformations.switchMap(listOfSub) { listOfSub -> getCatSub(listOfSub[indexOfSub], listOfMain[indexOfMain]) }
+                Transformations.switchMap(listOfSub) { listOfSub ->
+                    if(indexOfSub < 0 || indexOfMain < 0) null
+                    else getCatSub(listOfSub[indexOfSub], listOfMain[indexOfMain])
+                }
             }.observe(this@FragmentEditIncome, Observer { sub -> sub?.let {
                 income.category = sub.id
             } })
@@ -135,26 +151,61 @@ class FragmentEditIncome : Fragment() {
     }
     fun onIndexOfAccountChanged() {
         binding.viewmodel?.run {
-            Transformations.switchMap(listOfAccount) { list -> getAccountByNumber(list[indexOfAccount]) }.observe(this@FragmentEditIncome, Observer { account -> account?.let {
+            Transformations.switchMap(listOfAccount) { list ->
+                if(indexOfAccount < 0) null else getAccountByNumber(list[indexOfAccount])
+            }.observe(this@FragmentEditIncome, Observer { account -> account?.let {
                 idAccount = account.id
+                income.account = account.id
             } })
         }
     }
     private fun save() {
         binding.viewmodel?.run {
-            if(income.id == null) insert(income) else update(income)
+            val jobIncome = if(income.id == null) insert(income) else update(income)
 
-            loadingIOKRW(idAccount, income.date).observeOnce(Observer { io -> io?.let {
-                if(io.id == null) insert(io) else update(io)
+            runBlocking {
+                jobIncome.cancelAndJoin()
 
-                loadingDairyKRW(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
-                    if(dairy.id == null) insert(dairy) else update(dairy)
-                    loadingDairyTotal(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
-                        if(dairy.id == null) insert(dairy) else update(dairy)
-                        mFragmentManager.popBackStack()
-                    } })
+                loadingIOKRW(idAccount, income.date).observeOnce(Observer { io -> io?.let {
+                    val jobIO = if(io.id == null) insert(io) else update(io)
+
+                    runBlocking {
+                        jobIO.cancelAndJoin()
+
+                        loadingDairyKRW(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                            val jobDairyKRW = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                            runBlocking {
+                                jobDairyKRW.cancelAndJoin()
+
+                                getAfterOfDairyKRW(idAccount, income.date).observeOnce(Observer { list -> list?.let {
+                                    list.forEach { date ->
+                                        loadingDairyKRW(idAccount, date).observeOnce(Observer { d -> d?.let {
+                                            runBlocking { update(d).cancelAndJoin() }
+                                        }})
+                                    }
+                                }})
+                                loadingDairyTotal(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                                    val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                                    runBlocking {
+                                        jobDairyTotal.cancelAndJoin()
+
+                                        getAfterOfDairyTotal(idAccount, income.date).observeOnce(Observer { list -> list?.let {
+                                            list.forEach { date ->
+                                                loadingDairyTotal(idAccount, date).observeOnce(Observer { d -> d?.let {
+                                                    runBlocking { update(d).cancelAndJoin() }
+                                                }})
+                                            }
+                                        }})
+                                        mFragmentManager.popBackStack()
+                                    }
+                                } })
+                            }
+                        } })
+                    }
                 } })
-            } })
+            }
         }
     }
 

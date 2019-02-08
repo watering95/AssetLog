@@ -60,6 +60,10 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
     fun getLastSpendCode(date: String?) = repository.getLastSpendCode(date)
     fun getLogs(id_account: Int?) = repository.getLogs(id_account)
 
+    fun getAfterOfDairyKRW(id_account: Int?, date: String?) = repository.getAfterOfDairyKRW(id_account, date)
+    fun getAfterOfDairyForeign(id_account: Int?, date: String?, currency: Int?) = repository.getAfterOfDairyForeign(id_account, date, currency)
+    fun getAfterOfDairyTotal(id_account: Int?, date: String?) = repository.getAfterOfDairyTotal(id_account, date)
+
     fun loadingIOKRW(id_account: Int?, date: String?): LiveData<IOKRW> {
         return Transformations.switchMap(getPreviousEvaluationOfKRW(id_account, date)) { previousEvaluation ->
             Transformations.switchMap(sumOfSpendCashForDate(id_account, date)) { sumOfSpendsCash ->

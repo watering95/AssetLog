@@ -15,6 +15,8 @@ import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditInoutKrwBinding
 import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.viewmodel.ViewModelEditInoutKRW
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class FragmentEditInoutKRW : Fragment() {
@@ -25,7 +27,7 @@ class FragmentEditInoutKRW : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_inout_krw, container, false)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
         binding.viewmodel = ViewModelProviders.of(this).get(ViewModelEditInoutKRW::class.java)
 
         initLayout()
@@ -93,14 +95,28 @@ class FragmentEditInoutKRW : Fragment() {
 
     private fun save() {
         binding.viewmodel?.run {
-            if(io.id == null) insert(io) else update(io)
-            loadingDairyKRW(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
-                if(dairy.id == null) insert(dairy) else update(dairy)
-                loadingDairyTotal(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
-                    if(dairy.id == null) insert(dairy) else update(dairy)
-                    mFragmentManager.popBackStack()
+            val jobIO = if(io.id == null) insert(io) else update(io)
+
+            runBlocking {
+                jobIO.cancelAndJoin()
+
+                loadingDairyKRW(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
+                    val jobDairyKRW = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                    runBlocking {
+                        jobDairyKRW.cancelAndJoin()
+
+                        loadingDairyTotal(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
+                            val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                            runBlocking {
+                                jobDairyTotal.cancelAndJoin()
+                                mFragmentManager.popBackStack()
+                            }
+                        }})
+                    }
                 }})
-            }})
+            }
         }
     }
 
