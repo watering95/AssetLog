@@ -171,41 +171,66 @@ class FragmentEditIncome : Fragment() {
 
                     runBlocking {
                         jobIO.cancelAndJoin()
-
-                        loadingDairyKRW(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
-                            val jobDairyKRW = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                            runBlocking {
-                                jobDairyKRW.cancelAndJoin()
-
-                                getAfterOfDairyKRW(idAccount, income.date).observeOnce(Observer { list -> list?.let {
-                                    list.forEach { date ->
-                                        loadingDairyKRW(idAccount, date).observeOnce(Observer { d -> d?.let {
-                                            runBlocking { update(d).cancelAndJoin() }
-                                        }})
-                                    }
-                                }})
-                                loadingDairyTotal(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
-                                    val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                                    runBlocking {
-                                        jobDairyTotal.cancelAndJoin()
-
-                                        getAfterOfDairyTotal(idAccount, income.date).observeOnce(Observer { list -> list?.let {
-                                            list.forEach { date ->
-                                                loadingDairyTotal(idAccount, date).observeOnce(Observer { d -> d?.let {
-                                                    runBlocking { update(d).cancelAndJoin() }
-                                                }})
-                                            }
-                                        }})
-                                        mFragmentManager.popBackStack()
-                                    }
-                                } })
-                            }
-                        } })
+                        processingDairyKRW()
                     }
                 } })
             }
+        }
+    }
+
+    private fun processingDairyKRW() {
+        binding.viewmodel?.run {
+            loadingDairyKRW(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                val jobDairyKRW = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                runBlocking {
+                    jobDairyKRW.cancelAndJoin()
+
+                    getAfterOfDairyKRW(idAccount, income.date).observeOnce(Observer { list ->
+                        list?.let {
+                            when {
+                                list.isNotEmpty() -> list.forEach { date ->
+                                    loadingDairyKRW(idAccount, date).observeOnce(Observer { d -> d?.let {
+                                        runBlocking {
+                                            update(d).cancelAndJoin()
+                                            if(date == list.last()) processingDairyTotal()
+                                        }
+                                    }})
+                                }
+                                else -> processingDairyTotal()
+                            }
+                        }
+                    })
+                }
+            } })
+        }
+    }
+
+    private fun processingDairyTotal() {
+        binding.viewmodel?.run {
+            loadingDairyTotal(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
+                val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
+
+                runBlocking {
+                    jobDairyTotal.cancelAndJoin()
+
+                    getAfterOfDairyTotal(idAccount, income.date).observeOnce(Observer { list ->
+                        list?.let {
+                            when {
+                                list.isNotEmpty() -> list.forEach { date ->
+                                    loadingDairyTotal(idAccount, date).observeOnce(Observer { d -> d?.let {
+                                        runBlocking {
+                                            update(d).cancelAndJoin()
+                                            if(date == list.last()) mFragmentManager.popBackStack()
+                                        }
+                                    } })
+                                }
+                                else -> mFragmentManager.popBackStack()
+                            }
+                        }
+                    })
+                }
+            } })
         }
     }
 

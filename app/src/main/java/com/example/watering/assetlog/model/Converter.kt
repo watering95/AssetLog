@@ -8,14 +8,36 @@ object Converter {
     private val df_double = DecimalFormat("#,##0.##")
 
     @InverseMethod("strToInt")
-    @JvmStatic fun intToStr(value:Int): String = df_int.format(value)
+    @JvmStatic fun intToStr(value:Int): String {
+        return try {
+            df_int.format(value)
+        } catch (e: Exception) {
+            ""
+        }
+    }
 
-    @JvmStatic fun strToInt(value:String): Int = df_int.parse(value).toInt()
+    @JvmStatic fun strToInt(value:String): Int {
+        return try {
+            df_int.parse(value).toInt()
+        } catch (e: Exception) {
+            0
+        }
+    }
 
     @InverseMethod("strToDouble")
-//    @JvmStatic fun doubleToStr(value:Double): String = String.format("%.2f",value)
-    @JvmStatic fun doubleToStr(value:Double): String = df_double.format(value)
+    @JvmStatic fun doubleToStr(value:Double): String {
+        return try {
+            df_double.format(value)
+        } catch (e: Exception) {
+            ""
+        }
+    }
 
-//    @JvmStatic fun strToDouble(value:String): Double = value.toDouble()
-    @JvmStatic fun strToDouble(value:String): Double = df_double.parse(value).toDouble()
+    @JvmStatic fun strToDouble(value:String): Double {
+        return try {
+            df_double.parse(value).toDouble()
+        } catch (e: Exception) {
+            0.0
+        }
+    }
 }

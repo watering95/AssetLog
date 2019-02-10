@@ -156,15 +156,15 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
     fun loadingDairyTotal(id_account: Int?, date: String?): LiveData<DairyTotal> {
         return Transformations.switchMap(getLastDairyForeign(id_account, date)) { listOf_last_dairy_foreign ->
             Transformations.switchMap(getLastIOForeign(id_account, date)) { listOf_last_io_foreign ->
-                Transformations.switchMap(getLastDairyKRW(id_account, date)) { last_dairy_krw ->
-                    Transformations.switchMap(getLastIOKRW(id_account, date)) { last_io_krw ->
+                Transformations.switchMap(loadingDairyKRW(id_account, date)) { dairy_krw ->
+                    Transformations.switchMap(loadingIOKRW(id_account, date)) { io_krw ->
                         Transformations.map(getDairyTotal(id_account, date)) { dairy_total ->
                             var principal = 0
                             var evaluation = 0
                             var rate = 0.0
 
-                            last_dairy_krw?.run { principal = principalKRW!! }
-                            last_io_krw?.run { evaluation = evaluationKRW!! }
+                            dairy_krw?.run { principal = principalKRW!! }
+                            io_krw?.run { evaluation = evaluationKRW!! }
 
                             listOf_last_dairy_foreign.forEach { principal += it.principalKRW!! }
                             listOf_last_io_foreign.forEach { evaluation += it.evaluationKRW!!.toInt() }
@@ -238,7 +238,16 @@ open class ViewModelApp(application: Application) : AndroidViewModel(application
                Transformations.switchMap(sumOfOutputOfKRWUntilDate(id_account, date)) { sum_output ->
                    Transformations.switchMap(sumOfSpendCardUntilDate(id_account, date)) { sum_card ->
                        Transformations.map(sumOfSpendCashUntilDate(id_account, date)) { sum_cash ->
-                           sum_input + sum_income - sum_output - sum_card - sum_cash
+                           var input = 0
+                           var output = 0
+
+                           sum_input?.let { input += it }
+                           sum_income?.let { input += it }
+                           sum_output?.let { output += it }
+                           sum_card?.let { output += it }
+                           sum_cash?.let { output += it }
+
+                           input - output
                        }
                    }
                }
