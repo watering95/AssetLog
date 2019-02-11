@@ -3,7 +3,6 @@ package com.example.watering.assetlog.fragments
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.watering.assetlog.MainActivity
@@ -14,7 +13,6 @@ import com.example.watering.assetlog.viewmodel.ViewModelApp
 class FragmentManagement : Fragment() {
     private lateinit var mView: View
     private lateinit var mViewModel: ViewModelApp
-    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     private val mFragmentManagementGroup = FragmentManagementGroup()
     private val mFragmentManagementAccount = FragmentManagementAccount()
@@ -44,12 +42,12 @@ class FragmentManagement : Fragment() {
     private fun itemClicked(position: Int) {
         mViewModel.run {
             when (position) {
-                0 -> replaceFragment(mFragmentManager, mFragmentManagementGroup)
-                1 -> replaceFragment(mFragmentManager, mFragmentManagementAccount)
-                2 -> replaceFragment(mFragmentManager, mFragmentManagementCategoryMain)
-                3 -> replaceFragment(mFragmentManager, mFragmentManagementCategorySub)
-                4 -> replaceFragment(mFragmentManager, mFragmentManagementCard)
-                5 -> replaceFragment(mFragmentManager, mFragmentManagementDB)
+                0 -> replaceFragment(fragmentManager!!, mFragmentManagementGroup)
+                1 -> replaceFragment(fragmentManager!!, mFragmentManagementAccount)
+                2 -> replaceFragment(fragmentManager!!, mFragmentManagementCategoryMain)
+                3 -> replaceFragment(fragmentManager!!, mFragmentManagementCategorySub)
+                4 -> replaceFragment(fragmentManager!!, mFragmentManagementCard)
+                5 -> replaceFragment(fragmentManager!!, mFragmentManagementDB)
                 else -> {  }
             }
         }

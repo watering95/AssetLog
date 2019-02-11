@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditGroupBinding
@@ -15,7 +14,6 @@ class FragmentEditGroup : Fragment() {
     private lateinit var item: Group
     private lateinit var mViewModel: ViewModelApp
     private lateinit var binding:FragmentEditGroupBinding
-    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_group, container, false)
@@ -49,7 +47,7 @@ class FragmentEditGroup : Fragment() {
             R.id.menu_edit_delete -> { mViewModel.delete(this.item) }
         }
 
-        mFragmentManager.popBackStack()
+        fragmentManager?.popBackStack()
 
         return super.onOptionsItemSelected(item)
     }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditCategorymainBinding
@@ -16,7 +15,6 @@ class FragmentEditCategoryMain : Fragment() {
     private lateinit var item: CategoryMain
     private lateinit var mViewModel: ViewModelApp
     private lateinit var binding:FragmentEditCategorymainBinding
-    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
     private lateinit var mList:List<String>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,7 +57,7 @@ class FragmentEditCategoryMain : Fragment() {
             }
             R.id.menu_edit_delete -> { mViewModel.delete(this.item) }
         }
-        mFragmentManager.popBackStack()
+        fragmentManager?.popBackStack()
 
         return super.onOptionsItemSelected(item)
     }
