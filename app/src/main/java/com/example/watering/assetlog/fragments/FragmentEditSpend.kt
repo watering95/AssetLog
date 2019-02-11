@@ -17,6 +17,7 @@ import com.example.watering.assetlog.entities.Spend
 import com.example.watering.assetlog.entities.SpendCard
 import com.example.watering.assetlog.entities.SpendCash
 import com.example.watering.assetlog.model.ModelCalendar
+import com.example.watering.assetlog.model.Processing
 import com.example.watering.assetlog.viewmodel.ViewModelEditSpend
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -25,13 +26,15 @@ import java.util.*
 
 class FragmentEditSpend : Fragment() {
     private lateinit var binding: FragmentEditSpendBinding
-    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
+    private lateinit var processing: Processing
     private lateinit var spend: Spend
+    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_spend, container, false)
         binding.lifecycleOwner = this
         binding.viewmodel = ViewModelProviders.of(this).get(ViewModelEditSpend::class.java)
+        processing = Processing(binding.viewmodel, mFragmentManager)
 
         initLayout()
 
@@ -144,31 +147,7 @@ class FragmentEditSpend : Fragment() {
                 runBlocking {
                     delete(spend).cancelAndJoin()
                     jobDelete.cancelAndJoin()
-
-                    loadingIOKRW(idAccount, spend.date).observeOnce(Observer { io -> io?.let {
-                        val jobIO = if(io.id == null) insert(io) else update(io)
-
-                        runBlocking {
-                            jobIO.cancelAndJoin()
-
-                            loadingDairyKRW(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
-                                val jobDairyKRW = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                                runBlocking {
-                                    jobDairyKRW.cancelAndJoin()
-
-                                    loadingDairyTotal(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
-                                        val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                                        runBlocking {
-                                            jobDairyTotal.cancelAndJoin()
-                                            mFragmentManager.popBackStack()
-                                        }
-                                    } })
-                                }
-                            } })
-                        }
-                    } })
+                    processing.ioKRW(idAccount, spend.date)
                 }
             }
         }
@@ -253,31 +232,7 @@ class FragmentEditSpend : Fragment() {
                     jobSpend1.cancelAndJoin()
                     jobSpend2.cancelAndJoin()
                     jobDelete.cancelAndJoin()
-
-                    loadingIOKRW(idAccount, spend.date).observeOnce(Observer { io -> io?.let {
-                        val jobIO = if(io.id == null) insert(io) else update(io)
-
-                        runBlocking {
-                            jobIO.cancelAndJoin()
-
-                            loadingDairyKRW(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
-                                val jobDairyKRW = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                                runBlocking {
-                                    jobDairyKRW.cancelAndJoin()
-
-                                    loadingDairyTotal(idAccount, spend.date).observeOnce(Observer { dairy -> dairy?.let {
-                                        val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                                        runBlocking {
-                                            jobDairyTotal.cancelAndJoin()
-                                            mFragmentManager.popBackStack()
-                                        }
-                                    } })
-                                }
-                            } })
-                        }
-                    } })
+                    processing.ioKRW(idAccount, spend.date)
                 }
             } })
         }

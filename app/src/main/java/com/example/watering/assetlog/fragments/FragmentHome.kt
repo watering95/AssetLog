@@ -65,7 +65,7 @@ class FragmentHome : Fragment() {
         binding.viewmodel?.run {
             if(indexOfGroup == 0) allAccounts else {
                 Transformations.switchMap(listOfGroup) { list ->
-                    Transformations.switchMap(getGroupByName(list[indexOfGroup])) { group ->
+                    Transformations.switchMap(getGroup(list[indexOfGroup])) { group ->
                         Transformations.map(getAccountsByGroup(group.id)) { accounts -> accounts }
                     }
                 }

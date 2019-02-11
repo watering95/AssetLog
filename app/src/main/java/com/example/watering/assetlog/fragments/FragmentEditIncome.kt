@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import com.example.watering.assetlog.BR
@@ -15,6 +14,7 @@ import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditIncomeBinding
 import com.example.watering.assetlog.entities.Income
 import com.example.watering.assetlog.model.ModelCalendar
+import com.example.watering.assetlog.model.Processing
 import com.example.watering.assetlog.viewmodel.ViewModelEditIncome
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.runBlocking
@@ -23,12 +23,13 @@ import java.util.*
 class FragmentEditIncome : Fragment() {
     private lateinit var income: Income
     private lateinit var binding: FragmentEditIncomeBinding
-    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
+    private lateinit var processing: Processing
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_edit_income, container, false)
         binding.lifecycleOwner = this
         binding.viewmodel = ViewModelProviders.of(this).get(ViewModelEditIncome::class.java)
+        processing = Processing(binding.viewmodel, fragmentManager)
 
         initLayout()
         return binding.root
@@ -113,23 +114,7 @@ class FragmentEditIncome : Fragment() {
             R.id.menu_edit_delete -> binding.viewmodel?.run {
                 runBlocking {
                     delete(income).cancelAndJoin()
-
-                    loadingIOKRW(idAccount, income.date).observeOnce(Observer { io -> io?.let {
-                        val jobIO = if(io.id == null) insert(io) else update(io)
-
-                        runBlocking {
-                            jobIO.cancelAndJoin()
-
-                            loadingDairyKRW(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
-                                val jobDairy = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                                runBlocking {
-                                    jobDairy.cancelAndJoin()
-                                    mFragmentManager.popBackStack()
-                                }
-                            } })
-                        }
-                    } })
+                    processing.ioKRW(idAccount, income.date)
                 }
             }
         }
@@ -165,81 +150,8 @@ class FragmentEditIncome : Fragment() {
 
             runBlocking {
                 jobIncome.cancelAndJoin()
-
-                loadingIOKRW(idAccount, income.date).observeOnce(Observer { io -> io?.let {
-                    val jobIO = if(io.id == null) insert(io) else update(io)
-
-                    runBlocking {
-                        jobIO.cancelAndJoin()
-                        processingDairyKRW()
-                    }
-                } })
+                processing.ioKRW(idAccount, income.date)
             }
         }
-    }
-
-    private fun processingDairyKRW() {
-        binding.viewmodel?.run {
-            loadingDairyKRW(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
-                val jobDairyKRW = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                runBlocking {
-                    jobDairyKRW.cancelAndJoin()
-
-                    getAfterOfDairyKRW(idAccount, income.date).observeOnce(Observer { list ->
-                        list?.let {
-                            when {
-                                list.isNotEmpty() -> list.forEach { date ->
-                                    loadingDairyKRW(idAccount, date).observeOnce(Observer { d -> d?.let {
-                                        runBlocking {
-                                            update(d).cancelAndJoin()
-                                            if(date == list.last()) processingDairyTotal()
-                                        }
-                                    }})
-                                }
-                                else -> processingDairyTotal()
-                            }
-                        }
-                    })
-                }
-            } })
-        }
-    }
-
-    private fun processingDairyTotal() {
-        binding.viewmodel?.run {
-            loadingDairyTotal(idAccount, income.date).observeOnce(Observer { dairy -> dairy?.let {
-                val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                runBlocking {
-                    jobDairyTotal.cancelAndJoin()
-
-                    getAfterOfDairyTotal(idAccount, income.date).observeOnce(Observer { list ->
-                        list?.let {
-                            when {
-                                list.isNotEmpty() -> list.forEach { date ->
-                                    loadingDairyTotal(idAccount, date).observeOnce(Observer { d -> d?.let {
-                                        runBlocking {
-                                            update(d).cancelAndJoin()
-                                            if(date == list.last()) mFragmentManager.popBackStack()
-                                        }
-                                    } })
-                                }
-                                else -> mFragmentManager.popBackStack()
-                            }
-                        }
-                    })
-                }
-            } })
-        }
-    }
-
-    private fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
-        observeForever(object: Observer<T> {
-            override fun onChanged(t: T) {
-                observer.onChanged(t)
-                removeObserver(this)
-            }
-        })
     }
 }

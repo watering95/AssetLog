@@ -13,7 +13,7 @@ interface DaoGroup {
     fun get(id: Int?): LiveData<Group>
 
     @Query("SELECT * FROM tbl_Group WHERE name = :name")
-    fun getByName(name: String?): LiveData<Group>
+    fun get(name: String?): LiveData<Group>
 
     @Insert
     fun insert(group: Group)

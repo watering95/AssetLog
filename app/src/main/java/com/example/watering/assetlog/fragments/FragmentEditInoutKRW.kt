@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import com.example.watering.assetlog.BR
@@ -14,6 +13,7 @@ import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentEditInoutKrwBinding
 import com.example.watering.assetlog.model.ModelCalendar
+import com.example.watering.assetlog.model.Processing
 import com.example.watering.assetlog.viewmodel.ViewModelEditInoutKRW
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.runBlocking
@@ -21,7 +21,7 @@ import java.util.*
 
 class FragmentEditInoutKRW : Fragment() {
     private lateinit var binding: FragmentEditInoutKrwBinding
-    private val mFragmentManager by lazy { fragmentManager as FragmentManager }
+    private lateinit var processing: Processing
     private var idAccount:Int? = 0
     private var date:String? = ""
 
@@ -29,6 +29,7 @@ class FragmentEditInoutKRW : Fragment() {
         binding = inflate(inflater, R.layout.fragment_edit_inout_krw, container, false)
         binding.lifecycleOwner = this
         binding.viewmodel = ViewModelProviders.of(this).get(ViewModelEditInoutKRW::class.java)
+        processing = Processing(binding.viewmodel, fragmentManager)
 
         initLayout()
 
@@ -87,7 +88,12 @@ class FragmentEditInoutKRW : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.menu_edit_save -> save()
-            R.id.menu_edit_delete -> {}
+            R.id.menu_edit_delete -> binding.viewmodel?.run {
+                runBlocking {
+                    delete(io).cancelAndJoin()
+                    processing.dairyKRW(idAccount, io.date)
+                }
+            }
         }
 
         return super.onOptionsItemSelected(item)
@@ -99,23 +105,7 @@ class FragmentEditInoutKRW : Fragment() {
 
             runBlocking {
                 jobIO.cancelAndJoin()
-
-                loadingDairyKRW(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
-                    val jobDairyKRW = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                    runBlocking {
-                        jobDairyKRW.cancelAndJoin()
-
-                        loadingDairyTotal(idAccount, date).observeOnce(Observer { dairy -> dairy?.let {
-                            val jobDairyTotal = if(dairy.id == null) insert(dairy) else update(dairy)
-
-                            runBlocking {
-                                jobDairyTotal.cancelAndJoin()
-                                mFragmentManager.popBackStack()
-                            }
-                        }})
-                    }
-                }})
+                processing.dairyKRW(idAccount, io.date)
             }
         }
     }
@@ -134,14 +124,5 @@ class FragmentEditInoutKRW : Fragment() {
                 }})
             } })
         }
-    }
-
-    private fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
-        observeForever(object: Observer<T> {
-            override fun onChanged(t: T) {
-                observer.onChanged(t)
-                removeObserver(this)
-            }
-        })
     }
 }

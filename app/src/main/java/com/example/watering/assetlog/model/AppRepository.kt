@@ -30,34 +30,43 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     var allCards: LiveData<List<Card>> = daoCard.getAll()
 
     fun getGroup(id: Int?) = daoGroup.get(id)
-    fun getGroupByName(name: String?) = daoGroup.getByName(name)
+    fun getGroup(name: String?) = daoGroup.get(name)
+
     fun getAccount(id: Int?) = daoAccount.get(id)
+    fun getAccount(number: String?) = daoAccount.get(number)
     fun getAccountByCode(code: String?) = daoAccount.getByCode(code)
-    fun getAccountByNumber(number: String?) = daoAccount.getByNumber(number)
     fun getAccountsByGroup(id: Int?) = daoAccount.getByGroup(id)
+
     fun getCatMain(id: Int?) = daoCatMain.get(id)
-    fun getCatMainByKind(kind: String?) = daoCatMain.getByKind(kind)
+    fun getCatMain(kind: String?) = daoCatMain.get(kind)
     fun getCatMainBySub(id_sub: Int?) = daoCatMain.getBySub(id_sub)
+
     fun getCardByCode(code: String?) = daoCard.getByCode(code)
     fun getCardByNumber(number: String?) = daoCard.getByNumber(number)
+
     fun getIncomes(date: String?) = daoIncome.get(date)
+
     fun getCatSub(id: Int?) = daoCatSub.get(id)
     fun getCatSub(nameOfSub: String?, nameOfMain:String?) = daoCatSub.get(nameOfSub, nameOfMain)
     fun getCatSubsByMain(nameOfMain: String?) = daoCatSub.getByMain(nameOfMain)
     fun getCatSubsByMain(id_main: Int?) = daoCatSub.getByMain(id_main)
+
     fun getSpends(date: String?) = daoSpend.get(date)
     fun getSpendCash(code: String?) = daoSpendCash.get(code)
     fun getSpendCard(code: String?) = daoSpendCard.get(code)
+
     fun getIOKRW(id_account: Int?, date: String?) = daoIOKRW.get(id_account, date)
     fun getIOForeign(id_account: Int?, date: String?, currency: Int?) = daoIOForeign.get(id_account, date, currency)
+
     fun getDairyKRW(id_account: Int?, date: String?) = daoDairyKRW.get(id_account, date)
     fun getDairyForeign(id_account: Int?, date: String?, currency: Int?) = daoDairyForeign.get(id_account, date, currency)
     fun getDairyTotal(id_account: Int?, date: String?) = daoDairyTotal.get(id_account, date)
+
     fun getLogs(id_account: Int?) = daoDairyTotal.getLogs(id_account)
 
-    fun getAfterOfDairyKRW(id_account: Int?, date: String?) = daoDairyKRW.getAfter(id_account, date)
-    fun getAfterOfDairyForeign(id_account: Int?, date: String?, currency: Int?) = daoDairyForeign.getAfter(id_account, date, currency)
-    fun getAfterOfDairyTotal(id_account: Int?, date: String?) = daoDairyTotal.getAfter(id_account, date)
+    fun getAfterDairyKRW(id_account: Int?, date: String?) = daoDairyKRW.getAfter(id_account, date)
+    fun getAfterDairyForeign(id_account: Int?, date: String?, currency: Int?) = daoDairyForeign.getAfter(id_account, date, currency)
+    fun getAfterDairyTotal(id_account: Int?, date: String?) = daoDairyTotal.getAfter(id_account, date)
 
     fun getLastSpendCode(date: String?) = daoSpend.getLastCode(date)
     fun getLastIOKRW(id_account: Int?, date: String?) = daoIOKRW.getLast(id_account, date)
@@ -69,11 +78,12 @@ class AppRepository(application: Application, scope:CoroutineScope) {
     fun sumOfSpendCashForDate(id_account: Int?, date: String?) = daoSpend.sumOfSpendCash(id_account, date)
     fun sumOfSpendCardForDate(id_account: Int?, date: String?) = daoSpend.sumOfSpendCard(id_account, date)
     fun sumOfIncomeForDate(id_account: Int?, date: String?) = daoIncome.sum(id_account, date)
+
     fun sumOfInputOfKRWUntilDate(id_account: Int?, date: String?) = daoIOKRW.sumOfInput(id_account, date)
-    fun sumOfOutputOfKRWUntilDate(id_account: Int?, date: String?) = daoIOKRW.sumOfOutput(id_account, date)
     fun sumOfInputOfForeignUntilDate(id_account: Int?, date: String?, currency: Int?) = daoIOForeign.sumOfInput(id_account, date, currency)
-    fun sumOfOutputOfForeignUntilDate(id_account: Int?, date: String?, currency: Int?) = daoIOForeign.sumOfOutput(id_account, date, currency)
     fun sumOfInputKRWOfForeignUntilDate(id_account: Int?, date: String?, currency: Int?) = daoIOForeign.sumOfInputKRW(id_account, date, currency)
+    fun sumOfOutputOfKRWUntilDate(id_account: Int?, date: String?) = daoIOKRW.sumOfOutput(id_account, date)
+    fun sumOfOutputOfForeignUntilDate(id_account: Int?, date: String?, currency: Int?) = daoIOForeign.sumOfOutput(id_account, date, currency)
     fun sumOfOutputKRWOfForeignUntilDate(id_account: Int?, date: String?, currency: Int?) = daoIOForeign.sumOfOutputKRW(id_account, date, currency)
     fun sumOfIncomeUntilDate(id_account: Int?, date: String?) = daoIOKRW.sumOfIncome(id_account, date)
     fun sumOfSpendCardUntilDate(id_account: Int?, date: String?) = daoIOKRW.sumOfSpendCard(id_account, date)

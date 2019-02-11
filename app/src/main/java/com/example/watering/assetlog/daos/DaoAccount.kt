@@ -19,7 +19,7 @@ interface DaoAccount {
     fun getByCode(code: String?): LiveData<Account>
 
     @Query("SELECT * FROM tbl_Account WHERE number = :number")
-    fun getByNumber(number: String?): LiveData<Account>
+    fun get(number: String?): LiveData<Account>
 
     @Insert
     fun insert(account: Account)
