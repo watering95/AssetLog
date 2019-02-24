@@ -38,7 +38,8 @@
                     app:layout_constraintTop_toTopOf="@+id/text_date_fragment_book_income"
                     app:layout_constraintBottom_toBottomOf="@+id/text_date_fragment_book_income"
                     app:layout_constraintStart_toEndOf="@+id/text_date_fragment_book_income"
-                    android:layout_marginStart="8dp" style="@style/Widget.AppCompat.ImageButton"/>
+                    android:layout_marginStart="8dp" style="@style/Widget.AppCompat.ImageButton"
+                    android:contentDescription="@string/date"/>
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_fragment_book_income"
                     android:layout_width="match_parent"

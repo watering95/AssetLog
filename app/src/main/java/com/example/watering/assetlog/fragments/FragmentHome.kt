@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.watering.assetlog.BR
@@ -18,7 +17,6 @@ import com.example.watering.assetlog.MainActivity
 import com.example.watering.assetlog.R
 import com.example.watering.assetlog.databinding.FragmentHomeBinding
 import com.example.watering.assetlog.entities.Home
-import com.example.watering.assetlog.model.ModelCalendar
 import com.example.watering.assetlog.view.RecyclerViewAdapterHome
 import com.example.watering.assetlog.viewmodel.ViewModelHome
 
@@ -38,21 +36,13 @@ class FragmentHome : Fragment() {
         setHasOptionsMenu(false)
 
         binding.viewmodel?.run {
-            listOfGroup = Transformations.map(allGroups) { list -> listOf("전체") + list.map { it.name } }
-
             addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     when(propertyId) {
-                        BR.indexOfGroup -> onIndexOfGroupChanged()
-                        BR.list -> onListChanged()
+                        BR.list -> onChangedList()
                     }
                 }
             })
-        }
-
-        binding.recyclerviewFragmentHome.run {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@FragmentHome.context)
         }
     }
 
@@ -61,48 +51,49 @@ class FragmentHome : Fragment() {
         }
     }
 
-    fun onIndexOfGroupChanged() {
+    private fun onChangedRecyclerView(list: List<Home>) {
         binding.viewmodel?.run {
-            if(indexOfGroup == 0) allAccounts else {
-                Transformations.switchMap(listOfGroup) { list ->
-                    Transformations.switchMap(getGroup(list[indexOfGroup])) { group ->
-                        Transformations.map(getAccountsByGroup(group.id)) { accounts -> accounts }
-                    }
+            binding.recyclerviewFragmentHome.run {
+                if(adapter == null) {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(this@FragmentHome.context)
+                    adapter = RecyclerViewAdapterHome(list) { position -> itemClicked(position) }
                 }
-            }.observeOnce(Observer { accounts -> accounts?.let {
-                list = accounts.map { account ->
-                    val home = Home()
-                    loadingDairyTotal(account.id, ModelCalendar.getToday()).observeOnce(Observer { dairy -> dairy?.let {
-                        if(account == accounts.first()) {
-                            totalEvaluation = 0
-                            totalPrincipal = 0
-                        }
-                        home.evaluationKRW = dairy.evaluationKRW
-                        totalEvaluation += dairy.evaluationKRW!!
-                        home.principalKRW = dairy.principalKRW
-                        totalPrincipal += dairy.principalKRW!!
-                        home.rate = dairy.rate
-                        home.account = account.number
-                        home.description = account.institute + " " + account.description
-                        if(account == accounts.last()) {
-                            list = list.map {
-                                it.total = totalEvaluation
-                                it
-                            }
-                            notifyPropertyChanged(BR.list)
-                        }
-                    } })
-                    home
-                }
-            } })
+                else adapter?.notifyDataSetChanged()
+            }
         }
     }
 
-    fun onListChanged() {
+    fun onChangedList() {
         binding.viewmodel?.run {
-            binding.recyclerviewFragmentHome.run {
-                adapter = RecyclerViewAdapterHome(list) { position -> itemClicked(position) }
-            }
+            var sumOfEvaluation = 0
+            var sumOfPrincipal = 0
+
+            list.observeOnce(Observer { list -> list?.let {
+                var listOfHome: List<Home> = listOf()
+                list.map {
+                    if(it == list.last()) {
+                        it.observeOnce(Observer { home ->
+                            listOfHome = listOfHome + home
+                            sumOfEvaluation += home.evaluationKRW!!
+                            sumOfPrincipal += home.principalKRW!!
+                            totalEvaluation = sumOfEvaluation
+                            totalPrincipal = sumOfPrincipal
+                            listOfHome = listOfHome.map {
+                                it.total = totalEvaluation
+                                it
+                            }
+                            onChangedRecyclerView(listOfHome)
+                        })
+                    } else {
+                        it.observeOnce(Observer { home ->
+                            listOfHome = listOfHome + home
+                            sumOfEvaluation += home.evaluationKRW!!
+                            sumOfPrincipal += home.principalKRW!!
+                        })
+                    }
+                }
+            } })
         }
     }
 

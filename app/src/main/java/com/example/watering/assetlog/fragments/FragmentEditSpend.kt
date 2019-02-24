@@ -52,8 +52,8 @@ class FragmentEditSpend : Fragment() {
             addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     when(propertyId) {
-                        BR.indexOfSub -> onIndexOfSubChanged()
-                        BR.indexOfPay2 -> onIndexOfPay2Changed()
+                        BR.indexOfSub -> onChangedIndexOfSub()
+                        BR.indexOfPay2 -> onChangedIndexOfPay2()
                     }
                 }
             })
@@ -155,7 +155,7 @@ class FragmentEditSpend : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun onIndexOfSubChanged() {
+    fun onChangedIndexOfSub() {
         binding.viewmodel?.run {
             Transformations.switchMap(listOfMain) { listOfMain ->
                 Transformations.switchMap(listOfSub) { listOfSub ->
@@ -167,7 +167,7 @@ class FragmentEditSpend : Fragment() {
             } })
         }
     }
-    fun onIndexOfPay2Changed() {
+    fun onChangedIndexOfPay2() {
         binding.viewmodel?.run {
             when(newCode[0]) {
                 '1' -> {

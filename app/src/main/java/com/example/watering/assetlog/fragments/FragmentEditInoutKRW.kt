@@ -49,7 +49,7 @@ class FragmentEditInoutKRW : Fragment() {
             addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     when(propertyId) {
-                        BR.date -> onDateChanged()
+                        BR.date -> onChangedDate()
                     }
                 }
             })
@@ -110,7 +110,7 @@ class FragmentEditInoutKRW : Fragment() {
         }
     }
 
-    private fun onDateChanged() {
+    private fun onChangedDate() {
         binding.viewmodel?.run {
             loadingIOKRW(idAccount, date).observe(this@FragmentEditInoutKRW, Observer { io -> io?.let {
                 income = io.income

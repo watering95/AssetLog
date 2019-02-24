@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.title = getString(R.string.app_name)
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentHome)
-                    addToBackStack(null)
                     commit()
                 }
                 return@OnNavigationItemSelectedListener true
@@ -43,7 +42,6 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.title = getString(R.string.title_book)
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentBook)
-                    addToBackStack(null)
                     commit()
                 }
                 return@OnNavigationItemSelectedListener true
@@ -52,7 +50,6 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.title = getString(R.string.title_accounts)
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentAccounts)
-                    addToBackStack(null)
                     commit()
                 }
                 return@OnNavigationItemSelectedListener true
@@ -61,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.title = getString(R.string.title_management)
                 with(mTransaction) {
                     replace(R.id.frame_main, mFragmentManagement)
-                    addToBackStack(null)
                     commit()
                 }
                 return@OnNavigationItemSelectedListener true

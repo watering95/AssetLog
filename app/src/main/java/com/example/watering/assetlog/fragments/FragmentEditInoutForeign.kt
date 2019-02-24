@@ -50,7 +50,7 @@ class FragmentEditInoutForeign : Fragment() {
             addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     when(propertyId) {
-                        BR.date -> onDateChanged()
+                        BR.date -> onChangedDate()
                     }
                 }
             })
@@ -112,7 +112,7 @@ class FragmentEditInoutForeign : Fragment() {
         }
     }
 
-    private fun onDateChanged() {
+    private fun onChangedDate() {
         binding.viewmodel?.run {
             loadingIOForeign(idAccount, date, currency).observe(this@FragmentEditInoutForeign,  Observer { io -> io?.let {
                 deposit = io.input

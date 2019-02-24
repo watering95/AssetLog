@@ -74,8 +74,8 @@ class FragmentEditIncome : Fragment() {
             addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     when(propertyId) {
-                        BR.indexOfSub -> onIndexOfSubChanged()
-                        BR.indexOfAccount -> onIndexOfAccountChanged()
+                        BR.indexOfSub -> onChangedIndexOfSub()
+                        BR.indexOfAccount -> onChangedIndexOfAccount()
                     }
                 }
             })
@@ -122,7 +122,7 @@ class FragmentEditIncome : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun onIndexOfSubChanged() {
+    fun onChangedIndexOfSub() {
         binding.viewmodel?.run {
             Transformations.switchMap(listOfMain) { listOfMain ->
                 Transformations.switchMap(listOfSub) { listOfSub ->
@@ -134,7 +134,7 @@ class FragmentEditIncome : Fragment() {
             } })
         }
     }
-    fun onIndexOfAccountChanged() {
+    fun onChangedIndexOfAccount() {
         binding.viewmodel?.run {
             Transformations.switchMap(listOfAccount) { list ->
                 if(indexOfAccount < 0) null else getAccountByNumber(list[indexOfAccount])

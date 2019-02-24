@@ -30,7 +30,7 @@
                          app:layout_constraintStart_toEndOf="@+id/button_calendar_fragment_book_spend"
                          android:layout_marginStart="8dp"
                          app:layout_constraintBottom_toBottomOf="@+id/text_date_fragment_book_spend"
-                         style="@style/Widget.AppCompat.ImageButton"/>
+                         style="@style/Widget.AppCompat.ImageButton" android:contentDescription="@string/forward"/>
             <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:background="@drawable/baseline_date_range_black_18dp"
