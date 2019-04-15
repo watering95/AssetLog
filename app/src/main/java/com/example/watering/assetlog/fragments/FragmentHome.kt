@@ -1,6 +1,7 @@
 package com.example.watering.assetlog.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,9 +22,9 @@ import com.example.watering.assetlog.view.RecyclerViewAdapterHome
 import com.example.watering.assetlog.viewmodel.ViewModelHome
 
 class FragmentHome : Fragment() {
-    private val mViewModel by lazy { (activity as MainActivity).mViewModel }
     private lateinit var binding: FragmentHomeBinding
     private val mFragmentManager by lazy { (activity as MainActivity).supportFragmentManager as FragmentManager }
+    private var isUpdate = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = inflate(inflater, R.layout.fragment_home, container, false)
@@ -39,6 +40,7 @@ class FragmentHome : Fragment() {
             addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     when(propertyId) {
+                        BR.accounts -> onChangedAccounts()
                         BR.list -> onChangedList()
                     }
                 }
@@ -52,20 +54,29 @@ class FragmentHome : Fragment() {
     }
 
     private fun onChangedRecyclerView(list: List<Home>) {
+        Log.d("test","in")
         binding.viewmodel?.run {
             binding.recyclerviewFragmentHome.run {
                 if(adapter == null) {
                     setHasFixedSize(true)
                     layoutManager = LinearLayoutManager(this@FragmentHome.context)
-                    adapter = RecyclerViewAdapterHome(list) { position -> itemClicked(position) }
                 }
-                else adapter?.notifyDataSetChanged()
+                adapter = RecyclerViewAdapterHome(list) { position -> itemClicked(position) }
             }
+        }
+        Log.d("test","out")
+    }
+
+    fun onChangedAccounts() {
+        binding.viewmodel?.run {
+
         }
     }
 
     fun onChangedList() {
+        if(isUpdate) return
         binding.viewmodel?.run {
+            isUpdate = true
             var sumOfEvaluation = 0
             var sumOfPrincipal = 0
 
@@ -84,6 +95,7 @@ class FragmentHome : Fragment() {
                                 it
                             }
                             onChangedRecyclerView(listOfHome)
+                            isUpdate =false
                         })
                     } else {
                         it.observeOnce(Observer { home ->

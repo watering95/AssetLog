@@ -41,16 +41,16 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    implementation 'com.google.android.gms:play-services-drive:16.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'com.google.android.gms:play-services-drive:16.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
-    def room_version = "2.1.0-alpha04"
+    def room_version = "2.1.0-alpha06"
     def lifecycle_version = "2.0.0"
     def coroutines_version = "1.0.0"
-    def work_version = "1.0.0-rc02"
+    def work_version = "1.0.1"
 
     // Room components
     implementation "androidx.room:room-runtime:$room_version"

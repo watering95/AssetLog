@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         val toolBar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolBar)
 
-        mTransaction.add(R.id.frame_main, mFragmentHome).addToBackStack(null).commit()
+        mTransaction.add(R.id.frame_main, mFragmentHome).commit()
 
         mViewModel = ViewModelProviders.of(this).get(ViewModelApp::class.java)
 

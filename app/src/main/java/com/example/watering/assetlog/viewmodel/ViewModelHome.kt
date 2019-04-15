@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.databinding.Bindable
 import androidx.lifecycle.*
 import com.example.watering.assetlog.BR
+import com.example.watering.assetlog.entities.Account
 import com.example.watering.assetlog.entities.Home
 import com.example.watering.assetlog.model.ModelCalendar
 
@@ -55,20 +56,13 @@ class ViewModelHome(application:Application) : ObservableViewModel(application) 
         notifyPropertyChanged(BR.listOfGroup)
     }
 
-    var indexOfGroup = 0
+    var accounts: LiveData<List<Account>> = MutableLiveData()
     @Bindable get() {
         return field
     }
     set(value) {
         field = value
-        val accounts = if(field == 0) allAccounts else {
-            Transformations.switchMap(listOfGroup) { list ->
-                Transformations.switchMap(getGroup(list[field])) { group ->
-                    Transformations.map(getAccountsByGroup(group.id)) { accounts -> accounts }
-                }
-            }
-        }
-        list = Transformations.map(accounts) {
+        list = Transformations.map(field) {
             it.map { account ->
                 Transformations.map(loadingDairyTotal(account.id, ModelCalendar.getToday())) { dairy ->
                     val home = Home()
@@ -78,7 +72,23 @@ class ViewModelHome(application:Application) : ObservableViewModel(application) 
                     home.account = account.number
                     home.description = account.institute + " " + account.description
                     home
-                 }
+                }
+            }
+        }
+        notifyPropertyChanged(BR.accounts)
+    }
+
+    var indexOfGroup = 0
+    @Bindable get() {
+        return field
+    }
+    set(value) {
+        field = value
+        accounts = if(field == 0) allAccounts else {
+            Transformations.switchMap(listOfGroup) { list ->
+                Transformations.switchMap(getGroup(list[field])) { group ->
+                    Transformations.map(getAccountsByGroup(group.id)) { accounts -> accounts }
+                }
             }
         }
         notifyPropertyChanged(BR.indexOfGroup)
